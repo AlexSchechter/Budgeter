@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Budgeter.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -26,6 +27,18 @@ namespace Budgeter.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        public ActionResult UserProfile(string userId)
+        {
+            if (userId == null)
+                RedirectToAction("Index");
+            var db = new ApplicationDbContext();
+            ApplicationUser user = db.Users.FirstOrDefault(u => u.Id == userId);
+            ProfileViewModel model = new ProfileViewModel { Email = user.Email, FirstName = user.FirstName, LastName = user.LastName,
+                Username = user.UserName, HouseholdName = db.Households.FirstOrDefault(h => h.Id == user.HouseholdId).Name };
+
+            return View(model);
         }
     }
 }

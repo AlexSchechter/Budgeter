@@ -217,6 +217,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Invitation.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ProfileViewModel.cs" />
     <Compile Include="Models\Transaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -469,6 +470,8 @@
     <Content Include="Views\Account\EmailCheck.cshtml" />
     <Content Include="Views\Account\RegisterWithInvite.cshtml" />
     <Content Include="Views\Account\RWI.cshtml" />
+    <Content Include="Views\Home\UserProfile.cshtml" />
+    <Content Include="Views\Manage\UpdateUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -51,6 +51,12 @@ namespace Budgeter.Controllers
             }
         }
 
+        //GET: /Manage/UpdateProfile
+        public ActionResult UpdateProfile()
+        {
+            return View();
+        }
+        
         //
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)

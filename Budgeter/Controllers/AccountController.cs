@@ -143,25 +143,25 @@ namespace Budgeter.Controllers
             return View();
         }
 
-        //POST /Account/EmailCheck
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult EmailCheck(EmailCheckViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var db = new ApplicationDbContext();
-                //var householdIds = db.Invitations.Where(i => i.Email == model.Email).Select(i => i.HouseholdId);               
-                if (db.Invitations.Any(i => i.Email == model.Email))
-                {
-                    return RedirectToAction("RegisterWithInvite", new { email = model.Email });
-                }             
-                return RedirectToAction("Register", new RegisterViewModel { Email = model.Email });
-            }
+        ////POST /Account/EmailCheck
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult EmailCheck(EmailCheckViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var db = new ApplicationDbContext();
+        //        //var householdIds = db.Invitations.Where(i => i.Email == model.Email).Select(i => i.HouseholdId);               
+        //        if (db.Invitations.Any(i => i.Email == model.Email))
+        //        {
+        //            return RedirectToAction("RegisterWithInvite", new { email = model.Email });
+        //        }             
+        //        return RedirectToAction("Register", new RegisterViewModel { Email = model.Email });
+        //    }
 
-            return View(model);
-        }
+        //    return View(model);
+        //}
 
         //// GET /Account/RegisterWithInvite
         //[AllowAnonymous]
@@ -223,13 +223,29 @@ namespace Budgeter.Controllers
             if (ModelState.IsValid)
             {
                 var db = new ApplicationDbContext();
+                var invitation = db.Invitations.FirstOrDefault(i => i.Email == model.Email);
+                ApplicationUser user = null;
+                if (invitation != null)
+                {
+                    user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, HouseholdId = invitation.HouseholdId };                  
+                }
+                else
+                {
+                    string householdname = string.Concat(model.FirstName, " Household");
+                    db.Households.Add(new Household { Name = householdname });
+                    await db.SaveChangesAsync();
+                    var id = db.Households.ToList().OrderByDescending(h => h.Id).FirstOrDefault(h => h.Name == householdname).Id;
+                    user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, HouseholdId = id };
+                    
+
+                }
+                var result = await UserManager.CreateAsync(user, model.Password);
                 //db.Households.Add(new Household { Name = model.HouseholdName });
                 await db.SaveChangesAsync();
 
                 //var id = db.Households.ToList().OrderByDescending(h => h.Id).FirstOrDefault(h => h.Name == model.HouseholdName).Id;
 
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName/*, HouseholdId = id*/ };
-                var result = await UserManager.CreateAsync(user, model.Password);
+               
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
@@ -248,6 +264,8 @@ namespace Budgeter.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+
+     
 
         //
         // GET: /Account/ConfirmEmail

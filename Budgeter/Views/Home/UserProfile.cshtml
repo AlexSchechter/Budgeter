@@ -1,0 +1,218 @@
+﻿@using Budgeter.Models
+@model ProfileViewModel
+
+<div class="container-fluid primary-content">
+    <div class="user-profile">
+        <div class="profile-header-background"><img src="~/assets/img/city.jpg" alt="Profile Header Background" /></div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="profile-info-left">                  
+                    <div class="text-center">
+                        <img src="~/assets/img/avatar.png" alt="Avatar" class="avatar img-circle" />
+                        <h2>Jack Bay</h2>
+                    </div>
+                    <div class="action-buttons">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <a href="#" class="btn btn-success btn-block"><i class="icon ion-plus-round"></i> Follow</a>
+                            </div>
+                            <div class="col-xs-6">
+                                <a href="#" class="btn btn-primary btn-block"><i class="icon ion-android-mail"></i> Message</a>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="tble table-striped">
+                        <tbody>
+                            <tr>
+                                <td>Username</td>
+                                <td>@Model.Username</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>@Model.Email</td>
+                            </tr>
+                            <tr>
+                                <td>Name</td>
+                                <td>@Model.FirstName @Model.LastName</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="section">
+                        <h3>About Me</h3>
+                        <p>Energistically administrate 24/7 portals and enabled catalysts for change. Objectively revolutionize client-centered e-commerce via covalent scenarios. Continually envisioneer.</p>
+                    </div>
+                    <div class="section">
+                        <h3>Statistics</h3>
+                        <p><span class="badge">332</span> Following</p>
+                        <p><span class="badge">124</span> Followers</p>
+                        <p><span class="badge">620</span> Likes</p>
+                    </div>
+                    <div class="section">
+                        <h3>Social</h3>
+                        <ul class="list-unstyled list-social">
+                            <li><a href="#"><i class="icon ion-social-twitter"></i> jackbay</a></li>
+                            <li><a href="#"><i class="icon ion-social-facebook"></i> Jack Bay</a></li>
+                            <li><a href="#"><i class="icon ion-social-dribbble"></i> jackdribs</a></li>
+                            <li><a href="#"><i class="icon ion-social-linkedin"></i> Jack Bay</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid primary-content">
+    <!-- PRIMARY CONTENT HEADING -->
+    <div class="primary-content-heading clearfix">
+        <h2>IN-PLACE EDITING</h2>
+        <ul class="breadcrumb pull-left">
+            <li><i class="icon ion-home"></i><a href="#">Home</a></li>
+            <li><a href="#">Forms</a></li>
+            <li class="active">In-place Editing</li>
+        </ul>
+        <div class="sticky-content pull-right">
+            <div class="btn-group btn-dropdown">
+                <button type="button" class="btn btn-default btn-sm btn-favorites" data-toggle="dropdown"><i class="icon ion-android-star"></i> Favorites</button>
+                <ul class="dropdown-menu dropdown-menu-right list-inline">
+                    <li><a href="#"><i class="icon ion-pie-graph"></i> <span>Statistics</span></a></li>
+                    <li><a href="#"><i class="icon ion-email"></i> <span>Inbox</span></a></li>
+                    <li><a href="#"><i class="icon ion-chatboxes"></i> <span>Chat</span></a></li>
+                    <li><a href="#"><i class="icon ion-help-circled"></i> <span>Help</span></a></li>
+                    <li><a href="#"><i class="icon ion-gear-a"></i> <span>Settings</span></a></li>
+                    <li><a href="#"><i class="icon ion-help-buoy"></i> <span>Support</span></a></li>
+                </ul>
+            </div>
+            <button type="button" class="btn btn-default btn-sm btn-quick-task" data-toggle="modal" data-target="#quick-task-modal"><i class="icon ion-edit"></i> Quick Task</button>
+        </div>
+        <!-- quick task modal -->
+        <div class="modal fade" id="quick-task-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Quick Task</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label for="task-title" class="control-label sr-only">Title</label>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" id="task-title" placeholder="Title">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label sr-only">Description</label>
+                                <div class="col-sm-12">
+                                    <textarea class="form-control" name="task-description" rows="5" cols="30" placeholder="Description"></textarea>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save Task</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end quick task modal -->
+    </div>
+    <!-- END PRIMARY CONTENT HEADING -->
+    <!-- IN-PLACE EDITING -->
+    <div class="widget">
+        <div class="widget-header clearfix">
+            <h3><i class="icon ion-compose"></i> <span>IN-PLACE EDITING</span></h3>
+            <div class="btn-group widget-header-toolbar">
+                <a href="#" title="Expand/Collapse" class="btn btn-link btn-toggle-expand"><i class="icon ion-ios-arrow-up"></i></a>
+                <a href="#" title="Remove" class="btn btn-link btn-remove"><i class="icon ion-ios-close-empty"></i></a>
+            </div>
+        </div>
+        <div class="widget-content">
+            <div class="row">
+                <div class="col-xs-6">
+                    <button id="enable" class="btn btn-default btn-sm">Enable / Disable</button>
+                </div>
+                <div class="col-xs-6">
+                    <label class="switch-input pull-right">
+                        <input type="checkbox" id="switch-inline-input" name="switch-checkbox">
+                        <i data-swon-text="ON" data-swoff-text="OFF"></i> Inline Style
+                    </label>
+                </div>
+            </div>
+            <hr />
+            <table id="user" class="table table-bordered table-striped">
+                <tbody>
+                    <tr>
+                        <td>Simple text field</td>
+                        <td><a href="#" id="username" data-type="text" data-pk="1" data-title="Enter username">superuser</a></td>
+                    </tr>
+                    <tr>
+                        <td>Required, client-side error message</td>
+                        <td><a href="#" id="lastname" data-type="text" data-pk="1" data-placement="right" data-placeholder="Required" data-title="Enter your last name">mylastname</a></td>
+                    </tr>
+                    <tr>
+                        <td>Select, local array, custom display</td>
+                        <td>
+                            <a href="#" id="sex" data-type="select" data-pk="1" data-value="" data-title="Select sex"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Select, remote array, no buttons</td>
+                        <td><a href="#" id="group" data-type="select" data-pk="1" data-value="5" data-source="/groups" data-title="Select group">Admin</a></td>
+                    </tr>
+                    <tr>
+                        <td>Select, error while loading</td>
+                        <td><a href="#" id="status" data-type="select" data-pk="1" data-value="0" data-source="/status" data-title="Select status">Active</a></td>
+                    </tr>
+                    <tr>
+                        <td>Datepicker</td>
+                        <td><a href="#" id="dob" data-type="date" data-pk="1" data-url="/post" data-title="Select date">15/05/1984</a></td>
+                    </tr>
+                    <tr>
+                        <td>Combodate (date)</td>
+                        <td>
+                            <a href="#" id="combodate" data-type="combodate" data-value="1984-05-23" data-format="YYYY-MM-DD" data-viewformat="DD/MM/YYYY" data-template="D / MMM / YYYY" data-pk="1" data-title="Select Date of birth"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Combodate (datetime)</td>
+                        <td>
+                            <a href="#" id="event" data-type="combodate" data-template="D MMM YYYY  HH:mm" data-format="YYYY-MM-DD HH:mm" data-viewformat="MMM D, YYYY, HH:mm" data-pk="1" data-title="Setup event date and time"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Textarea, buttons below. Submit by <i>ctrl+enter</i></td>
+                        <td><a href="#" id="comments" data-type="textarea" data-pk="1" data-placeholder="Your comments here..." data-title="Enter comments">awesome user!</a></td>
+                    </tr>
+                    <tr>
+                        <td>Twitter typeahead.js</td>
+                        <td>
+                            <a href="#" id="state2" data-type="typeaheadjs" data-pk="1" data-placement="right" data-title="Start typing State.."></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Checklist</td>
+                        <td>
+                            <a href="#" id="fruits" data-type="checklist" data-value="2,3" data-title="Select fruits"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Select2 (tags mode)</td>
+                        <td><a href="#" id="tags" data-type="select2" data-pk="1" data-title="Enter tags">html, javascript</a></td>
+                    </tr>
+                    <tr>
+                        <td>Select2 (dropdown mode)</td>
+                        <td>
+                            <a href="#" id="country" data-type="select2" data-pk="1" data-value="BS" data-title="Select country"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Custom input, several fields</td>
+                        <td>
+                            <a href="#" id="address" data-type="address" data-pk="1" data-title="Please, fill address"></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- END IN-PLACE EDITING -->
+</div>

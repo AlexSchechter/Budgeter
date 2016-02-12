@@ -257,10 +257,8 @@
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a href="#">
-                                        <i class="icon ion-ios-person"></i>
-                                        <span class="text">Profile</span>
-                                    </a>
+                                    <i class="icon ion-ios-person"></i>
+                                    <span class="text">@Html.ActionLink("Profile", "UserProfile", "Home", new { userId = User.Identity.GetUserId() }, null)</span>
                                 </li>
                                 <li>
                                     <a href="#">
