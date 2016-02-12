@@ -468,6 +468,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Account\EmailCheck.cshtml" />
     <Content Include="Views\Account\RegisterWithInvite.cshtml" />
+    <Content Include="Views\Account\RWI.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

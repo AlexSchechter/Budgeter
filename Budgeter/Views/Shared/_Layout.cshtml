@@ -22,6 +22,7 @@
     <link rel="apple-touch-icon-precomposed" type="image/png" sizes="57x57" href="~/assets/ico/queenadmin-favicon57x57.png">
     <link rel="shortcut icon" href="~/assets/ico/favicon.ico">
 </head>
+@using Microsoft.AspNet.Identity
 <body class="fixed-top-active dashboard">
     <!-- WRAPPER -->
     <div class="wrapper">
@@ -249,29 +250,56 @@
                 </div>
                 <div class="logged-user">
                     <div class="btn-group">
-                        <a href="#" class="btn btn-link dropdown-toggle" data-toggle="dropdown">
-                            <img src="~/assets/img/user-loggedin.png" alt="Sebastian" /><span class="name">Sebastian <i class="icon ion-ios-arrow-down"></i></span>
-                        </a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li>
-                                <a href="#">
-                                    <i class="icon ion-ios-person"></i>
-                                    <span class="text">Profile</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="icon ion-ios-gear"></i>
-                                    <span class="text">Settings</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="icon ion-power"></i>
-                                    <span class="text">Logout</span>
-                                </a>
-                            </li>
-                        </ul>
+                        @if (Request.IsAuthenticated)
+                        {
+                            <a href="#" class="btn btn-link dropdown-toggle" data-toggle="dropdown">         
+                                <img src="~/assets/img/user-loggedin.png" alt="Sebastian" /><span class="name">@User.Identity.GetUserName() <i class="icon ion-ios-arrow-down"></i></span>                      
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="#">
+                                        <i class="icon ion-ios-person"></i>
+                                        <span class="text">Profile</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="icon ion-ios-gear"></i>
+                                        <span class="text">Settings</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <a href="javascript:document.getElementById('logoutForm').submit()">                                           
+                                            <i class="icon ion-power"></i>
+                                            <span class="text">Logout</span>
+                                        </a>
+                                    }
+                                </li>
+                            </ul>
+                        }
+                        else
+                        {
+                            <a href="#" class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+                                <span class="name">Login/Register <i class="icon ion-ios-arrow-down"></i></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="#">
+                                        <i class="icon ion-ios-person"></i>
+                                        <span class="text">@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="icon ion-ios-gear"></i>
+                                        <span class="text">@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</span>
+                                    </a>
+                                </li>
+                            </ul>                          
+                        }
                     </div>
                 </div>
                 <div class="action-group visible-lg-inline-block">
