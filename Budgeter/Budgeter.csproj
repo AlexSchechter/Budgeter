@@ -207,7 +207,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\HouseholdAccountViewModel.cs" />
+    <Compile Include="Models\HouseholdAccount.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Budget.cs" />
     <Compile Include="Models\BudgetItem.cs" />
@@ -475,6 +476,8 @@
     <Content Include="Views\Manage\EditProfile.cshtml" />
     <Content Include="Views\Shared\HouseholdDropdown.cshtml" />
     <Content Include="Views\Manage\JoinHouseHold.cshtml" />
+    <Content Include="Views\Home\HouseholdAccounts.cshtml" />
+    <Content Include="Views\Manage\CreateHouseholdAccount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

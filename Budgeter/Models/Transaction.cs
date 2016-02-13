@@ -8,7 +8,7 @@ namespace Budgeter.Models
     public class Transaction
     {
         public int Id { get; set; }
-        public int AccountId { get; set; }
+        public int HouseholdAccountId { get; set; }
         public string Description { get; set; }
         public DateTimeOffset Date { get; set; }
         public double Amount { get; set; }

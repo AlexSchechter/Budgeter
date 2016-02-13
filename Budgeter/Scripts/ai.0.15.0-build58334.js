@@ -577,7 +577,7 @@ var AI;
             this.sessionIsFirst = "ai.session.isFirst";
             this.sessionIsNew = "ai.session.isNew";
             this.userAccountAcquisitionDate = "ai.user.accountAcquisitionDate";
-            this.userAccountId = "ai.user.accountId";
+            this.userHouseholdAccountId = "ai.user.HouseholdAccountId";
             this.userAgent = "ai.user.userAgent";
             this.userId = "ai.user.id";
             this.userStoreRegion = "ai.user.storeRegion";
@@ -590,7 +590,7 @@ var AI;
             this.internalDataCollectorReceivedTime = "ai.internal.dataCollectorReceivedTime";
             this.internalProfileId = "ai.internal.profileId";
             this.internalProfileClassId = "ai.internal.profileClassId";
-            this.internalAccountId = "ai.internal.accountId";
+            this.internalHouseholdAccountId = "ai.internal.HouseholdAccountId";
             this.internalApplicationName = "ai.internal.applicationName";
             this.internalInstrumentationKey = "ai.internal.instrumentationKey";
             this.internalTelemetryItemId = "ai.internal.telemetryItemId";
@@ -902,7 +902,7 @@ var Microsoft;
         (function (Context) {
             "use strict";
             var User = (function () {
-                function User(accountId) {
+                function User(HouseholdAccountId) {
                     var cookie = ApplicationInsights.Util.getCookie(User.userCookieName);
                     if (cookie) {
                         var params = cookie.split(User.cookieSeparator);
@@ -920,7 +920,7 @@ var Microsoft;
                         ApplicationInsights.Util.setCookie(User.userCookieName, newCookie.join(User.cookieSeparator) + ';expires=' + date.toUTCString());
                         ApplicationInsights.Util.removeStorage('ai_session');
                     }
-                    this.accountId = accountId;
+                    this.HouseholdAccountId = HouseholdAccountId;
                     var authCookie = ApplicationInsights.Util.getCookie(User.authUserCookieName);
                     if (authCookie) {
                         authCookie = decodeURI(authCookie);
@@ -929,27 +929,27 @@ var Microsoft;
                             this.authenticatedId = authCookieString[0];
                         }
                         if (authCookieString.length > 1 && authCookieString[1]) {
-                            this.accountId = authCookieString[1];
+                            this.HouseholdAccountId = authCookieString[1];
                         }
                     }
                 }
-                User.prototype.setAuthenticatedUserContext = function (authenticatedUserId, accountId) {
-                    var isInvalidInput = !this.validateUserInput(authenticatedUserId) || (accountId && !this.validateUserInput(accountId));
+                User.prototype.setAuthenticatedUserContext = function (authenticatedUserId, HouseholdAccountId) {
+                    var isInvalidInput = !this.validateUserInput(authenticatedUserId) || (HouseholdAccountId && !this.validateUserInput(HouseholdAccountId));
                     if (isInvalidInput) {
                         ApplicationInsights._InternalLogging.throwInternalUserActionable(1 /* WARNING */, "Setting auth user context failed. " + "User auth/account id should be of type string, and not contain commas, semi-colons, equal signs, spaces, or vertical-bars.");
                         return;
                     }
                     this.authenticatedId = authenticatedUserId;
                     var authCookie = this.authenticatedId;
-                    if (accountId) {
-                        this.accountId = accountId;
-                        authCookie = [this.authenticatedId, this.accountId].join(User.cookieSeparator);
+                    if (HouseholdAccountId) {
+                        this.HouseholdAccountId = HouseholdAccountId;
+                        authCookie = [this.authenticatedId, this.HouseholdAccountId].join(User.cookieSeparator);
                     }
                     ApplicationInsights.Util.setCookie(User.authUserCookieName, encodeURI(authCookie));
                 };
                 User.prototype.clearAuthenticatedUserContext = function () {
                     this.authenticatedId = null;
-                    this.accountId = null;
+                    this.HouseholdAccountId = null;
                     ApplicationInsights.Util.deleteCookie(User.authUserCookieName);
                 };
                 User.prototype.validateUserInput = function (id) {
@@ -1813,7 +1813,7 @@ var Microsoft;
                     this.device = new ApplicationInsights.Context.Device();
                     this.internal = new ApplicationInsights.Context.Internal();
                     this.location = new ApplicationInsights.Context.Location();
-                    this.user = new ApplicationInsights.Context.User(config.accountId());
+                    this.user = new ApplicationInsights.Context.User(config.HouseholdAccountId());
                     this.operation = new ApplicationInsights.Context.Operation();
                     this.session = new ApplicationInsights.Context.Session();
                     this.sample = new ApplicationInsights.Context.Sample(config.sampleRate());
@@ -2000,8 +2000,8 @@ var Microsoft;
                     if (typeof userContext.accountAcquisitionDate === "string") {
                         envelope.tags[tagKeys.userAccountAcquisitionDate] = userContext.accountAcquisitionDate;
                     }
-                    if (typeof userContext.accountId === "string") {
-                        envelope.tags[tagKeys.userAccountId] = userContext.accountId;
+                    if (typeof userContext.HouseholdAccountId === "string") {
+                        envelope.tags[tagKeys.userHouseholdAccountId] = userContext.HouseholdAccountId;
                     }
                     if (typeof userContext.agent === "string") {
                         envelope.tags[tagKeys.userAgent] = userContext.agent;
@@ -2172,7 +2172,7 @@ var Microsoft;
                 ApplicationInsights._InternalLogging.enableDebugExceptions = function () { return _this.config.enableDebug; };
                 var configGetters = {
                     instrumentationKey: function () { return _this.config.instrumentationKey; },
-                    accountId: function () { return _this.config.accountId; },
+                    HouseholdAccountId: function () { return _this.config.HouseholdAccountId; },
                     appUserId: function () { return _this.config.appUserId; },
                     sessionRenewalMs: function () { return _this.config.sessionRenewalMs; },
                     sessionExpirationMs: function () { return _this.config.sessionExpirationMs; },
@@ -2358,9 +2358,9 @@ var Microsoft;
                     ApplicationInsights._InternalLogging.throwInternalNonUserActionable(0 /* CRITICAL */, "flush failed, telemetry will not be collected: " + ApplicationInsights.Util.dump(e));
                 }
             };
-            AppInsights.prototype.setAuthenticatedUserContext = function (authenticatedUserId, accountId) {
+            AppInsights.prototype.setAuthenticatedUserContext = function (authenticatedUserId, HouseholdAccountId) {
                 try {
-                    this.context.user.setAuthenticatedUserContext(authenticatedUserId, accountId);
+                    this.context.user.setAuthenticatedUserContext(authenticatedUserId, HouseholdAccountId);
                 }
                 catch (e) {
                     ApplicationInsights._InternalLogging.throwInternalUserActionable(1 /* WARNING */, "Setting auth user context failed. " + ApplicationInsights.Util.dump(e));
@@ -2596,7 +2596,7 @@ var Microsoft;
                     config = {};
                 }
                 config.endpointUrl = config.endpointUrl || "//dc.services.visualstudio.com/v2/track";
-                config.accountId = config.accountId;
+                config.HouseholdAccountId = config.HouseholdAccountId;
                 config.appUserId = config.appUserId;
                 config.sessionRenewalMs = 30 * 60 * 1000;
                 config.sessionExpirationMs = 24 * 60 * 60 * 1000;

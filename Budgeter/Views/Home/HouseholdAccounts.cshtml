@@ -1,0 +1,259 @@
+﻿@using Budgeter.Models
+@model List<HouseholdAccount>
+
+<div class="container-fluid primary-content">
+    <!-- PRIMARY CONTENT HEADING -->
+    <div class="primary-content-heading clearfix">
+        <h2>PROJECTS</h2>
+       
+        <ul class="breadcrumb pull-left">
+            <li><i class="icon ion-home"></i><a href="#">Home</a></li>
+            <li><a href="#">Pages</a></li>
+            <li class="active">Projects</li>
+        </ul>
+        <div class="sticky-content pull-right">
+            <div class="btn-group btn-dropdown">
+                <button type="button" class="btn btn-default btn-sm btn-favorites" data-toggle="dropdown"><i class="icon ion-android-star"></i> Favorites</button>
+                <ul class="dropdown-menu dropdown-menu-right list-inline">
+                    <li><a href="#"><i class="icon ion-pie-graph"></i> <span>Statistics</span></a></li>
+                    <li><a href="#"><i class="icon ion-email"></i> <span>Inbox</span></a></li>
+                    <li><a href="#"><i class="icon ion-chatboxes"></i> <span>Chat</span></a></li>
+                    <li><a href="#"><i class="icon ion-help-circled"></i> <span>Help</span></a></li>
+                    <li><a href="#"><i class="icon ion-gear-a"></i> <span>Settings</span></a></li>
+                    <li><a href="#"><i class="icon ion-help-buoy"></i> <span>Support</span></a></li>
+                </ul>
+            </div>
+            <button type="button" class="btn btn-default btn-sm btn-quick-task" data-toggle="modal" data-target="#quick-task-modal"><i class="icon ion-edit"></i> Quick Task</button>
+        </div>
+        <!-- quick task modal -->
+        <div class="modal fade" id="quick-task-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Quick Task</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label for="task-title" class="control-label sr-only">Title</label>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" id="task-title" placeholder="Title">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label sr-only">Description</label>
+                                <div class="col-sm-12">
+                                    <textarea class="form-control" name="task-description" rows="5" cols="30" placeholder="Description"></textarea>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save Task</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end quick task modal -->
+    </div>
+    <!-- END PRIMARY CONTENT HEADING -->
+    <div class="project-list-subheading">
+        <p class="lead">You're involved in <span class="label label-success">4 active</span> projects, <span class="label label-warning">2 pending</span> and <span class="label label-default">2 closed</span></p>
+        <button type="button" class="btn btn-primary pull-right btn-new-project"><i class="icon ion-compose"></i> CREATE NEW ACCOUNT</button>
+    </div>
+    <div class="table-responsive">
+        <table class="table colored-header datatable project-list">
+            <thead>
+                <tr>
+                    <th>Account Name</th>
+                    <th>Creation Date</th>
+                    <th>Balance</th>
+                    <th>Reconciled Balanced</th>
+                    <th>[Priority]</th>
+                    <th>[Leader]</th>
+                    <th>[Status]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count; ++i)
+                {
+                    <tr>
+                        <td>@Model[i].Name</td>
+                        <td>@Model[i].CreationDate.Date.ToString("d")</td>
+                        <td>@string.Concat("$", Model[i].Balance,2)</td>
+                        <td>@string.Concat("$", Model[i].ReconciledBalance)</td>
+                        <td></td> 
+                        <td></td>
+                        <td></td>                      
+                    </tr>
+                }
+                <tr>
+                    <td><a href="#">V Media</a></td>
+                    <td>18-05-2014</td>
+                    <td>12 days</td>
+                    <td>
+                        <div class="progress">
+                            <div class="progress-bar" data-transitiongoal="95"></div>
+                        </div>
+                    </td>
+                    <td><span class="label label-warning">MEDIUM</span></td>
+                    <td><img src="~/assets/img/user2.png" alt="Avatar" class="avatar" /> <a href="#">Michael</a></td>
+                    <td><span class="label label-success">ACTIVE</span></td>
+                </tr>
+                <tr>
+                    <td><a href="#">E-Commerce Site</a></td>
+                    <td>24-05-2014</td>
+                    <td>30 days</td>
+                    <td>
+                        <div class="progress">
+                            <div class="progress-bar" data-transitiongoal="40"></div>
+                        </div>
+                    </td>
+                    <td><span class="label label-success">LOW</span></td>
+                    <td><img src="~/assets/img/user1.png" alt="Avatar" class="avatar" /> <a href="#">Antonius</a></td>
+                    <td><span class="label label-warning">PENDING</span></td>
+                </tr>
+                <tr>
+                    <td><a href="#">Project 123GO</a></td>
+                    <td>20-09-2014</td>
+                    <td>50 days</td>
+                    <td>
+                        <div class="progress">
+                            <div class="progress-bar" data-transitiongoal="65"></div>
+                        </div>
+                    </td>
+                    <td><span class="label label-danger">HIGH</span></td>
+                    <td><img src="~/assets/img/user1.png" alt="Avatar" class="avatar" /> <a href="#">Antonius</a></td>
+                    <td><span class="label label-success">ACTIVE</span></td>
+                </tr>
+                <tr>
+                    <td><a href="#">Wordpress Theme</a></td>
+                    <td>05-10-2014</td>
+                    <td>40 days</td>
+                    <td>
+                        <div class="progress">
+                            <div class="progress-bar" data-transitiongoal="77"></div>
+                        </div>
+                    </td>
+                    <td><span class="label label-warning">MEDIUM</span></td>
+                    <td><img src="~/assets/img/user2.png" alt="Avatar" class="avatar" /> <a href="#">Michael</a></td>
+                    <td><span class="label label-success">ACTIVE</span></td>
+                </tr>
+                <tr>
+                    <td><a href="#">Redesign Landing Page</a></td>
+                    <td>15-11-2014</td>
+                    <td>30 days</td>
+                    <td>
+                        <div class="progress">
+                            <div class="progress-bar" data-transitiongoal="25"></div>
+                        </div>
+                    </td>
+                    <td><span class="label label-success">LOW</span></td>
+                    <td><img src="~/assets/img/user5.png" alt="Avatar" class="avatar" /> <a href="#">Jason</a></td>
+                    <td><span class="label label-success">ACTIVE</span></td>
+                </tr>
+                <tr>
+                    <td><a href="#">Project 123GO</a></td>
+                    <td>20-09-2014</td>
+                    <td>N/A</td>
+                    <td>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-default" data-transitiongoal="100"></div>
+                        </div>
+                    </td>
+                    <td><span class="label label-default">HIGH</span></td>
+                    <td><img src="~/assets/img/user1.png" alt="Avatar" class="avatar" /> <a href="#">Antonius</a></td>
+                    <td><span class="label label-default">CLOSED</span></td>
+                </tr>
+                <tr>
+                    <td><a href="#">Wordpress Theme</a></td>
+                    <td>05-10-2014</td>
+                    <td>N/A</td>
+                    <td>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-default" data-transitiongoal="100"></div>
+                        </div>
+                    </td>
+                    <td><span class="label label-default">MEDIUM</span></td>
+                    <td><img src="~/assets/img/user2.png" alt="Avatar" class="avatar" /> <a href="#">Michael</a></td>
+                    <td><span class="label label-default">CLOSED</span></td>
+                </tr>
+                <tr>
+                    <td><a href="#">Redesign Landing Page</a></td>
+                    <td>15-11-2014</td>
+                    <td>30 days</td>
+                    <td>
+                        <div class="progress">
+                            <div class="progress-bar" data-transitiongoal="33"></div>
+                        </div>
+                    </td>
+                    <td><span class="label label-success">LOW</span></td>
+                    <td><img src="~/assets/img/user5.png" alt="Avatar" class="avatar" /> <a href="#">Jason</a></td>
+                    <td><span class="label label-warning">PENDING</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="right-sidebar">
+    <!-- CHAT -->
+    <div class="widget widget-chat-contacts">
+        <div class="widget-header clearfix">
+            <h3 class="sr-only">CHAT</h3>
+            <div class="btn-group btn-group-justified widget-header-toolbar visible-lg">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary btn-xs"><i class="icon ion-plus-circled"></i> Add</button>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn dropdown-toggle btn-xs btn-success" data-btnclass="btn-success" data-toggle="dropdown">Online <span class="caret"></span></button>
+                    <ul class="dropdown-menu dropdown-menu-right chat-status" role="menu">
+                        <li><a href="#" class="online" data-btnclass="btn-success">Online</a></li>
+                        <li><a href="#" class="away" data-btnclass="btn-warning">Away</a></li>
+                        <li><a href="#" class="busy" data-btnclass="btn-danger">Busy</a></li>
+                        <li><a href="#" class="offline" data-btnclass="btn-default">Offline</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="widget-content">
+            <strong>Online (4)</strong>
+            <ul class="list-unstyled chat-contacts">
+                <li>
+                    <a href="#" id="theusername"><img src="~/assets/img/user1.png" class="img-circle" alt="Antonius">Antonius</a>
+                </li>
+                <li>
+                    <a href="#"><img src="~/assets/img/user2.png" class="img-circle" alt="Antonius">Michael Smith</a>
+                </li>
+                <li class="away">
+                    <a href="#"><img src="~/assets/img/user3.png" class="img-circle" alt="Antonius">Stella Ray</a>
+                </li>
+                <li class="busy">
+                    <a href="#"><img src="~/assets/img/user4.png" class="img-circle" alt="Antonius">Jane Doe</a>
+                </li>
+            </ul>
+            <strong>Offline (6)</strong>
+            <ul class="list-unstyled chat-contacts contacts-offline">
+                <li>
+                    <a href="#"><img src="~/assets/img/user5.png" class="img-circle" alt="John Simmons">John Simmons</a>
+                </li>
+                <li>
+                    <a href="#"><img src="~/assets/img/user6.png" class="img-circle" alt="Jack Bay">Jack Bay</a>
+                </li>
+                <li>
+                    <a href="#"><img src="~/assets/img/user7.png" class="img-circle" alt="Daraiana">Daraiana</a>
+                </li>
+                <li>
+                    <a href="#"><img src="~/assets/img/user8.png" class="img-circle" alt="Alessio Ferrara">Alessio Ferrara</a>
+                </li>
+                <li>
+                    <a href="#"><img src="~/assets/img/user9.png" class="img-circle" alt="Sorana">Sorana</a>
+                </li>
+                <li>
+                    <a href="#"><img src="~/assets/img/user10.png" class="img-circle" alt="Regan Morton">Regan Morton</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- END CHAT -->
+</div>
+	

@@ -9,7 +9,7 @@ namespace Budgeter.Models
     {
         public Household()
         {
-            this.Accounts = new HashSet<Account>();
+            this.HouseholdAccounts = new HashSet<HouseholdAccount>();
             this.Categories = new HashSet<Category>();
             this.Budgets = new HashSet<Budget>();
             this.Members = new HashSet<ApplicationUser>();
@@ -17,7 +17,7 @@ namespace Budgeter.Models
         public int Id { get; set; }
         public string Name { get; set; }
         
-        public virtual ICollection<Account> Accounts { get; set; }
+        public virtual ICollection<HouseholdAccount> HouseholdAccounts { get; set; }
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<Budget> Budgets { get; set; }
         public virtual ICollection<ApplicationUser> Members { get; set; }
