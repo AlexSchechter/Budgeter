@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 namespace Budgeter.Models
 {
@@ -18,7 +19,7 @@ namespace Budgeter.Models
         }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public int? HouseholdId { get; set; }
+        public int HouseholdId { get; set; }
 
         public virtual ICollection<Transaction> Transactions { get; set; }
 
@@ -50,6 +51,11 @@ namespace Budgeter.Models
         public DbSet<Budget> Budgets { get; set; }
         public DbSet<BudgetItem> BudgetItems { get; set; }
         public DbSet<Invitation> Invitations { get; set; }
+
+        internal void SubmitChanges()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

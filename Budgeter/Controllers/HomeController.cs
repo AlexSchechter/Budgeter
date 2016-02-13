@@ -29,11 +29,12 @@ namespace Budgeter.Controllers
             return View();
         }
 
+        //GET /home/UserProfile
         public ActionResult UserProfile(string userId)
         {
             if (userId == null)
                 RedirectToAction("Index");
-            var db = new ApplicationDbContext();
+            ApplicationDbContext db = new ApplicationDbContext();
             ApplicationUser user = db.Users.FirstOrDefault(u => u.Id == userId);
             ProfileViewModel model = new ProfileViewModel { Email = user.Email, FirstName = user.FirstName, LastName = user.LastName,
                 Username = user.UserName, HouseholdName = db.Households.FirstOrDefault(h => h.Id == user.HouseholdId).Name };

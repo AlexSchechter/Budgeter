@@ -7,6 +7,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Budgeter.Models;
+using System.Collections.Generic;
+using Microsoft.Ajax.Utilities;
 
 namespace Budgeter.Controllers
 {
@@ -51,12 +53,75 @@ namespace Budgeter.Controllers
             }
         }
 
-        //GET: /Manage/UpdateProfile
-        public ActionResult UpdateProfile()
+        //GET: /Manage/EditProfile
+        [HttpGet]
+        public ActionResult EditProfile(string userId)
         {
-            return View();
+            if (userId == null)
+                return RedirectToAction("Index", "Home");
+
+            ApplicationDbContext db = new ApplicationDbContext();
+            ApplicationUser user = db.Users.FirstOrDefault(u => u.Id == userId);
+            Profile model = new Profile
+            {
+                UserId = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Username = user.UserName,
+                HouseholdId = user.HouseholdId,
+                HouseholdInvites = db.Households.Where(h => h.Id == user.HouseholdId).ToList()
+            };
+
+            List<Invitation> invitations = db.Invitations.Where(i => i.Email == user.Email).ToList();
+            foreach (Invitation i in invitations)
+                model.HouseholdInvites.Add(db.Households.FirstOrDefault(h => h.Id == i.HouseholdId));
+            return View(model);
         }
-        
+
+        //POST: /Manage/EditProfile
+        [HttpPost]
+        public async Task<ActionResult> EditProfile(Profile profile)
+        {
+            if (profile == null)
+                RedirectToAction("Index", "Home");
+            ApplicationDbContext db = new ApplicationDbContext();
+
+            var user = db.Users.Where(u => u.Id == profile.UserId).ToList();
+
+            user.ForEach(u =>
+            {
+                u.UserName = profile.Username;
+                u.Email = profile.Email;
+                u.FirstName = profile.FirstName;
+                u.LastName = profile.LastName;
+                u.HouseholdId = profile.HouseholdInvites.FirstOrDefault(h => h.Id == 1).Id;
+            }
+                        );
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
+        //GET: :Manage/JoinHousehold
+        [HttpGet]
+        public ActionResult JoinHousehold(Household household)
+        {
+            return View(household);
+        }
+
+        //POST: :Manage/JoinHousehold
+        [HttpPost]
+        public async Task<ActionResult> JoinHousehold(int householdId)
+        {
+            string userId = User.Identity.GetUserId();
+            ApplicationDbContext db = new ApplicationDbContext();
+            var user = db.Users.Where(u => u.Id == userId).ToList();
+            user.ForEach(u => u.HouseholdId = householdId);
+            await db.SaveChangesAsync();
+            return RedirectToAction("EditProfile", "Manage", new { userId = userId });
+        }
+
+
         //
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
