@@ -213,7 +213,6 @@
     <Compile Include="Models\Budget.cs" />
     <Compile Include="Models\BudgetItem.cs" />
     <Compile Include="Models\Category.cs" />
-    <Compile Include="Models\EmailCheckViewModel.cs" />
     <Compile Include="Models\Household.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Invitation.cs" />
@@ -478,6 +477,7 @@
     <Content Include="Views\Manage\JoinHouseHold.cshtml" />
     <Content Include="Views\Home\HouseholdAccounts.cshtml" />
     <Content Include="Views\Manage\CreateHouseholdAccount.cshtml" />
+    <Content Include="Views\Home\Households.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

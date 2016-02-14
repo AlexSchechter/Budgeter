@@ -53,5 +53,12 @@ namespace Budgeter.Controllers
             List<HouseholdAccount> model = db.HouseholdAccounts.Where(h => h.HouseholdId == householdId).ToList();
             return View(model);
         }
+
+        //Get /Home/Households
+        public  ActionResult Households()
+        {
+            return View();
+        }
+
     }
 }

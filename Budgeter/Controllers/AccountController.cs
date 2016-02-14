@@ -136,76 +136,6 @@ namespace Budgeter.Controllers
             }
         }
 
-        //GET /Account/EmailCheck
-        [AllowAnonymous]
-        public ActionResult EmailCheck()
-        {
-            return View();
-        }
-
-        ////POST /Account/EmailCheck
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult EmailCheck(EmailCheckViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var db = new ApplicationDbContext();
-        //        //var householdIds = db.Invitations.Where(i => i.Email == model.Email).Select(i => i.HouseholdId);               
-        //        if (db.Invitations.Any(i => i.Email == model.Email))
-        //        {
-        //            return RedirectToAction("RegisterWithInvite", new { email = model.Email });
-        //        }             
-        //        return RedirectToAction("Register", new RegisterViewModel { Email = model.Email });
-        //    }
-
-        //    return View(model);
-        //}
-
-        //// GET /Account/RegisterWithInvite
-        //[AllowAnonymous]
-        //public ActionResult RegisterWithInvite(string email)
-        //{
-        //    var db = new ApplicationDbContext();
-        //    RegisterWithInviteViewModel model = new RegisterWithInviteViewModel { Email = email };
-        //    var householdIds = db.Invitations.Where(i => i.Email == model.Email).Select(i => i.HouseholdId);
-        //    ViewBag.Households = new SelectList(db.Households.Where(h => householdIds.Contains(h.Id)).ToList(), "Id", "Name");
-        //    return View(model);
-        //}
-
-        ////
-        //// POST: /Account/RegisterWithInvite
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> RegisterWithInvite(RegisterWithInviteViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var db = new ApplicationDbContext();                          
-
-        //        var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, HouseholdId = model.HouseholdId };
-        //        var result = await UserManager.CreateAsync(user, model.Password);
-        //        if (result.Succeeded)
-        //        {
-        //            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
-        //            // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-        //            // Send an email with this link
-        //            // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-        //            // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-        //            // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-        //            return RedirectToAction("Index", "Home");
-        //        }
-        //        AddErrors(result);
-        //    }
-
-        //    // If we got this far, something failed, redisplay form
-        //    return View(model);
-        //}
-
         // GET: /Account/Register
         [AllowAnonymous]
         public ActionResult Register()
@@ -242,9 +172,6 @@ namespace Budgeter.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 //db.Households.Add(new Household { Name = model.HouseholdName });
                 await db.SaveChangesAsync();
-
-                //var id = db.Households.ToList().OrderByDescending(h => h.Id).FirstOrDefault(h => h.Name == model.HouseholdName).Id;
-
                
                 if (result.Succeeded)
                 {

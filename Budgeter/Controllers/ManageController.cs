@@ -109,7 +109,7 @@ namespace Budgeter.Controllers
             return View(household);
         }
 
-        //POST: :Manage/JoinHousehold
+        //POST: /Manage/JoinHousehold
         [HttpPost]
         public async Task<ActionResult> JoinHousehold(int householdId)
         {
@@ -119,6 +119,36 @@ namespace Budgeter.Controllers
             user.ForEach(u => u.HouseholdId = householdId);
             await db.SaveChangesAsync();
             return RedirectToAction("EditProfile", "Manage", new { userId = userId });
+        }
+
+        //GET:  /Manage/CreateHouseholdAccount
+        [HttpGet]
+        public ActionResult CreateHouseholdAccount()
+        {
+            return View();
+        }
+
+        //POST:  /Manage/CreateHouseholdAccount
+        [HttpPost]
+        public async Task<ActionResult> CreateHouseholdAccount(HouseholdAccountViewModel hav)
+        {
+            if(ModelState.IsValid)
+            { 
+                ApplicationDbContext db = new ApplicationDbContext();
+                string userId = User.Identity.GetUserId();
+                HouseholdAccount household = new HouseholdAccount
+                {
+                    Name = hav.Name,
+                    Balance = hav.Balance,
+                    ReconciledBalance = hav.ReconReconciledBalance,
+                    CreationDate = DateTimeOffset.Now,
+                    HouseholdId = db.Users.FirstOrDefault(u => u.Id == userId).HouseholdId,
+                };
+                db.HouseholdAccounts.Add(household);
+                await db.SaveChangesAsync();
+                return RedirectToAction("HouseHoldAccounts", "Home");
+            }
+            return View();
         }
 
 

@@ -1,0 +1,56 @@
+﻿@using Budgeter.Models
+@model Household
+
+@*<div class="h2">You are currently part of the @Model.Name household</div> 
+<div class="h4">This houshold has @Model.Members.Count members, @Model.Budgets budgets and @Model.Categories categories</div>*@
+
+<div class="h2">Change Household</div>
+<div class="h4 text-danger">Please note that if you are the only member a household and you leave it, 
+    then all the data of that household will be erased. This action cannot be undone </div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="widget">
+            <div class="widget-header clearfix">
+                <h3><i class="icon ion-ios-grid-view-outline"></i> <span>BASIC TABLE</span></h3>
+                <div class="btn-group widget-header-toolbar visible-lg">
+                    <a href="#" title="Expand/Collapse" class="btn btn-link btn-toggle-expand"><i class="icon ion-ios-arrow-up"></i></a>
+                    <a href="#" title="Remove" class="btn btn-link btn-remove"><i class="icon ion-ios-close-empty"></i></a>
+                </div>
+            </div>
+            <div class="widget-content">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Username</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Steve</td>
+                            <td>Jobs</td>
+                            <td>steve</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Simon</td>
+                            <td>Philips</td>
+                            <td>simon</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Jane</td>
+                            <td>Doe</td>
+                            <td>jane</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+

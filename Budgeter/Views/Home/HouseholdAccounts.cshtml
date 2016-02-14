@@ -59,7 +59,9 @@
     <!-- END PRIMARY CONTENT HEADING -->
     <div class="project-list-subheading">
         <p class="lead">You're involved in <span class="label label-success">4 active</span> projects, <span class="label label-warning">2 pending</span> and <span class="label label-default">2 closed</span></p>
-        <button type="button" class="btn btn-primary pull-right btn-new-project"><i class="icon ion-compose"></i> CREATE NEW ACCOUNT</button>
+        <a href ="/manage/CreateHouseholdAccount" type="button" class="btn btn-primary pull-right btn-new-project">
+            <i class="icon ion-compose"> CREATE NEW ACCOUNT</i> 
+        </a>
     </div>
     <div class="table-responsive">
         <table class="table colored-header datatable project-list">
@@ -80,7 +82,7 @@
                     <tr>
                         <td>@Model[i].Name</td>
                         <td>@Model[i].CreationDate.Date.ToString("d")</td>
-                        <td>@string.Concat("$", Model[i].Balance,2)</td>
+                        <td>@string.Concat("$", Model[i].Balance)</td>
                         <td>@string.Concat("$", Model[i].ReconciledBalance)</td>
                         <td></td> 
                         <td></td>
