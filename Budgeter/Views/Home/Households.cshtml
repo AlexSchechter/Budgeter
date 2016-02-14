@@ -1,9 +1,12 @@
 ﻿@using Budgeter.Models
-@model Household
+@model HouseholdViewModel
 
-@*<div class="h2">You are currently part of the @Model.Name household</div> 
-<div class="h4">This houshold has @Model.Members.Count members, @Model.Budgets budgets and @Model.Categories categories</div>*@
-
+<div class="h2">You are currently part of the <i> "@Model.CurrentHousehold.Name" </i> household</div> 
+<div class="h4">This houshold has @Model.CurrentHousehold.Members.Count members, 
+    @Model.CurrentHousehold.Budgets.Count budgets and @Model.CurrentHousehold.Categories.Count categories</div>
+<br />
+<hr />
+<br />
 <div class="h2">Change Household</div>
 <div class="h4 text-danger">Please note that if you are the only member a household and you leave it, 
     then all the data of that household will be erased. This action cannot be undone </div>
@@ -21,32 +24,23 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Username</th>
+                            <th>Name</th>
+                            <th>Members</th>
+                            <th>Budgets</th>
+                            <th>Categories</th>
                         </tr>
                     </thead>
+                    @foreach (Household household in Model.HouseholdOptions)
+                    {
                     <tbody>
                         <tr>
-                            <td>1</td>
-                            <td>Steve</td>
-                            <td>Jobs</td>
-                            <td>steve</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Simon</td>
-                            <td>Philips</td>
-                            <td>simon</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Jane</td>
-                            <td>Doe</td>
-                            <td>jane</td>
+                            <td>@household.Name</td>
+                            <td>@household.Members.Count</td>
+                            <td>@household.Budgets.Count</td>
+                            <td>@household.Budgets.Count</td>
                         </tr>
                     </tbody>
+                    }
                 </table>
             </div>
         </div>
