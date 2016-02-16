@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Budgeter.Models
 {
@@ -21,6 +22,7 @@ namespace Budgeter.Models
         public string LastName { get; set; }
         public int HouseholdId { get; set; }
 
+        [InverseProperty("EnteredBy")]
         public virtual ICollection<Transaction> Transactions { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)

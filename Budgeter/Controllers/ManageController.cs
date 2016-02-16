@@ -86,17 +86,18 @@ namespace Budgeter.Controllers
         {
             if (profile == null)
                 RedirectToAction("Index", "Home");
-            ApplicationDbContext db = new ApplicationDbContext();
-
+            ApplicationDbContext db = new ApplicationDbContext();           
             ApplicationUser user = db.Users.FirstOrDefault(u => u.Id == profile.UserId);
+            List<Invitation> invitations = db.Invitations.Where(i => i.Email == user.Email).ToList();
 
             user.UserName = profile.Username;
             user.Email = profile.Email;
             user.FirstName = profile.FirstName;
             user.LastName = profile.LastName;
-
+            foreach (Invitation invitation in invitations)          
+                invitation.Email = profile.Email;         
             await db.SaveChangesAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("UserProfile", "Home");
         }
 
         //GET: :Manage/ChangeHousehold

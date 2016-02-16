@@ -16,5 +16,6 @@ namespace Budgeter.Models
         public int? HouseholdId { get; set; }
 
         public virtual ICollection<BudgetItem> BudgetItems { get; set; }
+        public virtual Household Household { get; set; }
     }
 }

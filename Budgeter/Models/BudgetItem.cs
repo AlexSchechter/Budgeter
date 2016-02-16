@@ -16,5 +16,6 @@ namespace Budgeter.Models
         public double Amount { get; set; }
 
         public virtual ICollection<Budget> Budgets { get; set; }
+        public virtual Category Category { get; set; }
     }
 }

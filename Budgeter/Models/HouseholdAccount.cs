@@ -22,6 +22,7 @@ namespace Budgeter.Models
         public double ReconciledBalance { get; set; }
 
         public virtual ICollection<Transaction> Transactions { get; set; }
+        public virtual Household Household { get; set; }
 
     }
 }
