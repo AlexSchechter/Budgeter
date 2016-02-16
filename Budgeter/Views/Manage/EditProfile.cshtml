@@ -6,10 +6,9 @@
 }
 
 <h2>@ViewBag.Title</h2>
-@using (Html.BeginForm("Edit Profile", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("EditProfile", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
-
     <h4>Edit Profile</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })

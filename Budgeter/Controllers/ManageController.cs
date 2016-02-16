@@ -9,6 +9,7 @@ using Microsoft.Owin.Security;
 using Budgeter.Models;
 using System.Collections.Generic;
 using Microsoft.Ajax.Utilities;
+using System.Data.Entity;
 
 namespace Budgeter.Controllers
 {
@@ -87,38 +88,83 @@ namespace Budgeter.Controllers
                 RedirectToAction("Index", "Home");
             ApplicationDbContext db = new ApplicationDbContext();
 
-            var user = db.Users.Where(u => u.Id == profile.UserId).ToList();
+            ApplicationUser user = db.Users.FirstOrDefault(u => u.Id == profile.UserId);
 
-            user.ForEach(u =>
-            {
-                u.UserName = profile.Username;
-                u.Email = profile.Email;
-                u.FirstName = profile.FirstName;
-                u.LastName = profile.LastName;
-                u.HouseholdId = profile.HouseholdInvites.FirstOrDefault(h => h.Id == 1).Id;
-            }
-                        );
+            user.UserName = profile.Username;
+            user.Email = profile.Email;
+            user.FirstName = profile.FirstName;
+            user.LastName = profile.LastName;
+
             await db.SaveChangesAsync();
             return RedirectToAction("Index", "Home");
         }
 
-        //GET: :Manage/JoinHousehold
+        //GET: :Manage/ChangeHousehold
         [HttpGet]
-        public ActionResult JoinHousehold(Household household)
+        public ActionResult ChangeHousehold(int householdId)
         {
-            return View(household);
+            ViewBag.householdId = householdId;
+            return View(householdId);
         }
 
-        //POST: /Manage/JoinHousehold
+        //POST: /Manage/ChangeHousehold
         [HttpPost]
-        public async Task<ActionResult> JoinHousehold(int householdId)
+        public async Task<ActionResult> ChangeHousehold(string submitButton, int householdId)
         {
-            string userId = User.Identity.GetUserId();
-            ApplicationDbContext db = new ApplicationDbContext();
-            var user = db.Users.Where(u => u.Id == userId).ToList();
-            user.ForEach(u => u.HouseholdId = householdId);
-            await db.SaveChangesAsync();
-            return RedirectToAction("EditProfile", "Manage", new { userId = userId });
+            switch (submitButton)
+            {
+                case "Confirm":
+                    string userId = User.Identity.GetUserId();
+                    ApplicationDbContext db = new ApplicationDbContext();
+                    var user = db.Users.FirstOrDefault(u => u.Id == userId);
+                    Household oldHousehold = db.Households.FirstOrDefault(h => h.Id == user.HouseholdId);
+                    user.HouseholdId = householdId;
+                    if (oldHousehold.Members.Count == 1)
+                        db.Households.Remove(oldHousehold);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Households","Home");
+                case "Cancel":
+                    return RedirectToAction("Households", "Home");
+                default:
+                    return View();
+            }
+            
+        }
+        
+        //GET: /Manage/CreateAndChangeHousehold
+        [HttpGet]
+        public ActionResult CreateAndChangeHousehold(string newName, int members)
+        {
+            if (newName != null && newName != "")
+            {
+                ViewBag.newName = newName;
+                return View();
+            }
+            return RedirectToAction("Households", "Home");
+        }
+
+        //POST: /Manage/CreateAndChangeHousehold
+        [HttpPost]
+        public async Task<ActionResult> CreateAndChangeHousehold(string submitButton, string newName)
+        {
+            switch (submitButton)
+            {
+                case "Confirm":               
+                    string userId = User.Identity.GetUserId();                
+                    ApplicationDbContext db = new ApplicationDbContext();
+                    db.Households.Add(new Household { Name = newName });
+                    await db.SaveChangesAsync();
+                    ApplicationUser user = db.Users.FirstOrDefault(u => u.Id == userId);
+                    Household oldHousehold = db.Households.FirstOrDefault(h => h.Id == user.HouseholdId);
+                    user.HouseholdId = db.Households.OrderByDescending(h => h.Id).FirstOrDefault(h => h.Name == newName).Id;
+                    db.Households.Remove(oldHousehold);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Households", "Home");
+                case "Cancel":
+                    return RedirectToAction("Households", "Home");
+                default:
+                    return View();
+            }        
         }
 
         //GET:  /Manage/CreateHouseholdAccount

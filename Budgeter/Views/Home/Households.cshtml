@@ -2,48 +2,59 @@
 @model HouseholdViewModel
 
 <div class="h2">You are currently part of the <i> "@Model.CurrentHousehold.Name" </i> household</div> 
-<div class="h4">This houshold has @Model.CurrentHousehold.Members.Count members, 
+<div class="h4">Your household has @Model.CurrentHousehold.Members.Count members, 
     @Model.CurrentHousehold.Budgets.Count budgets and @Model.CurrentHousehold.Categories.Count categories</div>
 <br />
 <hr />
 <br />
-<div class="h2">Change Household</div>
+<div class="h1 text-center">Change Household</div>
 <div class="h4 text-danger">Please note that if you are the only member a household and you leave it, 
     then all the data of that household will be erased. This action cannot be undone </div>
 <div class="row">
+    <div class="col-sm-6">    
+        <div class="h2">Switch to Existing Household</div>
+        <div class="h5 text-info">Plese note you can only switch to a household for which you have an invite</div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Id</th>
+                    <th>Members</th>
+                    <th>Budgets</th>
+                    <th>Categories</th>
+                    <th></th>
+                </tr>
+            </thead>
+            @foreach (Household household in Model.HouseholdOptions)
+            {
+            <tbody>
+                <tr>                   
+                    <td>@household.Name</td>
+                    <td>@household.Id</td>
+                    <td>@household.Members.Count</td>
+                    <td>@household.Budgets.Count</td>
+                    <td>@household.Budgets.Count</td>
+                    <td>@Html.ActionLink("Join", "ChangeHousehold", "Manage", new { householdId = household.Id }, new { @class = "btn btn-default" })</td>
+                </tr>
+            </tbody>
+            }
+        </table>
+    </div>
     <div class="col-sm-6">
-        <div class="widget">
-            <div class="widget-header clearfix">
-                <h3><i class="icon ion-ios-grid-view-outline"></i> <span>BASIC TABLE</span></h3>
-                <div class="btn-group widget-header-toolbar visible-lg">
-                    <a href="#" title="Expand/Collapse" class="btn btn-link btn-toggle-expand"><i class="icon ion-ios-arrow-up"></i></a>
-                    <a href="#" title="Remove" class="btn btn-link btn-remove"><i class="icon ion-ios-close-empty"></i></a>
+        <div class="h2">Switch to New Household</div>
+        <div class="h5 text-info">You can create here a complete new household and switch to it</div>
+        
+        @using (Html.BeginForm("CreateAndChangeHousehold", "Manage", FormMethod.Get, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">       
+                <div class="input-group">
+                    <input name="members" value="1" type="hidden" />
+                    <input type="text" class="form-control" name="newName" placeholder="Enter household name">
+                    <span class="input-group-btn"><input type="submit" class="btn btn-default" value="Create Household" /></span>                
                 </div>
             </div>
-            <div class="widget-content">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Members</th>
-                            <th>Budgets</th>
-                            <th>Categories</th>
-                        </tr>
-                    </thead>
-                    @foreach (Household household in Model.HouseholdOptions)
-                    {
-                    <tbody>
-                        <tr>
-                            <td>@household.Name</td>
-                            <td>@household.Members.Count</td>
-                            <td>@household.Budgets.Count</td>
-                            <td>@household.Budgets.Count</td>
-                        </tr>
-                    </tbody>
-                    }
-                </table>
-            </div>
-        </div>
+        }
     </div>
 </div>
 
