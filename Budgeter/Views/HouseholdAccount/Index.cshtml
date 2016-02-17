@@ -73,7 +73,7 @@
                     <th>Reconciled Balanced</th>
                     <th>Edit</th>
                     <th>Delete</th>
-                    <th>[Status]</th>
+                    <th>Details</th>
                 </tr>
             </thead>
             <tbody>
@@ -86,7 +86,7 @@
                         <td>@string.Concat("$", account.ReconciledBalance)</td>
                         <td>@Html.ActionLink("Edit", "Edit", new { householdAccountId = account.Id }, new { @class = "btn btn-default" })</td>
                         <td>@Html.ActionLink("Delete", "Delete", new { householdAccountId = account.Id }, new { @class = "btn btn-default" })</td>
-                        <td></td>
+                        <td>@Html.ActionLink("Details", "Index", "Transactions", new { householdAccountId = account.Id }, new { @class = "btn btn-default" })</td>
                     </tr>
                 }
                 <tr>

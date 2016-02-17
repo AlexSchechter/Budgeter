@@ -14,9 +14,7 @@ namespace Budgeter.Controllers
 
         protected ApplicationUser UserInfo()
         {
-            string userId = User.Identity.GetUserId();
-            ApplicationUser user = db.Users.FirstOrDefault(u => u.Id == userId);
-            return user;
+            return db.Users.Find(User.Identity.GetUserId());
         }
     }
 }

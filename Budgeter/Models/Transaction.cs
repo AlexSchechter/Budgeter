@@ -14,7 +14,7 @@ namespace Budgeter.Models
         public DateTimeOffset Date { get; set; }
         public double Amount { get; set; }
         public int CategoryId { get; set; }
-        public int ReconciledAmount { get; set; }
+        public double ReconciledAmount { get; set; }
         public bool Reconciled { get; set; }
         [InverseProperty("Transactions")]
         public string EnteredById { get; set; }

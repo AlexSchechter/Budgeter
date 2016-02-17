@@ -16,37 +16,20 @@ namespace Budgeter.Controllers
     {       
       
         // GET: Transactions
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(int householdAccountId)
         {
-            var transactions = db.Transactions.Include(t => t.Category).Include(t => t.EnteredBy).Include(t => t.HouseholdAccount);
+            ViewBag.HouseholdAccountId = householdAccountId;
+            var transactions = db.Transactions.Where(t => t.HouseholdAccountId == householdAccountId).Include(t => t.Category).Include(t => t.EnteredBy).Include(t => t.HouseholdAccount);
             return View(await transactions.ToListAsync());
         }
 
-        // GET: Transactions/Details/5
-        public async Task<ActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Transaction transaction = await db.Transactions.FindAsync(id);
-            if (transaction == null)
-            {
-                return HttpNotFound();
-            }
-            return View(transaction);
-        }
-
         // GET: Transactions/Create
-        public ActionResult Create()
-        {         
-            
+        public ActionResult Create(int householdAccountId)
+        {
             // GET THE USER'S CURRENT HOUSEHOLD
             // USE household.Categories to list cats for h
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name");
-            ViewBag.EnteredById = new SelectList(db.Users, "Id", "FirstName");
-            ViewBag.HouseholdAccountId = new SelectList(db.HouseholdAccounts, "Id", "Name");
-            return View();
+            ViewBag.CategoryId = new SelectList(db.Households.FirstOrDefault(h => h.Id == UserInfo().HouseholdId).Categories);
+            return View(new Transaction { HouseholdAccountId = householdAccountId });
         }
 
         // POST: Transactions/Create
@@ -58,32 +41,30 @@ namespace Budgeter.Controllers
         {
             if (ModelState.IsValid)
             {
+                transaction.Date = DateTimeOffset.Now;
+                transaction.EnteredById = User.Identity.GetUserId();
                 db.Transactions.Add(transaction);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { householdAccountId = transaction.HouseholdAccountId });
             }
-
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", transaction.CategoryId);
-            ViewBag.EnteredById = new SelectList(db.ApplicationUsers, "Id", "FirstName", transaction.EnteredById);
-            ViewBag.HouseholdAccountId = new SelectList(db.HouseholdAccounts, "Id", "Name", transaction.HouseholdAccountId);
-            return View(transaction);
+            return View(transaction.HouseholdAccountId);
         }
 
         // GET: Transactions/Edit/5
-        public async Task<ActionResult> Edit(int? id)
+        public async Task<ActionResult> Edit(int? transactionId)
         {
-            if (id == null)
+            if (transactionId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Transaction transaction = await db.Transactions.FindAsync(id);
+            Transaction transaction = await db.Transactions.FindAsync(transactionId);
             if (transaction == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", transaction.CategoryId);
-            ViewBag.EnteredById = new SelectList(db.ApplicationUsers, "Id", "FirstName", transaction.EnteredById);
-            ViewBag.HouseholdAccountId = new SelectList(db.HouseholdAccounts, "Id", "Name", transaction.HouseholdAccountId);
+            int householdId = UserInfo().HouseholdId;
+            ViewBag.CategoryId = new SelectList(db.Households.FirstOrDefault(h => h.Id == householdId).Categories, "Id", "Name", transaction.CategoryId);
+            //ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", transaction.CategoryId);
             return View(transaction);
         }
 
@@ -98,22 +79,21 @@ namespace Budgeter.Controllers
             {
                 db.Entry(transaction).State = EntityState.Modified;
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { householdAccountId = transaction.HouseholdAccountId });
             }
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", transaction.CategoryId);
-            ViewBag.EnteredById = new SelectList(db.ApplicationUsers, "Id", "FirstName", transaction.EnteredById);
-            ViewBag.HouseholdAccountId = new SelectList(db.HouseholdAccounts, "Id", "Name", transaction.HouseholdAccountId);
+            int householdId = UserInfo().HouseholdId;
+            ViewBag.CategoryId = new SelectList(db.Households.FirstOrDefault(h => h.Id == householdId).Categories, "Id", "Name", transaction.CategoryId);
             return View(transaction);
         }
 
         // GET: Transactions/Delete/5
-        public async Task<ActionResult> Delete(int? id)
+        public async Task<ActionResult> Delete(int? transactionId)
         {
-            if (id == null)
+            if (transactionId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Transaction transaction = await db.Transactions.FindAsync(id);
+            Transaction transaction = await db.Transactions.FindAsync(transactionId);
             if (transaction == null)
             {
                 return HttpNotFound();
@@ -124,12 +104,12 @@ namespace Budgeter.Controllers
         // POST: Transactions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int transactionId)
         {
-            Transaction transaction = await db.Transactions.FindAsync(id);
+            Transaction transaction = await db.Transactions.FindAsync(transactionId);
             db.Transactions.Remove(transaction);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { householdAccountId = transaction.HouseholdAccountId });
         }
 
         protected override void Dispose(bool disposing)

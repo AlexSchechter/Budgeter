@@ -7,7 +7,7 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create", new { householdAccountId = ViewBag.HouseholdAccountId })
 </p>
 <table class="table">
     <tr>
@@ -65,9 +65,8 @@
             @Html.DisplayFor(modelItem => item.Reconciled)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Edit", "Edit", new { transactionId = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { transactionId = item.Id })
         </td>
     </tr>
 }
