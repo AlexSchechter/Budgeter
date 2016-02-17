@@ -4,7 +4,7 @@
 <div class="container-fluid primary-content">
     <!-- PRIMARY CONTENT HEADING -->
     <div class="primary-content-heading clearfix">
-        <h2>PROJECTS</h2>
+        <h2>Accounts for @ViewBag.HouseholdName Household</h2>
        
         <ul class="breadcrumb pull-left">
             <li><i class="icon ion-home"></i><a href="#">Home</a></li>
@@ -59,7 +59,7 @@
     <!-- END PRIMARY CONTENT HEADING -->
     <div class="project-list-subheading">
         <p class="lead">You're involved in <span class="label label-success">4 active</span> projects, <span class="label label-warning">2 pending</span> and <span class="label label-default">2 closed</span></p>
-        <a href ="/manage/CreateHouseholdAccount" type="button" class="btn btn-primary pull-right btn-new-project">
+        <a href ="/HouseholdAccount/Create" type="button" class="btn btn-primary pull-right btn-new-project">
             <i class="icon ion-compose"> CREATE NEW ACCOUNT</i> 
         </a>
     </div>
@@ -71,8 +71,8 @@
                     <th>Creation Date</th>
                     <th>Balance</th>
                     <th>Reconciled Balanced</th>
-                    <th>[Priority]</th>
-                    <th>[Leader]</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
                     <th>[Status]</th>
                 </tr>
             </thead>
@@ -84,8 +84,8 @@
                         <td>@account.CreationDate.Date.ToString("d")</td>
                         <td>@string.Concat("$", account.Balance)</td>
                         <td>@string.Concat("$", account.ReconciledBalance)</td>
-                        <td></td>
-                        <td></td>
+                        <td>@Html.ActionLink("Edit", "Edit", new { householdAccountId = account.Id }, new { @class = "btn btn-default" })</td>
+                        <td>@Html.ActionLink("Delete", "Delete", new { householdAccountId = account.Id }, new { @class = "btn btn-default" })</td>
                         <td></td>
                     </tr>
                 }

@@ -2,8 +2,34 @@
 @model HouseholdViewModel
 
 <div class="h2">You are currently part of the <i> "@Model.CurrentHousehold.Name" </i> household</div> 
-<div class="h4">Your household has @Model.CurrentHousehold.Members.Count members, 
-    @Model.CurrentHousehold.Budgets.Count budgets and @Model.CurrentHousehold.Categories.Count categories</div>
+<br />
+<div class="h4 text-info">Your household has @Model.CurrentHousehold.Budgets.Count budgets and @Model.CurrentHousehold.Categories.Count categories</div>
+<br />
+<div class="h4 text-info">It has @Model.CurrentHousehold.Members.Count members: </div>
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>UserId</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (ApplicationUser member in Model.CurrentHousehold.Members)
+    {
+        <tr>
+            <td>@member.UserName</td>
+            <td>@member.FirstName</td>
+            <td>@member.LastName</td>
+            <td>@member.Email</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+
 <br />
 <hr />
 <br />
@@ -25,10 +51,10 @@
                     <th></th>
                 </tr>
             </thead>
+            <tbody>
             @foreach (Household household in Model.HouseholdOptions)
             {
-            <tbody>
-                <tr>                   
+                <tr>
                     <td>@household.Name</td>
                     <td>@household.Id</td>
                     <td>@household.Members.Count</td>
@@ -36,8 +62,9 @@
                     <td>@household.Budgets.Count</td>
                     <td>@Html.ActionLink("Join", "ChangeHousehold", "Manage", new { householdId = household.Id }, new { @class = "btn btn-default" })</td>
                 </tr>
-            </tbody>
             }
+            </tbody>
+
         </table>
     </div>
     <div class="col-sm-6">

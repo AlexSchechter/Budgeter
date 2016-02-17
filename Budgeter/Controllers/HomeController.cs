@@ -42,15 +42,7 @@ namespace Budgeter.Controllers
             return View(model);
         }
 
-        //Get /Home/HouseholdAccounts
-        public ActionResult HouseholdAccounts()
-        {
-            ApplicationDbContext db = new ApplicationDbContext();
-            string userId = User.Identity.GetUserId();
-            int householdId = db.Users.FirstOrDefault(u => u.Id == userId ).HouseholdId;
-            List<HouseholdAccount> model = db.HouseholdAccounts.Where(h => h.HouseholdId == householdId).ToList();
-            return View(model);
-        }
+
 
         //Get /Home/Households
         public  ActionResult Households()

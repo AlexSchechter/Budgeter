@@ -53,6 +53,7 @@ namespace Budgeter.Models
         public DbSet<Budget> Budgets { get; set; }
         public DbSet<BudgetItem> BudgetItems { get; set; }
         public DbSet<Invitation> Invitations { get; set; }
+        public IEnumerable ApplicationUsers { get; internal set; }
 
         internal void SubmitChanges()
         {

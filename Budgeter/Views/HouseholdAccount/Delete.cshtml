@@ -1,0 +1,6 @@
+﻿<div class="h2 text-danger">Are you sure you want to delete the account? This action cannot be undone.</div>
+@using (Html.BeginForm("Delete", "HouseholdAccount", new { householdAccountId = ViewBag.householdAccountId }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    <input type="submit" name="submitButton" value="Delete" />
+    <input type="submit" name="submitButton" value="Cancel" />
+}

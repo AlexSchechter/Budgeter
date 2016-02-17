@@ -128,8 +128,7 @@ namespace Budgeter.Controllers
                     return RedirectToAction("Households", "Home");
                 default:
                     return View();
-            }
-            
+            }            
         }
         
         //GET: /Manage/CreateAndChangeHousehold
@@ -168,35 +167,6 @@ namespace Budgeter.Controllers
             }        
         }
 
-        //GET:  /Manage/CreateHouseholdAccount
-        [HttpGet]
-        public ActionResult CreateHouseholdAccount()
-        {
-            return View();
-        }
-
-        //POST:  /Manage/CreateHouseholdAccount
-        [HttpPost]
-        public async Task<ActionResult> CreateHouseholdAccount(HouseholdAccountViewModel hav)
-        {
-            if(ModelState.IsValid)
-            { 
-                ApplicationDbContext db = new ApplicationDbContext();
-                string userId = User.Identity.GetUserId();
-                HouseholdAccount household = new HouseholdAccount
-                {
-                    Name = hav.Name,
-                    Balance = hav.Balance,
-                    ReconciledBalance = hav.ReconReconciledBalance,
-                    CreationDate = DateTimeOffset.Now,
-                    HouseholdId = db.Users.FirstOrDefault(u => u.Id == userId).HouseholdId,
-                };
-                db.HouseholdAccounts.Add(household);
-                await db.SaveChangesAsync();
-                return RedirectToAction("HouseHoldAccounts", "Home");
-            }
-            return View();
-        }
 
 
         //
@@ -385,7 +355,7 @@ namespace Budgeter.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                return RedirectToAction("Index", "Home", new { Message = ManageMessageId.ChangePasswordSuccess });
             }
             AddErrors(result);
             return View(model);
