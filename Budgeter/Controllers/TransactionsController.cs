@@ -16,19 +16,23 @@ namespace Budgeter.Controllers
     {       
       
         // GET: Transactions
-        public async Task<ActionResult> Index(int householdAccountId)
+        public async Task<ActionResult> Index(int? householdAccountId)
         {
-            ViewBag.HouseholdAccountId = householdAccountId;
-            var transactions = db.Transactions.Where(t => t.HouseholdAccountId == householdAccountId).Include(t => t.Category).Include(t => t.EnteredBy).Include(t => t.HouseholdAccount);
-            return View(await transactions.ToListAsync());
+            if (householdAccountId !=null)
+            {
+                ViewBag.HouseholdAccountId = householdAccountId;
+                ViewBag.HouseholdAccountName = db.HouseholdAccounts.Find(householdAccountId).Name;
+                var transactions = db.Transactions.Where(t => t.HouseholdAccountId == householdAccountId).Include(t => t.Category).Include(t => t.EnteredBy).Include(t => t.HouseholdAccount);
+                return View(await transactions.ToListAsync());
+            }
+            return RedirectToAction("Index", "HouseholdAccount");  
         }
 
         // GET: Transactions/Create
         public ActionResult Create(int householdAccountId)
         {
-            // GET THE USER'S CURRENT HOUSEHOLD
-            // USE household.Categories to list cats for h
-            ViewBag.CategoryId = new SelectList(db.Households.FirstOrDefault(h => h.Id == UserInfo().HouseholdId).Categories);
+            int householdId = UserInfo().HouseholdId;
+            ViewBag.CategoryId = new SelectList(db.Households.FirstOrDefault(h => h.Id == householdId).Categories, "Id", "Name");
             return View(new Transaction { HouseholdAccountId = householdAccountId });
         }
 

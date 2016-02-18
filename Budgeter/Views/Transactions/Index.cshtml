@@ -1,74 +1,214 @@
 ﻿@model IEnumerable<Budgeter.Models.Transaction>
 
-@{
-    ViewBag.Title = "Index";
-}
-
-<h2>Index</h2>
+<h2>Transactions for @ViewBag.HouseholdAccountName</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create", new { householdAccountId = ViewBag.HouseholdAccountId })
+    @Html.ActionLink("Create New Transaction", "Create", new { householdAccountId = ViewBag.HouseholdAccountId })
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Category.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EnteredBy.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.HouseholdAccount.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Date)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Amount)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ReconciledAmount)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Reconciled)
-        </th>
-        <th></th>
-    </tr>
+<div class="table-responsive">
+    <table id="datatable-column-filter" class="table table-sorting table-striped table-hover datatable">
+        <thead>
+            <tr>
+                <th>
+                    Category
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EnteredBy.FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HouseholdAccount.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Amount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReconciledAmount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Reconciled)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Category.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EnteredBy.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HouseholdAccount.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReconciledAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Reconciled)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { transactionId = item.Id }) |
+                        @Html.ActionLink("Delete", "Delete", new { transactionId = item.Id })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Category.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.EnteredBy.FirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.HouseholdAccount.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Amount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ReconciledAmount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Reconciled)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { transactionId = item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { transactionId = item.Id })
-        </td>
-    </tr>
-}
-
-</table>
+<div class="widget">
+    <div class="widget-header clearfix">
+        <h3><i class="icon ion-ios-grid-view-outline"></i> <span>COLUMN FILTER</span></h3>
+        <div class="btn-group widget-header-toolbar visible-lg">
+            <a href="#" title="Expand/Collapse" class="btn btn-link btn-toggle-expand"><i class="icon ion-ios-arrow-up"></i></a>
+            <a href="#" title="Remove" class="btn btn-link btn-remove"><i class="icon ion-ios-close-empty"></i></a>
+        </div>
+    </div>
+    <div class="widget-content">
+        <div class="table-responsive">
+            <table id="datatable-column-filter" class="table table-sorting table-striped table-hover datatable">
+                <thead>
+                    <tr>
+                        <th>Browser</th>
+                        <th>Operating System</th>
+                        <th>Visits</th>
+                        <th>New Visits</th>
+                        <th>Bounce Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Chrome</td>
+                        <td>Macintosh</td>
+                        <td>360</td>
+                        <td>82.78%</td>
+                        <td>87.77%</td>
+                    </tr>
+                    <tr>
+                        <td>Chrome</td>
+                        <td>Windows</td>
+                        <td>582</td>
+                        <td>87.24%</td>
+                        <td>90.12%</td>
+                    </tr>
+                    <tr>
+                        <td>Chrome</td>
+                        <td>Linux</td>
+                        <td>172</td>
+                        <td>45.21%</td>
+                        <td>48.81%</td>
+                    </tr>
+                    <tr>
+                        <td>Chrome</td>
+                        <td>iOS</td>
+                        <td>86</td>
+                        <td>35.23%</td>
+                        <td>44.21%</td>
+                    </tr>
+                    <tr>
+                        <td>Firefox</td>
+                        <td>Windows</td>
+                        <td>280</td>
+                        <td>63.12%</td>
+                        <td>89.34%</td>
+                    </tr>
+                    <tr>
+                        <td>Firefox</td>
+                        <td>Android</td>
+                        <td>236</td>
+                        <td>58.02%</td>
+                        <td>76.19%</td>
+                    </tr>
+                    <tr>
+                        <td>Internet Explorer</td>
+                        <td>Windows</td>
+                        <td>145</td>
+                        <td>45.23%</td>
+                        <td>94.65%</td>
+                    </tr>
+                    <tr>
+                        <td>Safari</td>
+                        <td>Macintosh</td>
+                        <td>103</td>
+                        <td>22.12%</td>
+                        <td>52.43%</td>
+                    </tr>
+                    <tr>
+                        <td>Safari</td>
+                        <td>iOS</td>
+                        <td>302</td>
+                        <td>56.98%</td>
+                        <td>45.53%</td>
+                    </tr>
+                    <tr>
+                        <td>Opera</td>
+                        <td>Windows</td>
+                        <td>328</td>
+                        <td>67.12%</td>
+                        <td>78.34%</td>
+                    </tr>
+                    <tr>
+                        <td>Opera</td>
+                        <td>Macintosh</td>
+                        <td>22</td>
+                        <td>87.21%</td>
+                        <td>79.81%</td>
+                    </tr>
+                    <tr>
+                        <td>Chrome</td>
+                        <td>iOS</td>
+                        <td>45</td>
+                        <td>23.21%</td>
+                        <td>34.67%</td>
+                    </tr>
+                    <tr>
+                        <td>Firefox</td>
+                        <td>Windows</td>
+                        <td>67</td>
+                        <td>27.11%</td>
+                        <td>78.08%</td>
+                    </tr>
+                    <tr>
+                        <td>Chrome</td>
+                        <td>Macintosh</td>
+                        <td>120</td>
+                        <td>80.78%</td>
+                        <td>80.77%</td>
+                    </tr>
+                    <tr>
+                        <td>Chrome</td>
+                        <td>Windows</td>
+                        <td>682</td>
+                        <td>89.44%</td>
+                        <td>95.32%</td>
+                    </tr>
+                    <tr>
+                        <td>Chrome</td>
+                        <td>Windows</td>
+                        <td>172</td>
+                        <td>43.11%</td>
+                        <td>46.89%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

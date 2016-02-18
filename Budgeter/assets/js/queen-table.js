@@ -4,7 +4,7 @@ $(document).ready(function(){
 	/*	DATA TABLE
 	/********************************************/
 
-	if( $('.datatable').length > 0 ) {
+    if ($('.datatable').length > 0) {
 		/* basic */
 		$('#datatable-basic').dataTable({
 			sDom:
