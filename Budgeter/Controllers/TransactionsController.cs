@@ -116,13 +116,5 @@ namespace Budgeter.Controllers
             return RedirectToAction("Index", new { householdAccountId = transaction.HouseholdAccountId });
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }

@@ -259,7 +259,7 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li>
                                     <i class="icon ion-ios-person"></i>
-                                    <span class="text">@Html.ActionLink("Profile", "UserProfile", "Home", new { userId = User.Identity.GetUserId() }, null)</span>
+                                    <span class="text">@Html.ActionLink("Profile", "UserProfile", "Home")</span>
                                 </li>
                                 <li>
                                     <a href="#">
@@ -317,11 +317,14 @@
                 <nav id="main-nav" class="main-nav">
                     <h3>MAIN</h3>
                     <ul class="main-menu">
-                        <li class="has-submenu active">                   
+                        <li class="has-submenu">                   
                             <a href="/HouseholdAccount/Index" class="submenu"><i class="icon ion-ios-speedometer-outline"></i><span class="text">Accounts</span></a>
                         </li>
-                        <li class="has-submenu active">
+                        <li class="has-submenu">
                             <a href="/Home/Households" class="submenu"><i class="icon ion-ios-paper-outline"></i><span class="text">Manage Households</span></a>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="/Categories/Index" class="submenu"><i class="icon ion-ios-flask-outline"></i><span class="text">Manage Categories</span></a>
                         </li>
                         <li class="has-submenu">
                             <a href="#" class="submenu-toggle"><i class="icon ion-ios-paper-outline"></i><span class="text">Forms</span></a>

@@ -7,7 +7,7 @@ using System.Web.Mvc;
 namespace Budgeter.Controllers
 {
     [RequireHttps]
-    public class HomeController : Controller
+    public class HomeController : AppController
     {
         public ActionResult Index()
         {
@@ -33,16 +33,16 @@ namespace Budgeter.Controllers
         //GET /Home/UserProfile
         public ActionResult UserProfile()
         {
-            string userId = User.Identity.GetUserId();
-            ApplicationDbContext db = new ApplicationDbContext();
-            ApplicationUser user = db.Users.FirstOrDefault(u => u.Id == userId);
-            ProfileViewModel model = new ProfileViewModel { Email = user.Email, FirstName = user.FirstName, LastName = user.LastName,
-                Username = user.UserName, HouseholdName = db.Households.FirstOrDefault(h => h.Id == user.HouseholdId).Name };
-
-            return View(model);
+            ApplicationUser user = UserInfo();
+            return View(new ProfileViewModel
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Username = user.UserName,
+                HouseholdName = db.Households.FirstOrDefault(h => h.Id == user.HouseholdId).Name
+            });
         }
-
-
 
         //Get /Home/Households
         public  ActionResult Households()

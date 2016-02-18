@@ -36,15 +36,20 @@ namespace Budgeter.Controllers
         {
             if (ModelState.IsValid)
             {
-                Household household = db.Households.Find(UserInfo().HouseholdId);
+                Household household = HouseholdInfo();
 
                 if (household.Categories.Any(c => c.Name == category.Name))
                     return RedirectToAction("Index");
 
-                if (!db.Categories.Any(c => c.Name == category.Name))
+                Category sameNameCategory = db.Categories.FirstOrDefault(c => c.Name == category.Name);
+                if (sameNameCategory == null)
+                {
                     db.Categories.Add(category);
+                    household.Categories.Add(category);
+                }
+                else
+                    household.Categories.Add(sameNameCategory);
 
-                household.Categories.Add(category);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");           
             }
@@ -53,38 +58,41 @@ namespace Budgeter.Controllers
         }
 
         // GET: Categories/Delete/5
-        public async Task<ActionResult> Delete(int? id)
+        public async Task<ActionResult> Delete(int? categoryId)
         {
-            if (id == null)
-            {
+            if (categoryId == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Category category = await db.Categories.FindAsync(id);
-            if (category == null)
-            {
+         
+            if (!HouseholdInfo().Categories.Any(c => c.Id == categoryId))
                 return HttpNotFound();
-            }
-            return View(category);
+
+            return View(await db.Categories.FindAsync(categoryId));
         }
 
         // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int categoryId)
         {
-            Category category = await db.Categories.FindAsync(id);
-            db.Categories.Remove(category);
-            await db.SaveChangesAsync();
+            Household household = HouseholdInfo();
+
+            if (!household.Categories.Any(c => c.Id == categoryId))
+                 return HttpNotFound();
+
+            Category category = await db.Categories.FindAsync(categoryId);
+            
+            if (household.HouseholdAccounts.SelectMany(t => t.Transactions).Where(t => t.CategoryId == categoryId).Count() == 0)
+            {
+                household.Categories.Remove(category);
+                await db.SaveChangesAsync();
+                if (!db.Households.SelectMany(c => c.Categories).Select(c => c.Id).Contains(categoryId))
+                {
+                    db.Categories.Remove(category);
+                    await db.SaveChangesAsync();
+                }
+            }
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }

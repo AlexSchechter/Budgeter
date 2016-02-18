@@ -1,10 +1,8 @@
 ﻿@model IEnumerable<Budgeter.Models.Category>
 
-@{
-    ViewBag.Title = "Index";
-}
-
-<h2>Index</h2>
+<div class="h2">Index of Categories</div>
+<div class="h5 text-info">Please note that only Categories that contain no transactinons can be deleted</div>
+<br />
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -13,6 +11,9 @@
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            Transactions
         </th>
         <th></th>
     </tr>
@@ -23,7 +24,13 @@
             @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @item.Transactions.Count
+        </td>
+        <td>
+            @*@if (item.Transactions.Count == 0)
+            {*@
+                @Html.ActionLink("Delete", "Delete", new { categoryId = item.Id });
+            @*}*@
         </td>
     </tr>
 }

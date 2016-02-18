@@ -16,5 +16,18 @@ namespace Budgeter.Controllers
         {
             return db.Users.Find(User.Identity.GetUserId());
         }
+        protected Household HouseholdInfo()
+        {
+            ApplicationUser user = UserInfo();
+            return (db.Households.FirstOrDefault(h => h.Id == user.HouseholdId));
+        }
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }
