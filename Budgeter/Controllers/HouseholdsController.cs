@@ -20,8 +20,13 @@ namespace Budgeter.Controllers
             List<int> householdOptionsIds = db.Invitations.Where(i => i.Email == user.Email).
                 Where(i => i.HouseholdId != household.Id).Select(i => i.HouseholdId).ToList();
             List<Household> householdOptions = new List<Household>();
+            Household householdOption = new Household();
             foreach (int optionId in householdOptionsIds)
-                householdOptions.Add(db.Households.FirstOrDefault(i => i.Id == optionId));
+            {
+                householdOption = db.Households.Find(optionId);
+                if (householdOption.MarkedForDeletion == false)
+                    householdOptions.Add(householdOption);
+            }               
             return View(new HouseholdViewModel { CurrentHousehold = household, HouseholdOptions = householdOptions });
         }
 
@@ -35,23 +40,23 @@ namespace Budgeter.Controllers
 
         //POST: /Manage/ChangeHousehold
         [HttpPost]
-        public async Task<ActionResult> ChangeHousehold(string submitButton, int householdId)
+        public async Task<ActionResult> ChangeHousehold(string submitButton, int? householdId)
         {
-            switch (submitButton)
+            if (submitButton == "Confirm")
             {
-                case "Confirm":
+                if ((householdId != null) && (db.Households.Any(h => h.Id == householdId) && (db.Households.Find(householdId).MarkedForDeletion == false)))
+                {
                     ApplicationUser user = UserInfo();
                     Household oldHousehold = HouseholdInfo();
-                    user.HouseholdId = householdId;
+                    user.HouseholdId = (int)householdId;
                     if (oldHousehold.Members.Count == 1)
-                        db.Households.Remove(oldHousehold);
+                        oldHousehold.MarkedForDeletion = true;
                     await db.SaveChangesAsync();
                     return RedirectToAction("Index", "Households");
-                case "Cancel":
-                    return RedirectToAction("Index", "Households");
-                default:
-                    return View();
+                }
+                return HttpNotFound();
             }
+            return RedirectToAction("Index", "Households");
         }
 
         //GET: /Manage/CreateAndChangeHousehold
@@ -70,11 +75,11 @@ namespace Budgeter.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateAndChangeHousehold(string submitButton, string newName)
         {
-            if (submitButton == "Confirm" || newName != null || newName != "")
+            if (submitButton == "Confirm" && newName != null && newName != "")
             {              
                 ApplicationUser user = UserInfo();
                 Household oldHousehold = HouseholdInfo();
-                db.Households.Add(new Household { Name = newName });
+                db.Households.Add(new Household { Name = newName, MarkedForDeletion = false });
                 await db.SaveChangesAsync();
                 Household newHousehold = db.Households.OrderByDescending(h => h.Id).FirstOrDefault(h => h.Name == newName);
                 user.HouseholdId = newHousehold.Id;
@@ -95,9 +100,9 @@ namespace Budgeter.Controllers
                     myCategory = db.Categories.FirstOrDefault(c => c.Name == name);
                     newHousehold.Categories.Add(myCategory);
                 }
-
+                
                 if (oldHousehold.Members.Count == 1)
-                    db.Households.Remove(oldHousehold);
+                    oldHousehold.MarkedForDeletion = true;
 
                 await db.SaveChangesAsync();
             }

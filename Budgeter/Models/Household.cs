@@ -17,6 +17,7 @@ namespace Budgeter.Models
         }
         public int Id { get; set; }
         public string Name { get; set; }
+        public bool MarkedForDeletion { get; set; }
         
         public virtual ICollection<HouseholdAccount> HouseholdAccounts { get; set; }
         public virtual ICollection<Category> Categories { get; set; }
