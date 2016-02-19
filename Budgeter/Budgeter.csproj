@@ -205,6 +205,7 @@
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HouseholdAccountController.cs" />
+    <Compile Include="Controllers\HouseholdsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
     <Compile Include="Migrations\Configuration.cs" />
@@ -479,8 +480,8 @@
     <Content Include="Views\Manage\EditProfile.cshtml" />
     <Content Include="Views\HouseholdAccount\Index.cshtml" />
     <Content Include="Views\Home\Households.cshtml" />
-    <Content Include="Views\Manage\ChangeHousehold.cshtml" />
-    <Content Include="Views\Manage\CreateAndChangeHousehold.cshtml" />
+    <Content Include="Views\Households\ChangeHousehold.cshtml" />
+    <Content Include="Views\Households\CreateAndChangeHousehold.cshtml" />
     <Content Include="Views\Shared\_NotAuthenticatedLayout.cshtml" />
     <Content Include="Views\HouseholdAccount\Edit.cshtml" />
     <Content Include="Views\HouseholdAccount\Create.cshtml" />
@@ -493,10 +494,12 @@
     <Content Include="Views\Categories\Create.cshtml" />
     <Content Include="Views\Categories\Delete.cshtml" />
     <Content Include="Views\Categories\Index.cshtml" />
+    <Content Include="Views\Households\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\App\" />
+    <Folder Include="Views\Category\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

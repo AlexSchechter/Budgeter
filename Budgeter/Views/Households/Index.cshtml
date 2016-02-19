@@ -1,0 +1,89 @@
+﻿
+@using Budgeter.Models
+@model HouseholdViewModel
+
+<div class="h2">You are currently part of the <i> "@Model.CurrentHousehold.Name" </i> household</div>
+<br />
+<div class="h4 text-info">Your household has @Model.CurrentHousehold.Budgets.Count budgets and @Model.CurrentHousehold.Categories.Count categories</div>
+<br />
+<div class="h4 text-info">It has @Model.CurrentHousehold.Members.Count members: </div>
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>UserId</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (ApplicationUser member in Model.CurrentHousehold.Members)
+        {
+            <tr>
+                <td>@member.UserName</td>
+                <td>@member.FirstName</td>
+                <td>@member.LastName</td>
+                <td>@member.Email</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<br />
+<hr />
+<br />
+<div class="h1 text-center">Change Household</div>
+<div class="h4 text-danger">
+    Please note that if you are the only member a household and you leave it,
+    then all the data of that household will be erased. This action cannot be undone
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="h2">Switch to Existing Household</div>
+        <div class="h5 text-info">Plese note you can only switch to a household for which you have an invite</div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Id</th>
+                    <th>Members</th>
+                    <th>Budgets</th>
+                    <th>Categories</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Household household in Model.HouseholdOptions)
+            {
+                    <tr>
+                        <td>@household.Name</td>
+                        <td>@household.Id</td>
+                        <td>@household.Members.Count</td>
+                        <td>@household.Budgets.Count</td>
+                        <td>@household.Categories.Count</td>
+                        <td>@Html.ActionLink("Join", "ChangeHousehold", "Households", new { householdId = household.Id }, new { @class = "btn btn-default" })</td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+    <div class="col-sm-6">
+        <div class="h2">Switch to New Household</div>
+        <div class="h5 text-info">You can create here a complete new household and switch to it</div>
+
+        @using (Html.BeginForm("CreateAndChangeHousehold", "Households", FormMethod.Get, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <div class="input-group">
+                    <input name="members" value="1" type="hidden" />
+                    <input type="text" class="form-control" name="newName" placeholder="Enter household name">
+                    <span class="input-group-btn"><input type="submit" class="btn btn-default" value="Create Household" /></span>
+                </div>
+            </div>
+        }
+    </div>
+</div>

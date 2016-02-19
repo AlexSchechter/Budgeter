@@ -100,72 +100,7 @@ namespace Budgeter.Controllers
             return RedirectToAction("UserProfile", "Home");
         }
 
-        //GET: :Manage/ChangeHousehold
-        [HttpGet]
-        public ActionResult ChangeHousehold(int householdId)
-        {
-            ViewBag.householdId = householdId;
-            return View(householdId);
-        }
-
-        //POST: /Manage/ChangeHousehold
-        [HttpPost]
-        public async Task<ActionResult> ChangeHousehold(string submitButton, int householdId)
-        {
-            switch (submitButton)
-            {
-                case "Confirm":
-                    string userId = User.Identity.GetUserId();
-                    ApplicationDbContext db = new ApplicationDbContext();
-                    var user = db.Users.FirstOrDefault(u => u.Id == userId);
-                    Household oldHousehold = db.Households.FirstOrDefault(h => h.Id == user.HouseholdId);
-                    user.HouseholdId = householdId;
-                    if (oldHousehold.Members.Count == 1)
-                        db.Households.Remove(oldHousehold);
-                    await db.SaveChangesAsync();
-                    return RedirectToAction("Households","Home");
-                case "Cancel":
-                    return RedirectToAction("Households", "Home");
-                default:
-                    return View();
-            }            
-        }
         
-        //GET: /Manage/CreateAndChangeHousehold
-        [HttpGet]
-        public ActionResult CreateAndChangeHousehold(string newName, int members)
-        {
-            if (newName != null && newName != "")
-            {
-                ViewBag.newName = newName;
-                return View();
-            }
-            return RedirectToAction("Households", "Home");
-        }
-
-        //POST: /Manage/CreateAndChangeHousehold
-        [HttpPost]
-        public async Task<ActionResult> CreateAndChangeHousehold(string submitButton, string newName)
-        {
-            switch (submitButton)
-            {
-                case "Confirm":               
-                    string userId = User.Identity.GetUserId();                
-                    ApplicationDbContext db = new ApplicationDbContext();
-                    db.Households.Add(new Household { Name = newName });
-                    await db.SaveChangesAsync();
-                    ApplicationUser user = db.Users.FirstOrDefault(u => u.Id == userId);
-                    Household oldHousehold = db.Households.FirstOrDefault(h => h.Id == user.HouseholdId);
-                    user.HouseholdId = db.Households.OrderByDescending(h => h.Id).FirstOrDefault(h => h.Name == newName).Id;
-                    db.Households.Remove(oldHousehold);
-                    await db.SaveChangesAsync();
-                    return RedirectToAction("Households", "Home");
-                case "Cancel":
-                    return RedirectToAction("Households", "Home");
-                default:
-                    return View();
-            }        
-        }
 
 
 

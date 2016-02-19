@@ -19,6 +19,8 @@ namespace Budgeter.Controllers
         protected Household HouseholdInfo()
         {
             ApplicationUser user = UserInfo();
+            if (user == null)
+                return null;
             return (db.Households.FirstOrDefault(h => h.Id == user.HouseholdId));
         }
         protected override void Dispose(bool disposing)

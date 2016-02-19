@@ -1,6 +1,6 @@
 ﻿<div class="h2 text-danger">Do you really want to leave your current household?</div>
-@using (Html.BeginForm("CreateAndChangeHousehold", "Manage", new { newName = ViewBag.newName }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
+@using (Html.BeginForm("ChangeHousehold", "Households", new { householdId = ViewBag.householdId }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{    
     <input type="submit" name="submitButton" value="Confirm" />
     <input type="submit" name="submitButton" value="Cancel" />
 }
