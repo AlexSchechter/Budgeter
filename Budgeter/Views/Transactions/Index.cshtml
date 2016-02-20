@@ -3,7 +3,8 @@
 <h2>Transactions for @ViewBag.HouseholdAccountName</h2>
 
 <p>
-    @Html.ActionLink("Create New Transaction", "Create", new { householdAccountId = ViewBag.HouseholdAccountId })
+    @Html.ActionLink("Create New Transaction", "Create", new { householdAccountId = ViewBag.HouseholdAccountId }) |
+    @Html.ActionLink("Back to Accounts List", "Index", "HouseholdAccount")
 </p>
 <div class="widget">
     <div class="widget-content">

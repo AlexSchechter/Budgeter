@@ -27,10 +27,10 @@
             @item.Transactions.Count
         </td>
         <td>
-            @*@if (item.Transactions.Count == 0)
-            {*@
+            @if (item.Transactions.Count == 0)
+            {
                 @Html.ActionLink("Delete", "Delete", new { categoryId = item.Id });
-            @*}*@
+            }
         </td>
     </tr>
 }

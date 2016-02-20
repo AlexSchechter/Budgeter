@@ -3,22 +3,24 @@ using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
 namespace Budgeter.Controllers
 {
-    public class HouseholdAccountController : Controller
+    public class HouseholdAccountController : AppController
     {
         //Get /HouseholdAccount/Index
         public ActionResult Index()
         {
-            ApplicationDbContext db = new ApplicationDbContext();
-            string userId = User.Identity.GetUserId();
-            int householdId = db.Users.FirstOrDefault(u => u.Id == userId).HouseholdId;
-            List<HouseholdAccount> model = db.HouseholdAccounts.Where(h => h.HouseholdId == householdId).ToList();
-            ViewBag.HouseholdName = db.Households.FirstOrDefault(h => h.Id == householdId).Name;
+            Household household = HouseholdInfo();
+            if (household == null)
+                return RedirectToAction("Index", "Home");
+
+            List<HouseholdAccount> model = db.HouseholdAccounts.Where(h => h.HouseholdId == household.Id).ToList();
+            ViewBag.HouseholdName = household.Name;
             return View(model);
         }
 
@@ -26,11 +28,15 @@ namespace Budgeter.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            if (UserInfo() == null)
+                RedirectToAction("Index", "Home");
+
             return View();
         }
 
         //POST:  /HouseholdAccount/Create
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(HouseholdAccount model)
         {
             if (ModelState.IsValid)
@@ -40,8 +46,8 @@ namespace Budgeter.Controllers
                 HouseholdAccount household = new HouseholdAccount
                 {
                     Name = model.Name,
-                    Balance = model.Balance,
-                    ReconciledBalance = model.ReconciledBalance,
+                    Balance = 0,
+                    ReconciledBalance = 0,
                     CreationDate = DateTimeOffset.Now,
                     HouseholdId = db.Users.FirstOrDefault(u => u.Id == userId).HouseholdId,
                 };
@@ -54,24 +60,33 @@ namespace Budgeter.Controllers
 
         //GET: /HouseholdAccount/Edit
         [HttpGet]
-        public ActionResult Edit(int householdAccountId)
+        public async Task<ActionResult> Edit(int? householdAccountId)
         {
-            ApplicationDbContext db = new ApplicationDbContext();
-            HouseholdAccount model = db.HouseholdAccounts.FirstOrDefault(h => h.Id == householdAccountId);
-            return View(model);
+            if (UserInfo() == null)
+                return RedirectToAction("Index", "Home");
+
+            if (householdAccountId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            HouseholdAccount householdAccount = await db.HouseholdAccounts.FindAsync(householdAccountId);
+
+            if (householdAccount == null || householdAccount.HouseholdId != HouseholdInfo().Id)
+                return HttpNotFound();
+
+            return View(householdAccount);
         }
         
         //POST: /HouseholdAccount/Edit
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(HouseholdAccount model)
         {
             if(ModelState.IsValid)
             { 
                 ApplicationDbContext db = new ApplicationDbContext();
-                HouseholdAccount householdAccount = db.HouseholdAccounts.FirstOrDefault(h => h.Id == model.Id);
+                HouseholdAccount householdAccount = await db.HouseholdAccounts.FindAsync(model.Id);
                 householdAccount.Name = model.Name;
-                householdAccount.Balance = model.Balance;
-                householdAccount.ReconciledBalance = model.ReconciledBalance;
                 await db.SaveChangesAsync();
             }
             return RedirectToAction("Index");
@@ -81,6 +96,9 @@ namespace Budgeter.Controllers
         [HttpGet]
         public ActionResult Delete(int householdAccountId)
         {
+            if (UserInfo() == null)
+                return RedirectToAction("Index", "Home");
+
             ViewBag.householdAccountId = householdAccountId;
             return View();
         }

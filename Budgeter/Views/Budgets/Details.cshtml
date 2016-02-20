@@ -1,24 +1,21 @@
 ﻿@model IEnumerable<Budgeter.Models.BudgetItem>
 
-@{
-    ViewBag.Title = "Index";
-}
-
-<h2>Index</h2>
+<h2>Budget Items for @ViewBag.BudgetName Monthly Budget</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New Budget Item", "Create", "BudgetItems", new { budgetId = ViewBag.BudgetId }, null) |
+    @Html.ActionLink("Back to Budget Management Overview", "Index")
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Budget.Name)
+            Category
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Category.Name)
+            Description
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Amount)
+            Amount
         </th>
         <th></th>
     </tr>
@@ -27,20 +24,18 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Budget.Name)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Category.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Amount)
+                @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                $@item.Amount
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", "BudgetItems", new { budgetItemId = item.Id }, null) |
+                @Html.ActionLink("Delete", "Delete", "BudgetItems", new { budgetItemId = item.Id }, null)
             </td>
         </tr>
     }
-
 </table>

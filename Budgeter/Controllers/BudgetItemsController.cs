@@ -11,38 +11,36 @@ using Budgeter.Models;
 
 namespace Budgeter.Controllers
 {
-    public class BudgetItemsController : Controller
+    public class BudgetItemsController : AppController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: BudgetItems
         public async Task<ActionResult> Index()
         {
+            if (UserInfo() == null)
+                return RedirectToAction("Index", "Home");
+
             var budgetItems = db.BudgetItems.Include(b => b.Budget).Include(b => b.Category);
             return View(await budgetItems.ToListAsync());
         }
 
-        // GET: BudgetItems/Details/5
-        public async Task<ActionResult> Details(int? id)
+        // GET: BudgetItems/Create
+        public async Task<ActionResult> Create(int? budgetId)
         {
-            if (id == null)
+            if (UserInfo() == null)
+                return RedirectToAction("Index", "Home");
+
+            if (budgetId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BudgetItem budgetItem = await db.BudgetItems.FindAsync(id);
-            if (budgetItem == null)
-            {
-                return HttpNotFound();
-            }
-            return View(budgetItem);
-        }
 
-        // GET: BudgetItems/Create
-        public ActionResult Create()
-        {
-            ViewBag.BudgetId = new SelectList(db.Budgets, "Id", "Name");
+            Budget budget = await db.Budgets.FindAsync(budgetId);
+            if ((budget == null) || budget.HouseholdId != HouseholdInfo().Id)
+                return HttpNotFound();
+
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name");
-            return View();
+            return View(new BudgetItem { BudgetId = (int)budgetId});
         }
 
         // POST: BudgetItems/Create
@@ -50,13 +48,13 @@ namespace Budgeter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,CategoryId,BudgetId,Amount")] BudgetItem budgetItem)
+        public async Task<ActionResult> Create([Bind(Include = "Id,CategoryId,BudgetId,Amount,Description")] BudgetItem budgetItem)
         {
             if (ModelState.IsValid)
             {
                 db.BudgetItems.Add(budgetItem);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Budgets", new { budgetId = budgetItem.BudgetId });
             }
 
             ViewBag.BudgetId = new SelectList(db.Budgets, "Id", "Name", budgetItem.BudgetId);
@@ -65,17 +63,18 @@ namespace Budgeter.Controllers
         }
 
         // GET: BudgetItems/Edit/5
-        public async Task<ActionResult> Edit(int? id)
+        public async Task<ActionResult> Edit(int? budgetItemId)
         {
-            if (id == null)
-            {
+            if (UserInfo() == null)
+                return RedirectToAction("Index", "Home");
+
+            if (budgetItemId == null)           
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            BudgetItem budgetItem = await db.BudgetItems.FindAsync(id);
-            if (budgetItem == null)
-            {
+            
+            BudgetItem budgetItem = await db.BudgetItems.FindAsync(budgetItemId);
+            if (budgetItem == null || budgetItem.Budget.HouseholdId != HouseholdInfo().Id)           
                 return HttpNotFound();
-            }
+            
             ViewBag.BudgetId = new SelectList(db.Budgets, "Id", "Name", budgetItem.BudgetId);
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", budgetItem.CategoryId);
             return View(budgetItem);
@@ -86,13 +85,13 @@ namespace Budgeter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,CategoryId,BudgetId,Amount")] BudgetItem budgetItem)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,CategoryId,BudgetId,Amount,Description")] BudgetItem budgetItem)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(budgetItem).State = EntityState.Modified;
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Budgets", new { budgetId = budgetItem.BudgetId });
             }
             ViewBag.BudgetId = new SelectList(db.Budgets, "Id", "Name", budgetItem.BudgetId);
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", budgetItem.CategoryId);
@@ -100,14 +99,17 @@ namespace Budgeter.Controllers
         }
 
         // GET: BudgetItems/Delete/5
-        public async Task<ActionResult> Delete(int? id)
+        public async Task<ActionResult> Delete(int? budgetItemId)
         {
-            if (id == null)
+            if (UserInfo() == null)
+                return RedirectToAction("Index", "Home");
+
+            if (budgetItemId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BudgetItem budgetItem = await db.BudgetItems.FindAsync(id);
-            if (budgetItem == null)
+            BudgetItem budgetItem = await db.BudgetItems.FindAsync(budgetItemId);
+            if (budgetItem == null || budgetItem.Budget.HouseholdId != HouseholdInfo().Id)
             {
                 return HttpNotFound();
             }
@@ -117,21 +119,12 @@ namespace Budgeter.Controllers
         // POST: BudgetItems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int budgetItemId)
         {
-            BudgetItem budgetItem = await db.BudgetItems.FindAsync(id);
+            BudgetItem budgetItem = await db.BudgetItems.FindAsync(budgetItemId);
             db.BudgetItems.Remove(budgetItem);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
+            return RedirectToAction("Details", "Budgets", new { budgetId = budgetItem.BudgetId });
         }
     }
 }

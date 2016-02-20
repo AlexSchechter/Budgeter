@@ -40,6 +40,8 @@ namespace Budgeter.Controllers
             if (budget == null || budget.HouseholdId != HouseholdInfo().Id)           
                 return HttpNotFound();
 
+            ViewBag.BudgetName = budget.Name;
+            ViewBag.BudgetId = budgetId;
             var budgetItems = db.BudgetItems.Where(b => b.BudgetId == budgetId).Include(b => b.Category);
             return View(await budgetItems.ToListAsync());
         }
@@ -81,14 +83,12 @@ namespace Budgeter.Controllers
                 return RedirectToAction("Index", "Home");
 
             if (BudgetId == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             Budget budget = await db.Budgets.FindAsync(BudgetId);
             if ((budget == null) || (budget.HouseholdId != HouseholdInfo().Id))
-            {
                 return HttpNotFound();
-            }
+
             return View(budget);
         }
 

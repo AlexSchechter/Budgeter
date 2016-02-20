@@ -11,6 +11,7 @@ namespace Budgeter.Models
         public int CategoryId { get; set; }
         public int BudgetId { get; set; }
         public double Amount { get; set; }
+        public string Description { get; set; }
 
         public virtual Budget Budget { get; set; }
         public virtual Category Category { get; set; }

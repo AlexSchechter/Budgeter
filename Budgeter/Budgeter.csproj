@@ -214,6 +214,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\HouseholdAccountsView.cs" />
+    <Compile Include="Models\HouseholdAccountViewModel.cs" />
     <Compile Include="Models\HouseholdViewModel.cs" />
     <Compile Include="Models\HouseholdAccount.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -503,13 +505,11 @@
     <Content Include="Views\Budgets\Index.cshtml" />
     <Content Include="Views\BudgetItems\Create.cshtml" />
     <Content Include="Views\BudgetItems\Delete.cshtml" />
-    <Content Include="Views\BudgetItems\Details.cshtml" />
     <Content Include="Views\BudgetItems\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\App\" />
-    <Folder Include="Views\Category\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

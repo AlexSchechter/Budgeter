@@ -18,6 +18,9 @@ namespace Budgeter.Controllers
         // GET: Transactions
         public async Task<ActionResult> Index(int? householdAccountId)
         {
+            if (UserInfo() == null)
+                return RedirectToAction("Index", "Home");
+
             if (householdAccountId !=null)
             {
                 ViewBag.HouseholdAccountId = householdAccountId;
@@ -31,6 +34,9 @@ namespace Budgeter.Controllers
         // GET: Transactions/Create
         public ActionResult Create(int householdAccountId)
         {
+            if (UserInfo() == null)
+                return RedirectToAction("Index", "Home");
+
             int householdId = UserInfo().HouseholdId;
             ViewBag.CategoryId = new SelectList(db.Households.FirstOrDefault(h => h.Id == householdId).Categories, "Id", "Name");
             return View(new Transaction { HouseholdAccountId = householdAccountId });
@@ -48,6 +54,9 @@ namespace Budgeter.Controllers
                 transaction.Date = DateTimeOffset.Now;
                 transaction.EnteredById = User.Identity.GetUserId();
                 db.Transactions.Add(transaction);
+                HouseholdAccount householdAccount = await db.HouseholdAccounts.FindAsync(transaction.HouseholdAccountId);
+                householdAccount.Balance =+ transaction.Amount;
+                householdAccount.ReconciledBalance = +transaction.ReconciledAmount;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index", new { householdAccountId = transaction.HouseholdAccountId });
             }
@@ -57,18 +66,19 @@ namespace Budgeter.Controllers
         // GET: Transactions/Edit/5
         public async Task<ActionResult> Edit(int? transactionId)
         {
-            if (transactionId == null)
-            {
+            if (UserInfo() == null)
+                return RedirectToAction("Index", "Home");
+
+            if (transactionId == null)            
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            
             Transaction transaction = await db.Transactions.FindAsync(transactionId);
-            if (transaction == null)
-            {
-                return HttpNotFound();
-            }
             int householdId = UserInfo().HouseholdId;
+
+            if (transaction == null || transaction.HouseholdAccount.HouseholdId != householdId)          
+                return HttpNotFound();
+                     
             ViewBag.CategoryId = new SelectList(db.Households.FirstOrDefault(h => h.Id == householdId).Categories, "Id", "Name", transaction.CategoryId);
-            //ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", transaction.CategoryId);
             return View(transaction);
         }
 
@@ -82,6 +92,10 @@ namespace Budgeter.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(transaction).State = EntityState.Modified;
+                HouseholdAccount householdAccount = await db.HouseholdAccounts.FindAsync(transaction.HouseholdAccountId);
+                //householdAccount.Balance = 0;
+                //householdAccount.ReconciledBalance = 0;
+                //foreach (Transaction transaction in db.Transactions)
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index", new { householdAccountId = transaction.HouseholdAccountId });
             }
@@ -93,6 +107,9 @@ namespace Budgeter.Controllers
         // GET: Transactions/Delete/5
         public async Task<ActionResult> Delete(int? transactionId)
         {
+            if (UserInfo() == null)
+                return RedirectToAction("Index", "Home");
+
             if (transactionId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
