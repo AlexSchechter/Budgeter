@@ -255,11 +255,11 @@
     <Content Include="assets\fonts\ionicons.svg" />
     <Content Include="assets\fonts\josefinslab-bold-webfont.svg" />
     <Content Include="assets\fonts\josefinslab-semibold-webfont.svg" />
+    <Content Include="assets\ico\budgeter-favicon114x114.png" />
+    <Content Include="assets\ico\budgeter-favicon144x144.png" />
+    <Content Include="assets\ico\budgeter-favicon57x57.png" />
+    <Content Include="assets\ico\budgeter-favicon72x72.png" />
     <Content Include="assets\ico\favicon.ico" />
-    <Content Include="assets\ico\queenadmin-favicon114x114.png" />
-    <Content Include="assets\ico\queenadmin-favicon144x144.png" />
-    <Content Include="assets\ico\queenadmin-favicon57x57.png" />
-    <Content Include="assets\ico\queenadmin-favicon72x72.png" />
     <Content Include="assets\img\activity-photo1.jpg" />
     <Content Include="assets\img\activity-photo2.jpg" />
     <Content Include="assets\img\avatar.png" />
@@ -270,6 +270,7 @@
     <Content Include="assets\img\bootstrap-colorpicker\hue-horizontal.png" />
     <Content Include="assets\img\bootstrap-colorpicker\hue.png" />
     <Content Include="assets\img\bootstrap-colorpicker\saturation.png" />
+    <Content Include="assets\img\budgeter-logo.png" />
     <Content Include="assets\img\city.jpg" />
     <Content Include="assets\img\clear.png" />
     <Content Include="assets\img\diagonal-stripe.png" />
@@ -278,7 +279,6 @@
     <Content Include="assets\img\loading.gif" />
     <Content Include="assets\img\location-pin.png" />
     <Content Include="assets\img\queenadmin-logo-white.png" />
-    <Content Include="assets\img\queenadmin-logo.png" />
     <Content Include="assets\img\search-result-img.png" />
     <Content Include="assets\img\select2-spinner.gif" />
     <Content Include="assets\img\sort_asc.png" />

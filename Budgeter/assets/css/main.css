@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 /*	
 *	############################################################################
 *	
@@ -5543,6 +5543,21 @@ select.input-sm {
   border-radius: 4px;
 }
 
+#logoutForm {
+    line-height: 18px;
+    height: 35px;
+}
+
+#logoutForm > a{
+    display:block;
+    width: 100%;
+    font-size: 12.6px;
+}
+
+  #logoutForm:hover {
+    background: #116c8a;
+  }
+
 /* progress bar */
 .progress {
   -moz-border-radius: 2px;
@@ -8010,7 +8025,7 @@ div[class*="col-"] > .form-group {
   position: relative;
   color: #a8a5a5;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 26px;
   line-height: 1;
 }
 .btn-nav-sidebar-minified i:hover,
@@ -8043,7 +8058,7 @@ div[class*="col-"] > .form-group {
   margin-right: -10px;
 }
 .logo img {
-  width: 105px;
+  width: 150px;
 }
 
 .fixed-left-active .top-bar {
@@ -8078,7 +8093,7 @@ div[class*="col-"] > .form-group {
 }
 .top-bar .top-bar-right {
   text-align: right;
-  margin-top: 7px;
+  min-height: 47px;
 }
 @media screen and (max-width: 1200px) {
   .top-bar {
@@ -8088,7 +8103,7 @@ div[class*="col-"] > .form-group {
 }
 @media screen and (max-width: 479px) {
   .top-bar > :first-child {
-    width: auto;
+    //width: auto;
   }
 }
 .top-bar .action-group,
@@ -8129,6 +8144,7 @@ div[class*="col-"] > .form-group {
 .top-bar .action-group ul > li li,
 .top-bar .logged-user ul > li {
   border-top: 1px solid #e4e4e4;
+  height: 35px;
 }
 .top-bar .action-group ul > li li:first-child,
 .top-bar .logged-user ul > li:first-child {
@@ -8319,8 +8335,8 @@ div[class*="col-"] > .form-group {
   }
 }
 .top-bar .logged-user {
-  position: relative;
-  top: -3px;
+    line-height: 47px;
+    margin-right: 20px;
 }
 .top-bar .logged-user .btn {
   padding: 0;
@@ -8331,6 +8347,7 @@ div[class*="col-"] > .form-group {
 .top-bar .logged-user .btn i {
   position: relative;
   top: 2px;
+  margin-left: 5px;
 }
 .top-bar .logged-user .btn:hover {
   text-decoration: none;
@@ -8580,6 +8597,10 @@ body.fixed-left-active .main-nav {
 @media screen and (max-width: 1200px) {
   .right-sidebar {
     display: none;
+  }
+
+  .top-bar .logged-user {
+    margin-right: 0px;
   }
 }
 .right-sidebar .widget-chat-contacts {
@@ -10519,6 +10540,14 @@ ul.project-activity-list > li .activity-item > i {
   margin-bottom: 20px;
 }
 @media screen and (max-width: 480px) {
+
+  .pull-right, .pull-left {
+    display:table-cell;
+  }
+
+ #btn-nav-sidebar-minified {
+    display:none;   
+  }
   .simple-pricing-table .plan-detail-list {
     text-align: center;
   }
@@ -10708,4 +10737,14 @@ ul.project-activity-list > li .activity-item > i {
   .advanced-pricing-table .plan-item.popular {
     margin-top: 45px;
   }
+}
+@media screen and (max-width: 430px) {
+    .pull-right {
+        float: left !important;
+        display:block;
+    }
+
+    .top-bar .logged-user {
+        margin-left: 0;
+    }
 }
