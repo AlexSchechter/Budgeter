@@ -13,8 +13,8 @@ namespace Budgeter.Controllers
         //Get /Home/Households
         public ActionResult Index ()
         {
-            ApplicationUser user = UserInfo();
-            Household household = HouseholdInfo();
+            ApplicationUser user = GetUserInfo();
+            Household household = GetHouseholdInfo();
             if (household == null)
                 return RedirectToAction("Index", "Home");
             List<int> householdOptionsIds = db.Invitations.Where(i => i.Email == user.Email).
@@ -32,7 +32,7 @@ namespace Budgeter.Controllers
 
         //GET: :Manage/ChangeHousehold
         [HttpGet]
-        public ActionResult ChangeHousehold(int householdId)
+        public ActionResult ChangeHousehold(int? householdId)
         {
             ViewBag.householdId = householdId;
             return View(householdId);
@@ -46,8 +46,8 @@ namespace Budgeter.Controllers
             {
                 if ((householdId != null) && (db.Households.Any(h => h.Id == householdId) && (db.Households.Find(householdId).MarkedForDeletion == false)))
                 {
-                    ApplicationUser user = UserInfo();
-                    Household oldHousehold = HouseholdInfo();
+                    ApplicationUser user = GetUserInfo();
+                    Household oldHousehold = GetHouseholdInfo();
                     user.HouseholdId = (int)householdId;
                     if (oldHousehold.Members.Count == 1)
                         oldHousehold.MarkedForDeletion = true;
@@ -77,8 +77,8 @@ namespace Budgeter.Controllers
         {
             if (submitButton == "Confirm" && newName != null && newName != "")
             {              
-                ApplicationUser user = UserInfo();
-                Household oldHousehold = HouseholdInfo();
+                ApplicationUser user = GetUserInfo();
+                Household oldHousehold = GetHouseholdInfo();
                 db.Households.Add(new Household { Name = newName, MarkedForDeletion = false });
                 await db.SaveChangesAsync();
                 Household newHousehold = db.Households.OrderByDescending(h => h.Id).FirstOrDefault(h => h.Name == newName);

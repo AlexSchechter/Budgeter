@@ -15,7 +15,7 @@ namespace Budgeter.Controllers
         //Get /HouseholdAccount/Index
         public ActionResult Index()
         {
-            Household household = HouseholdInfo();
+            Household household = GetHouseholdInfo();
             if (household == null)
                 return RedirectToAction("Index", "Home");
 
@@ -28,7 +28,7 @@ namespace Budgeter.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            if (UserInfo() == null)
+            if (GetUserInfo() == null)
                 RedirectToAction("Index", "Home");
 
             return View();
@@ -62,7 +62,7 @@ namespace Budgeter.Controllers
         [HttpGet]
         public async Task<ActionResult> Edit(int? householdAccountId)
         {
-            if (UserInfo() == null)
+            if (GetUserInfo() == null)
                 return RedirectToAction("Index", "Home");
 
             if (householdAccountId == null)
@@ -71,7 +71,7 @@ namespace Budgeter.Controllers
             }
             HouseholdAccount householdAccount = await db.HouseholdAccounts.FindAsync(householdAccountId);
 
-            if (householdAccount == null || householdAccount.HouseholdId != HouseholdInfo().Id)
+            if (householdAccount == null || householdAccount.HouseholdId != GetHouseholdInfo().Id)
                 return HttpNotFound();
 
             return View(householdAccount);
@@ -96,7 +96,7 @@ namespace Budgeter.Controllers
         [HttpGet]
         public ActionResult Delete(int householdAccountId)
         {
-            if (UserInfo() == null)
+            if (GetUserInfo() == null)
                 return RedirectToAction("Index", "Home");
 
             ViewBag.householdAccountId = householdAccountId;

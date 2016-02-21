@@ -18,7 +18,7 @@ namespace Budgeter.Controllers
         // GET: Categories
         public ActionResult Index()
         {
-            return View(db.Households.Find(UserInfo().HouseholdId).Categories.ToList());
+            return View(db.Households.Find(GetUserInfo().HouseholdId).Categories.ToList());
         }
 
         // GET: Categories/Create
@@ -36,7 +36,7 @@ namespace Budgeter.Controllers
         {
             if (ModelState.IsValid)
             {
-                Household household = HouseholdInfo();
+                Household household = GetHouseholdInfo();
 
                 if (household.Categories.Any(c => c.Name == category.Name))
                     return RedirectToAction("Index");
@@ -63,7 +63,7 @@ namespace Budgeter.Controllers
             if (categoryId == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
          
-            if (!HouseholdInfo().Categories.Any(c => c.Id == categoryId))
+            if (!GetHouseholdInfo().Categories.Any(c => c.Id == categoryId))
                 return HttpNotFound();
 
             return View(await db.Categories.FindAsync(categoryId));
@@ -74,7 +74,7 @@ namespace Budgeter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int categoryId)
         {
-            Household household = HouseholdInfo();
+            Household household = GetHouseholdInfo();
 
             if (!household.Categories.Any(c => c.Id == categoryId))
                  return HttpNotFound();

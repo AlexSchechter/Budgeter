@@ -17,7 +17,7 @@ namespace Budgeter.Controllers
         // GET: Budgets
         public async Task<ActionResult> Index()
         {
-            Household household = HouseholdInfo();
+            Household household = GetHouseholdInfo();
             if (household == null)
                 return RedirectToAction("Index", "Home");
 
@@ -30,14 +30,14 @@ namespace Budgeter.Controllers
         // GET: Budgets/Details/5
         public async Task<ActionResult> Details(int? budgetId)
         {
-            if (UserInfo() == null)
+            if (GetUserInfo() == null)
                 return RedirectToAction("Index", "Home");
 
             if (budgetId == null)            
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             
             Budget budget = await db.Budgets.FindAsync(budgetId);
-            if (budget == null || budget.HouseholdId != HouseholdInfo().Id)           
+            if (budget == null || budget.HouseholdId != GetHouseholdInfo().Id)           
                 return HttpNotFound();
 
             ViewBag.BudgetName = budget.Name;
@@ -49,7 +49,7 @@ namespace Budgeter.Controllers
         // GET: Budgets/Create
         public ActionResult Create()
         {
-            if (UserInfo() == null)
+            if (GetUserInfo() == null)
                 return RedirectToAction("Index", "Home");
             return View();
         }
@@ -61,12 +61,12 @@ namespace Budgeter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Id,Name,HouseholdId")] Budget budget)
         {
-            if (UserInfo() == null)
+            if (GetUserInfo() == null)
                 return RedirectToAction("Index", "Home");
 
             if (ModelState.IsValid)
             {
-                budget.HouseholdId = HouseholdInfo().Id;
+                budget.HouseholdId = GetHouseholdInfo().Id;
                 db.Budgets.Add(budget);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -79,14 +79,14 @@ namespace Budgeter.Controllers
         // GET: Budgets/Edit/5
         public async Task<ActionResult> Edit(int? BudgetId)
         {
-            if (UserInfo() == null)
+            if (GetUserInfo() == null)
                 return RedirectToAction("Index", "Home");
 
             if (BudgetId == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             Budget budget = await db.Budgets.FindAsync(BudgetId);
-            if ((budget == null) || (budget.HouseholdId != HouseholdInfo().Id))
+            if ((budget == null) || (budget.HouseholdId != GetHouseholdInfo().Id))
                 return HttpNotFound();
 
             return View(budget);
@@ -101,7 +101,7 @@ namespace Budgeter.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (budget.HouseholdId != HouseholdInfo().Id)
+                if (budget.HouseholdId != GetHouseholdInfo().Id)
                     return HttpNotFound();
 
                 db.Entry(budget).State = EntityState.Modified;
@@ -115,7 +115,7 @@ namespace Budgeter.Controllers
         // GET: Budgets/Delete/5
         public async Task<ActionResult> Delete(int? BudgetId)
         {
-            if (UserInfo() == null)
+            if (GetUserInfo() == null)
                 return RedirectToAction("Index", "Home");
 
             if (BudgetId == null)
@@ -123,7 +123,7 @@ namespace Budgeter.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Budget budget = await db.Budgets.FindAsync(BudgetId);
-            if ((budget == null) || (budget.HouseholdId != HouseholdInfo().Id))
+            if ((budget == null) || (budget.HouseholdId != GetHouseholdInfo().Id))
                 return HttpNotFound();
 
             return View(budget);
@@ -135,7 +135,7 @@ namespace Budgeter.Controllers
         public async Task<ActionResult> DeleteConfirmed(int BudgetId)
         {          
             Budget budget = await db.Budgets.FindAsync(BudgetId);
-            if (budget.HouseholdId != HouseholdInfo().Id)
+            if (budget.HouseholdId != GetHouseholdInfo().Id)
                 return HttpNotFound();
 
             db.Budgets.Remove(budget);

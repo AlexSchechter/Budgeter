@@ -13,11 +13,10 @@ namespace Budgeter.Controllers
 {
     public class BudgetItemsController : AppController
     {
-
         // GET: BudgetItems
         public async Task<ActionResult> Index()
         {
-            if (UserInfo() == null)
+            if (GetUserInfo() == null)
                 return RedirectToAction("Index", "Home");
 
             var budgetItems = db.BudgetItems.Include(b => b.Budget).Include(b => b.Category);
@@ -27,16 +26,14 @@ namespace Budgeter.Controllers
         // GET: BudgetItems/Create
         public async Task<ActionResult> Create(int? budgetId)
         {
-            if (UserInfo() == null)
+            if (GetUserInfo() == null)
                 return RedirectToAction("Index", "Home");
 
             if (budgetId == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
 
             Budget budget = await db.Budgets.FindAsync(budgetId);
-            if ((budget == null) || budget.HouseholdId != HouseholdInfo().Id)
+            if ((budget == null) || budget.HouseholdId != GetHouseholdInfo().Id)
                 return HttpNotFound();
 
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name");
@@ -65,14 +62,14 @@ namespace Budgeter.Controllers
         // GET: BudgetItems/Edit/5
         public async Task<ActionResult> Edit(int? budgetItemId)
         {
-            if (UserInfo() == null)
+            if (GetUserInfo() == null)
                 return RedirectToAction("Index", "Home");
 
             if (budgetItemId == null)           
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             
             BudgetItem budgetItem = await db.BudgetItems.FindAsync(budgetItemId);
-            if (budgetItem == null || budgetItem.Budget.HouseholdId != HouseholdInfo().Id)           
+            if (budgetItem == null || budgetItem.Budget.HouseholdId != GetHouseholdInfo().Id)           
                 return HttpNotFound();
             
             ViewBag.BudgetId = new SelectList(db.Budgets, "Id", "Name", budgetItem.BudgetId);
@@ -101,18 +98,16 @@ namespace Budgeter.Controllers
         // GET: BudgetItems/Delete/5
         public async Task<ActionResult> Delete(int? budgetItemId)
         {
-            if (UserInfo() == null)
+            if (GetUserInfo() == null)
                 return RedirectToAction("Index", "Home");
 
-            if (budgetItemId == null)
-            {
+            if (budgetItemId == null)           
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            
             BudgetItem budgetItem = await db.BudgetItems.FindAsync(budgetItemId);
-            if (budgetItem == null || budgetItem.Budget.HouseholdId != HouseholdInfo().Id)
-            {
+            if (budgetItem == null || budgetItem.Budget.HouseholdId != GetHouseholdInfo().Id)           
                 return HttpNotFound();
-            }
+            
             return View(budgetItem);
         }
 

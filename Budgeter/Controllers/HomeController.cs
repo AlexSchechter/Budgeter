@@ -33,7 +33,7 @@ namespace Budgeter.Controllers
         //GET /Home/UserProfile
         public ActionResult UserProfile()
         {
-            ApplicationUser user = UserInfo();
+            ApplicationUser user = GetUserInfo();
             return View(new ProfileViewModel
             {
                 Email = user.Email,
