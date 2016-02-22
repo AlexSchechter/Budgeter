@@ -4,25 +4,33 @@
 <html lang="en" class="no-js">
 <!--<![endif]-->
 <head>
-    <title>Log In Alt | QueenAdmin - Beautiful Admin Dashboard</title>
+    <title>Log In Alt | Budgeter - Household Budget Manager</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="description" content="QueenAdmin - Beautiful Bootstrap Admin Dashboard Theme">
-    <meta name="author" content="The Develovers">
+    <meta name="description" content="_NotAuthenticatedLayout.cshtml">
+    <meta name="author" content="Alexander Schechter">
     <!-- CSS -->
     <link href="~/assets/css/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="~/assets/css/ionicons.css" rel="stylesheet" type="text/css">
     <link href="~/assets/css/main.css" rel="stylesheet" type="text/css">
+    <link href="~/assets/css/custom-styles.css" rel="stylesheet" type="text/css">
     <!-- Google Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,300,400,700' rel='stylesheet' type='text/css'>
     <!-- Fav and touch icons -->
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="~/assets/ico/queenadmin-favicon144x144.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="~/assets/ico/queenadmin-favicon114x114.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="~/assets/ico/queenadmin-favicon72x72.png">
-    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="~/assets/ico/queenadmin-favicon57x57.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="~/assets/ico/bugeter-favicon144x144.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="~/assets/ico/budgeter-favicon114x114.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="~/assets/ico/budgeter-favicon72x72.png">
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="~/assets/ico/budgeter-favicon57x57.png">
     <link rel="shortcut icon" href="~/assets/ico/favicon.png">
 </head>
 <body class="middle-content page-login-social">
+    <!-- TOP NAV BAR -->
+    <nav class="top-bar navbar-fixed-top" role="navigation">
+        <a id="site-logo" href='@Url.Action("Index", "Home")'>
+            <img src='@Url.Content("~/assets/img/budgeter-logo.png")' alt="Budgeter Logo" />
+        </a>
+    </nav>
+    <!-- END TOP NAV BAR -->
     <div class="container-fluid">
         @RenderBody();
     </div>

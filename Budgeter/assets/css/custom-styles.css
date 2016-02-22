@@ -1,0 +1,27 @@
+﻿/* NonAuthenticatedLayout page */
+#site-logo 
+{
+    display: block;
+    height: 34px !important;
+    margin: 6px auto;
+}
+
+#site-logo > img
+{
+    width: 220px;
+    height: auto;
+}
+
+/* UserProfile page */
+.avatar 
+{
+    width: 130px;
+    height: auto;
+    padding: 18px;
+    background: #ffffff;
+}
+
+.profile-header-background 
+{
+    border-bottom: solid 2px grey;
+}

@@ -235,6 +235,7 @@
   <ItemGroup>
     <Content Include="assets\css\bootstrap.css" />
     <Content Include="assets\css\bootstrap.min.css" />
+    <Content Include="assets\css\custom-styles.css" />
     <Content Include="assets\css\font-awesome.css" />
     <Content Include="assets\css\font-awesome.min.css" />
     <Content Include="assets\css\ionicons.css" />
@@ -260,6 +261,7 @@
     <Content Include="assets\ico\budgeter-favicon57x57.png" />
     <Content Include="assets\ico\budgeter-favicon72x72.png" />
     <Content Include="assets\ico\favicon.ico" />
+    <Content Include="assets\img\user.ico" />
     <Content Include="assets\img\activity-photo1.jpg" />
     <Content Include="assets\img\activity-photo2.jpg" />
     <Content Include="assets\img\avatar.png" />
