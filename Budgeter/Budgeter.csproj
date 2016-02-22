@@ -261,6 +261,7 @@
     <Content Include="assets\ico\budgeter-favicon57x57.png" />
     <Content Include="assets\ico\budgeter-favicon72x72.png" />
     <Content Include="assets\ico\favicon.ico" />
+    <Content Include="assets\img\budgeting-background.jpg" />
     <Content Include="assets\img\user.ico" />
     <Content Include="assets\img\activity-photo1.jpg" />
     <Content Include="assets\img\activity-photo2.jpg" />

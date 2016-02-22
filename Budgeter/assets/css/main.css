@@ -4819,7 +4819,8 @@ hr {
 .top-bar,
 #col-left,
 #col-right,
-ul.main-menu > li > a span {
+ul.main-menu > li > a span,
+ul.main-menu > li > form > a span {
   -moz-transition-property: all;
   -o-transition-property: all;
   -webkit-transition-property: all;
@@ -8357,8 +8358,9 @@ div[class*="col-"] > .form-group {
   -webkit-border-radius: 50%;
   border-radius: 50%;
   width: 32px;
-  border: 2px solid #a8a5a5;
+  border: 2px solid #6B8DBF;
   margin-right: 5px;
+  padding: 4px;
 }
 .top-bar .logged-user .dropdown-menu {
   width: auto;
@@ -8553,12 +8555,14 @@ body.fixed-left-active .main-nav {
 }
 .main-nav-minified .main-nav h3,
 .main-nav-minified ul.main-menu > li > a span,
+.main-nav-minified ul.main-menu > li > form > a span,
 .main-nav-minified ul.main-menu li.has-submenu > a:after,
 .main-nav-minified #col-left .main-menu > li.has-submenu.active .sub-menu,
 .main-nav-minified #col-left .widget {
   display: none;
 }
-.main-nav-minified ul.main-menu > li > a {
+.main-nav-minified ul.main-menu > li > a,
+.main-nav-minified ul.main-menu > li > form > a {
   padding: 12px;
   text-align: center;
 }
@@ -9775,7 +9779,7 @@ body.page-register {
 /*------------------------------------------------*/
 .register-box {
   padding: 30px;
-  margin-top: 15em;
+  margin-top: 1em;
   background-color: #fff;
 }
 .register-box h1 {
