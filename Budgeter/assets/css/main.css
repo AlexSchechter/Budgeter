@@ -7537,6 +7537,7 @@ table.colored-header thead > tr > th {
   background-color: #ebebeb;
 }
 
+
 table.dataTable thead > tr > th {
   padding-left: 8px;
   padding-right: 15px;
@@ -9028,9 +9029,6 @@ ul.chat-contacts.contacts-offline > li a, ul.chat-contacts.contacts-offline > li
 /*------------------------------------------------*/
 /*	Profile Page
 /*------------------------------------------------*/
-.user-profile {
-  padding-bottom: 30px;
-}
 
 .profile-header-background {
   margin: -30px -30px 0 -30px;

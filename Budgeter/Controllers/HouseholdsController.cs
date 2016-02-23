@@ -85,7 +85,7 @@ namespace Budgeter.Controllers
                 user.HouseholdId = newHousehold.Id;
 
                 string[] categoryNames = {"Automobile", "Bank Charges", "Charity", "Childcare", "Clothing", "Credit Card Fees", "Education",
-                        "Events", "Food", "Gifts", "Healthcare", "Household", "Insurance", "Job Expenses", "Leisure (daily/ not holiday)",
+                        "Events", "Food", "Gifts", "Healthcare", "Household", "Insurance", "Job Expenses", "Leisure (not holiday)",
                         "Hobbies", "Loans", "Pet Care", "Savings", "Taxes", "Utilities", "Holiday", "Zdd", "Zee"};
 
                 Category myCategory = new Category();

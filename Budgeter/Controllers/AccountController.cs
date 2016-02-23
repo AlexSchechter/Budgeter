@@ -12,7 +12,7 @@ namespace Budgeter.Controllers
 {
     [Authorize]
     [RequireHttps]
-    public class AccountController : Controller
+    public class AccountController : AppController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -70,6 +70,12 @@ namespace Budgeter.Controllers
         {
             if (!ModelState.IsValid)
                 return View(model);
+
+            if (db.Users.FirstOrDefault(u => u.Email == model.Email).MarkedForDeletion)
+            { 
+                ModelState.AddModelError("", "Account marked for deletion");
+                return View(model);
+            }
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
@@ -133,6 +139,9 @@ namespace Budgeter.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            if (GetUserInfo() != null)
+                return RedirectToAction("Index", "Home");
+
             return View();
         }
 
@@ -145,23 +154,22 @@ namespace Budgeter.Controllers
         {
             if (ModelState.IsValid)
             {
-                var db = new ApplicationDbContext();
+
+                ApplicationUser user = null;               
                 var invitation = db.Invitations.FirstOrDefault(i => i.Email == model.Email);
-                ApplicationUser user = null;
+                            
                 if (invitation != null)
                 {
                     user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, HouseholdId = invitation.HouseholdId };                  
                 }
                 else
                 {
-                    string householdname = string.Concat(model.FirstName, " Household");
-                    db.Households.Add(new Household { Name = householdname });
+                    db.Households.Add(new Household { Name = model.FirstName });
                     await db.SaveChangesAsync();
-                    var id = db.Households.ToList().OrderByDescending(h => h.Id).FirstOrDefault(h => h.Name == householdname).Id;
-                    user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, HouseholdId = id };
-                    
-
+                    var id = db.Households.ToList().OrderByDescending(h => h.Id).FirstOrDefault(h => h.Name == model.FirstName).Id;
+                    user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, HouseholdId = id };                 
                 }
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 //db.Households.Add(new Household { Name = model.HouseholdName });
                 await db.SaveChangesAsync();
@@ -189,8 +197,8 @@ namespace Budgeter.Controllers
         [HttpGet]
         public ActionResult DeleteAccount()
         {
-            ApplicationDbContext db = new ApplicationDbContext();
-            if (db.Users.Find(User.Identity.GetUserId()) == null)
+            
+            if (GetUserInfo() == null)
                 return RedirectToAction("Index", "Home"); 
                 
             return View();
@@ -202,9 +210,9 @@ namespace Budgeter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteAccountConfirmed()
         {
-            ApplicationDbContext db = new ApplicationDbContext();           
-            ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
-            Household household = db.Households.FirstOrDefault(h => h.Id == user.HouseholdId);
+
+            ApplicationUser user = GetUserInfo();
+            Household household = GetHouseholdInfo();
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
             user.MarkedForDeletion = true;           

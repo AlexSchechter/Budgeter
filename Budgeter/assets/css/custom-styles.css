@@ -25,3 +25,20 @@
 {
     border-bottom: solid 2px grey;
 }
+
+.user-profile > .row > .col-sm-12 
+{
+    height: 200px;
+}
+
+.edit-profile-form 
+{
+    width: 500px;
+    margin: auto;
+}
+
+.edit-profile-form .btn-block 
+{
+    margin-top: 20px;
+}
+

@@ -36,9 +36,9 @@ namespace Budgeter.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -56,6 +56,7 @@ namespace Budgeter.Controllers
 
         //GET: /Manage/EditProfile
         [HttpGet]
+        [ChildActionOnly]
         public ActionResult EditProfile(string userId)
         {
             if (userId == null)
@@ -86,7 +87,7 @@ namespace Budgeter.Controllers
         {
             if (profile == null)
                 RedirectToAction("Index", "Home");
-            ApplicationDbContext db = new ApplicationDbContext();           
+            ApplicationDbContext db = new ApplicationDbContext();
             ApplicationUser user = db.Users.FirstOrDefault(u => u.Id == profile.UserId);
             List<Invitation> invitations = db.Invitations.Where(i => i.Email == user.Email).ToList();
 
@@ -94,13 +95,13 @@ namespace Budgeter.Controllers
             user.Email = profile.Email;
             user.FirstName = profile.FirstName;
             user.LastName = profile.LastName;
-            foreach (Invitation invitation in invitations)          
-                invitation.Email = profile.Email;         
+            foreach (Invitation invitation in invitations)
+                invitation.Email = profile.Email;
             await db.SaveChangesAsync();
             return RedirectToAction("UserProfile", "Home");
         }
 
-        
+
 
 
 
@@ -385,7 +386,7 @@ namespace Budgeter.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -436,6 +437,6 @@ namespace Budgeter.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }
