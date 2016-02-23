@@ -2,8 +2,8 @@
 {
     public class ChartItem
     {
-        public double AmountBudgeted { get; set; }
-        public double AmountSpent { get; set; }
+        public decimal AmountBudgeted { get; set; }
+        public decimal AmountSpent { get; set; }
         public string CategoryName { get; set; }
     }
 }

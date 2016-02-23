@@ -1,9 +1,7 @@
 ﻿using Budgeter.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Budgeter.Controllers
@@ -27,7 +25,7 @@ namespace Budgeter.Controllers
                 if (householdOption.MarkedForDeletion == false)
                     householdOptions.Add(householdOption);
             }               
-            return View(new HouseholdViewModel { CurrentHousehold = household, HouseholdOptions = householdOptions });
+            return View(new HouseholdViewModel { CurrentHousehold = household, HouseholdOptions = householdOptions.OrderBy(h => h.Name).ToList()});
         }
 
         //GET: :Manage/ChangeHousehold
@@ -61,7 +59,7 @@ namespace Budgeter.Controllers
 
         //GET: /Manage/CreateAndChangeHousehold
         [HttpGet]
-        public ActionResult CreateAndChangeHousehold(string newName, int members)
+        public ActionResult CreateAndChangeHousehold(string newName)
         {
             if (newName != null && newName != "")
             {
@@ -85,8 +83,8 @@ namespace Budgeter.Controllers
                 user.HouseholdId = newHousehold.Id;
 
                 string[] categoryNames = {"Automobile", "Bank Charges", "Charity", "Childcare", "Clothing", "Credit Card Fees", "Education",
-                        "Events", "Food", "Gifts", "Healthcare", "Household", "Insurance", "Job Expenses", "Leisure (not holiday)",
-                        "Hobbies", "Loans", "Pet Care", "Savings", "Taxes", "Utilities", "Holiday", "Zdd", "Zee"};
+                "Events", "Food", "Gifts", "Healthcare", "Household", "Savings Interest", "Insurance", "Job Expenses", "Leisure (not holiday)", "Hobbies",
+                "Loans", "Misc", "Pet Care", "Salary", "Savings", "Taxes", "Utilities", "Holiday"};
 
                 Category myCategory = new Category();
                 foreach (string name in categoryNames)

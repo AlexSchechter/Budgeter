@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Budgeter.Controllers
@@ -19,7 +18,7 @@ namespace Budgeter.Controllers
             if (household == null)
                 return RedirectToAction("Index", "Home");
 
-            List<HouseholdAccount> model = db.HouseholdAccounts.Where(h => h.HouseholdId == household.Id).ToList();
+            List<HouseholdAccount> model = db.HouseholdAccounts.Where(h => h.HouseholdId == household.Id).OrderBy(h => h.Name).ToList();
             ViewBag.HouseholdName = household.Name;
             return View(model);
         }
@@ -56,7 +55,7 @@ namespace Budgeter.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View();
+            return View(model);
         }
 
         //GET: /HouseholdAccount/Edit
@@ -90,7 +89,7 @@ namespace Budgeter.Controllers
                 householdAccount.Name = model.Name;
                 await db.SaveChangesAsync();
             }
-            return RedirectToAction("Index");
+            return View(model);
         }
 
         //GET: /HouseholdAccount/Delete
@@ -121,7 +120,6 @@ namespace Budgeter.Controllers
                 default:
                     return View(householdAccountId);
             }
-
         }
     }
 }

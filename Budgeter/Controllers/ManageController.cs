@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -8,8 +7,6 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Budgeter.Models;
 using System.Collections.Generic;
-using Microsoft.Ajax.Utilities;
-using System.Data.Entity;
 
 namespace Budgeter.Controllers
 {

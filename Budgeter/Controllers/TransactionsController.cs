@@ -25,7 +25,8 @@ namespace Budgeter.Controllers
             {
                 ViewBag.HouseholdAccountId = householdAccountId;
                 ViewBag.HouseholdAccountName = db.HouseholdAccounts.Find(householdAccountId).Name;
-                var transactions = db.Transactions.Where(t => t.HouseholdAccountId == householdAccountId).Include(t => t.Category).Include(t => t.EnteredBy).Include(t => t.HouseholdAccount);
+                var transactions = db.Transactions.Where(t => t.HouseholdAccountId == householdAccountId).Include(t => t.Category)
+                                                  .Include(t => t.EnteredBy).Include(t => t.HouseholdAccount).OrderByDescending(t => t.Date);
                 return View(await transactions.ToListAsync());
             }
             return RedirectToAction("Index", "HouseholdAccount");  
@@ -37,8 +38,8 @@ namespace Budgeter.Controllers
             if (GetUserInfo() == null)
                 return RedirectToAction("Index", "Home");
 
-            int householdId = GetUserInfo().HouseholdId;
-            ViewBag.CategoryId = new SelectList(db.Households.FirstOrDefault(h => h.Id == householdId).Categories, "Id", "Name");
+            Household household = GetHouseholdInfo();
+            ViewBag.CategoryId = new SelectList(db.Households.Find(household.Id).Categories.OrderBy(c => c.Name), "Id", "Name");
             return View(new Transaction { HouseholdAccountId = householdAccountId });
         }
 
@@ -73,12 +74,12 @@ namespace Budgeter.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             
             Transaction transaction = await db.Transactions.FindAsync(transactionId);
-            int householdId = GetUserInfo().HouseholdId;
+            int householdId = GetHouseholdInfo().Id;
 
             if (transaction == null || transaction.HouseholdAccount.HouseholdId != householdId)          
                 return HttpNotFound();
                      
-            ViewBag.CategoryId = new SelectList(db.Households.FirstOrDefault(h => h.Id == householdId).Categories, "Id", "Name", transaction.CategoryId);
+            ViewBag.CategoryId = new SelectList(db.Households.Find(householdId).Categories.OrderBy(c => c.Name), "Id", "Name", transaction.CategoryId);
             return View(transaction);
         }
 

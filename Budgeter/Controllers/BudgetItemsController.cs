@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,9 +16,8 @@ namespace Budgeter.Controllers
         {
             if (GetUserInfo() == null)
                 return RedirectToAction("Index", "Home");
-
-            var budgetItems = db.BudgetItems.Include(b => b.Budget).Include(b => b.Category);
-            return View(await budgetItems.ToListAsync());
+          
+            return View(await db.BudgetItems.Include(b => b.Budget).Include(b => b.Category).OrderBy(b => b.Description).ToListAsync());
         }
 
         // GET: BudgetItems/Create
@@ -33,10 +30,11 @@ namespace Budgeter.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             Budget budget = await db.Budgets.FindAsync(budgetId);
-            if ((budget == null) || budget.HouseholdId != GetHouseholdInfo().Id)
+            Household household = GetHouseholdInfo();
+            if ((budget == null) || budget.HouseholdId != household.Id)
                 return HttpNotFound();
 
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name");
+            ViewBag.CategoryId = new SelectList(household.Categories.OrderBy(c => c.Name), "Id", "Name");
             return View(new BudgetItem { BudgetId = (int)budgetId});
         }
 
@@ -52,10 +50,7 @@ namespace Budgeter.Controllers
                 db.BudgetItems.Add(budgetItem);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Details", "Budgets", new { budgetId = budgetItem.BudgetId });
-            }
-
-            ViewBag.BudgetId = new SelectList(db.Budgets, "Id", "Name", budgetItem.BudgetId);
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", budgetItem.CategoryId);
+            }         
             return View(budgetItem);
         }
 
@@ -69,11 +64,12 @@ namespace Budgeter.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             
             BudgetItem budgetItem = await db.BudgetItems.FindAsync(budgetItemId);
+            Household household = GetHouseholdInfo();
             if (budgetItem == null || budgetItem.Budget.HouseholdId != GetHouseholdInfo().Id)           
                 return HttpNotFound();
             
-            ViewBag.BudgetId = new SelectList(db.Budgets, "Id", "Name", budgetItem.BudgetId);
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", budgetItem.CategoryId);
+            ViewBag.BudgetId = new SelectList(household.Budgets.OrderBy(b => b.Name), "Id", "Name", budgetItem.BudgetId);
+            ViewBag.CategoryId = new SelectList(household.Categories.OrderBy(c => c.Name), "Id", "Name", budgetItem.CategoryId);
             return View(budgetItem);
         }
 
@@ -90,8 +86,6 @@ namespace Budgeter.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Details", "Budgets", new { budgetId = budgetItem.BudgetId });
             }
-            ViewBag.BudgetId = new SelectList(db.Budgets, "Id", "Name", budgetItem.BudgetId);
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", budgetItem.CategoryId);
             return View(budgetItem);
         }
 

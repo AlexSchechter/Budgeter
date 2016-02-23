@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using System;
+using System.Data.Entity;
 
 namespace Budgeter.Controllers
 {
@@ -19,7 +20,10 @@ namespace Budgeter.Controllers
                 ViewBag.Name = string.Concat(user.FirstName, " ", user.LastName);
                 HomeViewModel model = new HomeViewModel
                 {
-                    ChartData = db.Categories.Where(c => c.Households.Any(h => h.Id == household.Id )).ToList().Select(c => CategoryToChartItem(c, household.Id)).ToList()
+                    ChartData = db.Categories.Where(c => c.Households.Any(h => h.Id == household.Id)).ToList()
+                                             .Select(c => CategoryToChartItem(c, household.Id)),
+                    LastTransactions = db.Transactions.Where(t => t.HouseholdAccount.HouseholdId == household.Id).Include(t => t.HouseholdAccount)
+                                                      .OrderByDescending(t => t.Date).Take(5)
                 };
                 return View(model);
             }               

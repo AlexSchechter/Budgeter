@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using Budgeter.Models;
-using Microsoft.AspNet.Identity;
 
 namespace Budgeter.Controllers
 {
@@ -18,7 +13,7 @@ namespace Budgeter.Controllers
         // GET: Categories
         public ActionResult Index()
         {
-            return View(db.Households.Find(GetUserInfo().HouseholdId).Categories.ToList());
+            return View(db.Households.Find(GetUserInfo().HouseholdId).Categories.OrderBy(c => c.Name).ToList());
         }
 
         // GET: Categories/Create

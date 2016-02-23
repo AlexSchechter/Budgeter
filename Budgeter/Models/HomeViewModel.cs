@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace Budgeter.Models
 {
     public class HomeViewModel
     {
-        public List<ChartItem> ChartData { get; set; }
+        public IEnumerable<ChartItem> ChartData { get; set; }
+        public IEnumerable<Transaction> LastTransactions { get; set; }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,8 +21,7 @@ namespace Budgeter.Controllers
 
             ViewBag.HouseholdName = household.Name;
             ViewBag.BudgetAmount = "100";
-            var budgets = db.Budgets.Where(b => b.HouseholdId == household.Id);
-            return View(await budgets.ToListAsync());
+            return View(await db.Budgets.Where(b => b.HouseholdId == household.Id).OrderBy(b => b.Name).ToListAsync());
         }
 
         // GET: Budgets/Details/5
@@ -42,8 +39,7 @@ namespace Budgeter.Controllers
 
             ViewBag.BudgetName = budget.Name;
             ViewBag.BudgetId = budgetId;
-            var budgetItems = db.BudgetItems.Where(b => b.BudgetId == budgetId).Include(b => b.Category);
-            return View(await budgetItems.ToListAsync());
+            return View(await db.BudgetItems.Where(b => b.BudgetId == budgetId).Include(b => b.Category).OrderBy(b => b.Description).ToListAsync());
         }
 
         // GET: Budgets/Create
@@ -71,8 +67,6 @@ namespace Budgeter.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", budget.HouseholdId);
             return View(budget);
         }
 
@@ -107,8 +101,7 @@ namespace Budgeter.Controllers
                 db.Entry(budget).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
-            }
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", budget.HouseholdId);
+            }            
             return View(budget);
         }
 

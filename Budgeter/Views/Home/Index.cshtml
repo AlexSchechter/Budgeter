@@ -8,6 +8,42 @@
 </div>
 <!-- END PRIMARY CONTENT HEADING -->
 <div class="widget widget-no-header widget-transparent bottom-30px">
+    <div class="widget-header clearfix">
+        <h3><i class="icon ion-ios-grid-view-outline"></i> <span>Last 5 Transactions</span></h3>
+    </div>
+    <div class="widget-content">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Account</th>
+                    <th>Description</th>
+                    <th>Entered By</th>
+                    <th>Amount</th>
+                    <th>Reconciled Amount</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Transaction transaction in Model.LastTransactions)
+                {
+                    <tr>
+                        <td>@transaction.Date.ToString("d")</td>
+                        <td>@transaction.Category.Name</td>
+                        <td>@transaction.HouseholdAccount.Name</td>
+                        <td>@transaction.Description</td>
+                        <td>@string.Concat(transaction.EnteredBy.FirstName, " ", transaction.EnteredBy.LastName)</td>
+                        <td>@string.Concat("$", transaction.Amount)</td>
+                        <td>@string.Concat("$", transaction.ReconciledAmount)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<div class="widget widget-no-header widget-transparent bottom-30px">  
     <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
     <table id="datatable" hidden>
         <thead>
@@ -28,11 +64,7 @@
             }             
         </tbody>
     </table>  
-    <!-- QUICK SUMMARY INFO -->
-    <div class="widget-content">
-           
-    </div>
-    <!-- END QUICK SUMMARY INFO -->
+
 </div>
 <div class="row">
     <div class="col-sm-8">

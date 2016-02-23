@@ -12,9 +12,9 @@ namespace Budgeter.Models
         public int HouseholdAccountId { get; set; }
         public string Description { get; set; }
         public DateTimeOffset Date { get; set; }
-        public double Amount { get; set; }
-        public int CategoryId { get; set; }
-        public double ReconciledAmount { get; set; }
+        public decimal Amount { get; set; }
+        public decimal ReconciledAmount { get; set; }
+        public int CategoryId { get; set; }      
         public bool Reconciled { get; set; }
         [InverseProperty("Transactions")]
         public string EnteredById { get; set; }
