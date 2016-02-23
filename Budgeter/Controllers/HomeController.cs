@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System;
 
 namespace Budgeter.Controllers
 {
@@ -10,7 +11,7 @@ namespace Budgeter.Controllers
     public class HomeController : AppController
     {
         public ActionResult Index()
-        {
+        {         
             if (User.Identity.IsAuthenticated)
             {
                 ApplicationUser user = GetUserInfo();
@@ -27,8 +28,10 @@ namespace Budgeter.Controllers
 
         private ChartItem CategoryToChartItem(Category category, int householdId)
         {
+           
             var transactions = db.Transactions.Where(t => t.HouseholdAccount.HouseholdId == householdId && t.Category.Id == category.Id)
-                                             .Where(t => t.Amount < 0);
+                                              .Where(t => t.Amount < 0)
+                                              .Where(t => t.Date.Month == DateTimeOffset.Now.Month && t.Date.Year == DateTimeOffset.Now.Year);
             var budgetItems = db.BudgetItems.Where(b => b.Budget.HouseholdId == householdId && b.Category.Id == category.Id);
 
             return new ChartItem

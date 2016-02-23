@@ -42,3 +42,26 @@
     margin-top: 20px;
 }
 
+/* Accounts page*/
+.create-account-form {
+    width: 50%;
+    margin: 10px 0 40px 20px;
+}
+
+.btn-xs 
+{
+    width: 50px;
+}
+
+.lead
+{
+    margin: 30px 0;
+}
+
+@media(max-width: 850px) 
+{
+    .create-account-form .input-group 
+    {
+        display: block;
+    }
+}

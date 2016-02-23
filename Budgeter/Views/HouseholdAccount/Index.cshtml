@@ -2,67 +2,20 @@
 @model List<HouseholdAccount>
 
 <div class="container-fluid primary-content">
-    <!-- PRIMARY CONTENT HEADING -->
     <div class="primary-content-heading clearfix">
         <h2>Accounts for @ViewBag.HouseholdName Household</h2>
-       
-        <ul class="breadcrumb pull-left">
-            <li><i class="icon ion-home"></i><a href="#">Home</a></li>
-            <li><a href="#">Pages</a></li>
-            <li class="active">Projects</li>
-        </ul>
-        <div class="sticky-content pull-right">
-            <div class="btn-group btn-dropdown">
-                <button type="button" class="btn btn-default btn-sm btn-favorites" data-toggle="dropdown"><i class="icon ion-android-star"></i> Favorites</button>
-                <ul class="dropdown-menu dropdown-menu-right list-inline">
-                    <li><a href="#"><i class="icon ion-pie-graph"></i> <span>Statistics</span></a></li>
-                    <li><a href="#"><i class="icon ion-email"></i> <span>Inbox</span></a></li>
-                    <li><a href="#"><i class="icon ion-chatboxes"></i> <span>Chat</span></a></li>
-                    <li><a href="#"><i class="icon ion-help-circled"></i> <span>Help</span></a></li>
-                    <li><a href="#"><i class="icon ion-gear-a"></i> <span>Settings</span></a></li>
-                    <li><a href="#"><i class="icon ion-help-buoy"></i> <span>Support</span></a></li>
-                </ul>
-            </div>
-            <button type="button" class="btn btn-default btn-sm btn-quick-task" data-toggle="modal" data-target="#quick-task-modal"><i class="icon ion-edit"></i> Quick Task</button>
+        <div class="project-list-subheading">
+            <p class="lead">
+                You have
+                <span class="label label-success">@Model.Count() account(s)</span>
+                with combined balance of
+                <span class="label label-warning">£100</span>
+                and combined reconciled balance of
+                <span class="label label-default">£90</span>
+            </p>
+            @Html.Action("Create", "HouseholdAccount")
         </div>
-        <!-- quick task modal -->
-        <div class="modal fade" id="quick-task-modal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">Quick Task</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form class="form-horizontal" role="form">
-                            <div class="form-group">
-                                <label for="task-title" class="control-label sr-only">Title</label>
-                                <div class="col-sm-12">
-                                    <input type="text" class="form-control" id="task-title" placeholder="Title">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label sr-only">Description</label>
-                                <div class="col-sm-12">
-                                    <textarea class="form-control" name="task-description" rows="5" cols="30" placeholder="Description"></textarea>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save Task</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- end quick task modal -->
-    </div>
-    <!-- END PRIMARY CONTENT HEADING -->
-    <div class="project-list-subheading">
-        <p class="lead">You're involved in <span class="label label-success">4 active</span> projects, <span class="label label-warning">2 pending</span> and <span class="label label-default">2 closed</span></p>
-        <a href ="/HouseholdAccount/Create" type="button" class="btn btn-primary pull-right btn-new-project">
-            <i class="icon ion-compose"> CREATE NEW ACCOUNT</i> 
-        </a>
-    </div>
+     </div>
     <div class="table-responsive">
         <table class="table colored-header datatable project-list">
             <thead>
@@ -71,9 +24,9 @@
                     <th>Creation Date</th>
                     <th>Balance</th>
                     <th>Reconciled Balance</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                    <th>Details</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -84,115 +37,11 @@
                         <td>@account.CreationDate.Date.ToString("d")</td>
                         <td>@string.Concat("$", account.Balance)</td>
                         <td>@string.Concat("$", account.ReconciledBalance)</td>
-                        <td>@Html.ActionLink("Edit", "Edit", new { householdAccountId = account.Id }, new { @class = "btn btn-default" })</td>
-                        <td>@Html.ActionLink("Delete", "Delete", new { householdAccountId = account.Id }, new { @class = "btn btn-default" })</td>
-                        <td>@Html.ActionLink("Details", "Index", "Transactions", new { householdAccountId = account.Id }, new { @class = "btn btn-default" })</td>
+                        <td>@Html.ActionLink("Details", "Index", "Transactions", new { householdAccountId = account.Id }, new { @class = "btn btn-primary btn-xs" })</td>
+                        <td>@Html.ActionLink("Edit", "Edit", new { householdAccountId = account.Id }, new { @class = "btn btn-warning btn-xs" })</td>
+                        <td>@Html.ActionLink("Delete", "Delete", new { householdAccountId = account.Id }, new { @class = "btn btn-danger btn-xs" })</td>
                     </tr>
                 }
-                <tr>
-                    <td><a href="#">V Media</a></td>
-                    <td>18-05-2014</td>
-                    <td>12 days</td>
-                    <td>
-                        <div class="progress">
-                            <div class="progress-bar" data-transitiongoal="95"></div>
-                        </div>
-                    </td>
-                    <td><span class="label label-warning">MEDIUM</span></td>
-                    <td><img src="~/assets/img/user2.png" alt="Avatar" class="avatar" /> <a href="#">Michael</a></td>
-                    <td><span class="label label-success">ACTIVE</span></td>
-                </tr>
-                <tr>
-                    <td><a href="#">E-Commerce Site</a></td>
-                    <td>24-05-2014</td>
-                    <td>30 days</td>
-                    <td>
-                        <div class="progress">
-                            <div class="progress-bar" data-transitiongoal="40"></div>
-                        </div>
-                    </td>
-                    <td><span class="label label-success">LOW</span></td>
-                    <td><img src="~/assets/img/user1.png" alt="Avatar" class="avatar" /> <a href="#">Antonius</a></td>
-                    <td><span class="label label-warning">PENDING</span></td>
-                </tr>
-                <tr>
-                    <td><a href="#">Project 123GO</a></td>
-                    <td>20-09-2014</td>
-                    <td>50 days</td>
-                    <td>
-                        <div class="progress">
-                            <div class="progress-bar" data-transitiongoal="65"></div>
-                        </div>
-                    </td>
-                    <td><span class="label label-danger">HIGH</span></td>
-                    <td><img src="~/assets/img/user1.png" alt="Avatar" class="avatar" /> <a href="#">Antonius</a></td>
-                    <td><span class="label label-success">ACTIVE</span></td>
-                </tr>
-                <tr>
-                    <td><a href="#">Wordpress Theme</a></td>
-                    <td>05-10-2014</td>
-                    <td>40 days</td>
-                    <td>
-                        <div class="progress">
-                            <div class="progress-bar" data-transitiongoal="77"></div>
-                        </div>
-                    </td>
-                    <td><span class="label label-warning">MEDIUM</span></td>
-                    <td><img src="~/assets/img/user2.png" alt="Avatar" class="avatar" /> <a href="#">Michael</a></td>
-                    <td><span class="label label-success">ACTIVE</span></td>
-                </tr>
-                <tr>
-                    <td><a href="#">Redesign Landing Page</a></td>
-                    <td>15-11-2014</td>
-                    <td>30 days</td>
-                    <td>
-                        <div class="progress">
-                            <div class="progress-bar" data-transitiongoal="25"></div>
-                        </div>
-                    </td>
-                    <td><span class="label label-success">LOW</span></td>
-                    <td><img src="~/assets/img/user5.png" alt="Avatar" class="avatar" /> <a href="#">Jason</a></td>
-                    <td><span class="label label-success">ACTIVE</span></td>
-                </tr>
-                <tr>
-                    <td><a href="#">Project 123GO</a></td>
-                    <td>20-09-2014</td>
-                    <td>N/A</td>
-                    <td>
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-default" data-transitiongoal="100"></div>
-                        </div>
-                    </td>
-                    <td><span class="label label-default">HIGH</span></td>
-                    <td><img src="~/assets/img/user1.png" alt="Avatar" class="avatar" /> <a href="#">Antonius</a></td>
-                    <td><span class="label label-default">CLOSED</span></td>
-                </tr>
-                <tr>
-                    <td><a href="#">Wordpress Theme</a></td>
-                    <td>05-10-2014</td>
-                    <td>N/A</td>
-                    <td>
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-default" data-transitiongoal="100"></div>
-                        </div>
-                    </td>
-                    <td><span class="label label-default">MEDIUM</span></td>
-                    <td><img src="~/assets/img/user2.png" alt="Avatar" class="avatar" /> <a href="#">Michael</a></td>
-                    <td><span class="label label-default">CLOSED</span></td>
-                </tr>
-                <tr>
-                    <td><a href="#">Redesign Landing Page</a></td>
-                    <td>15-11-2014</td>
-                    <td>30 days</td>
-                    <td>
-                        <div class="progress">
-                            <div class="progress-bar" data-transitiongoal="33"></div>
-                        </div>
-                    </td>
-                    <td><span class="label label-success">LOW</span></td>
-                    <td><img src="~/assets/img/user5.png" alt="Avatar" class="avatar" /> <a href="#">Jason</a></td>
-                    <td><span class="label label-warning">PENDING</span></td>
-                </tr>
             </tbody>
         </table>
     </div>
@@ -258,4 +107,3 @@
     </div>
     <!-- END CHAT -->
 </div>
-	

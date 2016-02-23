@@ -26,6 +26,7 @@ namespace Budgeter.Controllers
 
         //GET:  /HouseholdAccount/Create
         [HttpGet]
+        [ChildActionOnly]
         public ActionResult Create()
         {
             if (GetUserInfo() == null)
@@ -76,14 +77,14 @@ namespace Budgeter.Controllers
 
             return View(householdAccount);
         }
-        
+
         //POST: /HouseholdAccount/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(HouseholdAccount model)
         {
-            if(ModelState.IsValid)
-            { 
+            if (ModelState.IsValid)
+            {
                 ApplicationDbContext db = new ApplicationDbContext();
                 HouseholdAccount householdAccount = await db.HouseholdAccounts.FindAsync(model.Id);
                 householdAccount.Name = model.Name;
