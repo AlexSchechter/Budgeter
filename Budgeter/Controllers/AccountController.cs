@@ -12,7 +12,7 @@ namespace Budgeter.Controllers
 {
     [Authorize]
     [RequireHttps]
-    public class AccountController : AppController
+    public class AccountController : BaseController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;

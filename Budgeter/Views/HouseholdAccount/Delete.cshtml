@@ -1,7 +1,24 @@
-﻿<div class="h2 text-danger">Are you sure you want to delete the account? This action cannot be undone.</div>
-@using (Html.BeginForm("Delete", "HouseholdAccount", new { householdAccountId = ViewBag.householdAccountId }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
-    @Html.AntiForgeryToken()
-    <input type="submit" name="submitButton" value="Delete" />
-    <input type="submit" name="submitButton" value="Cancel" />
-}
+﻿<div class="widget edit-account-form">
+    <div class="widget-header clearfix">
+        <h3><i class="icon ion-compose"></i></h3>
+        <div class="btn-group widget-header-toolbar">
+            <a href="#" title="Expand/Collapse" class="btn btn-link btn-toggle-expand"><i class="icon ion-ios-arrow-up"></i></a>
+        </div>
+    </div>
+    <div class="widget-content">
+        <h3 class="text-danger">Are you sure you want to delete "@ViewBag.HouseholdAccountName" account? This action cannot be undone.</h3>
+        @using (Html.BeginForm("Delete", "HouseholdAccount", new { householdAccountId = ViewBag.HouseholdAccountId }, FormMethod.Post, new { @class = "form-horizontal edit-profile-form", role = "form" }))
+        {
+            <div class="form-group">
+                @Html.AntiForgeryToken()
+                <div class="col-xs-6">
+                    <input type="submit" name="submitButton" value="Delete" class="btn btn-success btn-block" />
+                </div>
+                <div class="col-xs-6">
+                    <input type="submit" name="submitButton" value="Cancel" class="btn btn-danger btn-block" />
+                </div>
+
+            </div>
+        }
+    </div>
+</div>

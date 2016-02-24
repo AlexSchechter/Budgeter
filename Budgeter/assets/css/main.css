@@ -10742,11 +10742,27 @@ ul.project-activity-list > li .activity-item > i {
 }
 @media screen and (max-width: 430px) {
     .pull-right {
-        float: left !important;
-        display:block;
+        display:none !important;
+    }
+
+    .pull-left
+    {
+        padding-bottom: 0;
+        padding-top: 14px;
     }
 
     .top-bar .logged-user {
         margin-left: 0;
+    }
+
+    .navbar-fixed-top 
+    {
+        position: initial;
+        height: 53px;
+    }
+
+    .fixed-top-active #col-right 
+    {
+        padding-top: 0;
     }
 }

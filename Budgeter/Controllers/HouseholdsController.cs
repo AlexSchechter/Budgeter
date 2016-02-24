@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace Budgeter.Controllers
 {
-    public class HouseholdsController : AppController
+    public class HouseholdsController : BaseController
     {
         //Get /Home/Households
         public ActionResult Index ()

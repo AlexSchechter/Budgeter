@@ -4,16 +4,32 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Web.Mvc;
 using Budgeter.Models;
+using System.Collections.Generic;
 
 namespace Budgeter.Controllers
 {
-    public class CategoriesController : AppController
+    public class CategoriesController : BaseController
     {
        
         // GET: Categories
         public ActionResult Index()
         {
-            return View(db.Households.Find(GetUserInfo().HouseholdId).Categories.OrderBy(c => c.Name).ToList());
+            Household household = GetHouseholdInfo();
+            CategoryViewModel model = new CategoryViewModel();
+            CategoryViewItem item = new CategoryViewItem();
+            foreach (Category category in db.Households.Find(GetUserInfo().HouseholdId).Categories)
+            {
+                item.Category = category;
+                item.TransactionCount = category.Transactions.Where(t => t.HouseholdAccount.HouseholdId == household.Id).Count();
+                model.CategoryItems.Add(item//new CategoryViewItem
+                //{
+                //    Category = category,
+                //    TransactionCount = category.Transactions.Where(t => t.HouseholdAccount.HouseholdId == household.Id).Count()
+                //}
+                );
+            }
+
+            return View(model); //what is passed here the object or just the reference to the database???
         }
 
         // GET: Categories/Create

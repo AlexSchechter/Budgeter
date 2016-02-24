@@ -12,7 +12,7 @@ using Microsoft.AspNet.Identity;
 
 namespace Budgeter.Controllers
 {
-    public class TransactionsController : AppController
+    public class TransactionsController : BaseController
     {       
       
         // GET: Transactions

@@ -201,7 +201,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\AppController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BudgetItemsController.cs" />
     <Compile Include="Controllers\BudgetsController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
@@ -214,6 +214,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CategoryViewItem.cs" />
+    <Compile Include="Models\CategoryViewModel.cs" />
     <Compile Include="Models\ChartItem.cs" />
     <Compile Include="Models\HomeViewModel.cs" />
     <Compile Include="Models\HouseholdAccountsView.cs" />

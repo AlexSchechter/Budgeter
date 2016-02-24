@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Budgeter.Models.Category>
+﻿@model Budgeter.Models.CategoryViewModel
 
 <div class="h2">Index of Categories</div>
 <div class="h5 text-info">Please note that only Categories that contain no transactinons can be deleted</div>
@@ -10,7 +10,7 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            @*@Html.DisplayNameFor(model => model.CategoryItems.Name)*@
         </th>
         <th>
             Transactions
@@ -18,18 +18,18 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model.CategoryItems) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Name)
+            @Html.DisplayFor(modelItem => item.Category.Name)
         </td>
         <td>
-            @item.Transactions.Count
+            @item.TransactionCount
         </td>
         <td>
-            @if (item.Transactions.Count == 0)
+            @if (item.TransactionCount == 0)
             {
-                @Html.ActionLink("Delete", "Delete", new { categoryId = item.Id });
+                @Html.ActionLink("Delete", "Delete", new { categoryId = item.Category.Id });
             }
         </td>
     </tr>

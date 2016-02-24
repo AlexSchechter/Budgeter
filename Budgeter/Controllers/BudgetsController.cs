@@ -9,7 +9,7 @@ using Budgeter.Models;
 
 namespace Budgeter.Controllers
 {
-    public class BudgetsController : AppController
+    public class BudgetsController : BaseController
     {
        
         // GET: Budgets

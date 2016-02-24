@@ -9,7 +9,7 @@ using System.Data.Entity;
 namespace Budgeter.Controllers
 {
     [RequireHttps]
-    public class HomeController : AppController
+    public class HomeController : BaseController
     {
         public ActionResult Index()
         {         

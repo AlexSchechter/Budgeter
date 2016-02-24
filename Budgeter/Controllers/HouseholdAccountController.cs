@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace Budgeter.Controllers
 {
-    public class HouseholdAccountController : AppController
+    public class HouseholdAccountController : BaseController
     {
         //Get /HouseholdAccount/Index
         public ActionResult Index()
@@ -20,6 +20,8 @@ namespace Budgeter.Controllers
 
             List<HouseholdAccount> model = db.HouseholdAccounts.Where(h => h.HouseholdId == household.Id).OrderBy(h => h.Name).ToList();
             ViewBag.HouseholdName = household.Name;
+            ViewBag.CombinedBalance = db.HouseholdAccounts.Sum(h => h.Balance);
+            ViewBag.CombinedReconciledBalance = db.HouseholdAccounts.Sum(h => h.ReconciledBalance);
             return View(model);
         }
 
@@ -94,17 +96,19 @@ namespace Budgeter.Controllers
 
         //GET: /HouseholdAccount/Delete
         [HttpGet]
-        public ActionResult Delete(int householdAccountId)
+        public ActionResult Delete(int? householdAccountId)
         {
-            if (GetUserInfo() == null)
+            if (householdAccountId == null || GetUserInfo() == null)
                 return RedirectToAction("Index", "Home");
 
             ViewBag.householdAccountId = householdAccountId;
+            ViewBag.HouseholdAccountName = db.HouseholdAccounts.Find(householdAccountId).Name;
             return View();
         }
 
         //DELETE: /HouseholdAccount/Delete
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Delete(string submitButton, int householdAccountId)
         {
             switch (submitButton)

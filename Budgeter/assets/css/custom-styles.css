@@ -46,11 +46,24 @@
 .create-account-form {
     width: 50%;
     margin: 10px 0 40px 20px;
+    min-width: 142px;
 }
+
+.edit-account-form 
+{
+    margin-top: 75px;
+}
+
+.edit-account-form h3 
+{
+    text-align:center;
+}
+
+/* Generic*/
 
 .btn-xs 
 {
-    width: 50px;
+    width: 86px;
 }
 
 .lead
@@ -58,10 +71,28 @@
     margin: 30px 0;
 }
 
+#col-right 
+{
+    padding-left: 0;
+}
+
 @media(max-width: 850px) 
 {
     .create-account-form .input-group 
     {
         display: block;
+    }
+
+    .create-account-form .form-control
+    {
+        margin-bottom: 10px;
+    }
+}
+
+@media(max-width: 650px) 
+{
+    .edit-profile-form 
+    {
+        width: auto;
     }
 }

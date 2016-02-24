@@ -3,20 +3,18 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using Budgeter.Models;
 
 namespace Budgeter.Controllers
 {
-    public class BudgetItemsController : AppController
+    public class BudgetItemsController : BaseController
     {
         // GET: BudgetItems
         public async Task<ActionResult> Index()
         {
             if (GetUserInfo() == null)
-                return RedirectToAction("Index", "Home");
-          
+                return RedirectToAction("Index", "Home");         
             return View(await db.BudgetItems.Include(b => b.Budget).Include(b => b.Category).OrderBy(b => b.Description).ToListAsync());
         }
 
