@@ -40,7 +40,7 @@
                         <td>@string.Concat("$", account.Balance)</td>
                         <td>@string.Concat("$", account.ReconciledBalance)</td>
                         <td>@Html.ActionLink("Transactions", "Index", "Transactions", new { householdAccountId = account.Id }, new { @class = "btn btn-primary btn-xs" })</td>
-                        <td>@Html.ActionLink("Edit", "Edit", new { householdAccountId = account.Id }, new { @class = "btn btn-warning btn-xs" })</td>
+                        <td>@Html.ActionLink("Rename", "Edit", new { householdAccountId = account.Id }, new { @class = "btn btn-warning btn-xs" })</td>
                         <td>@Html.ActionLink("Delete", "Delete", new { householdAccountId = account.Id }, new { @class = "btn btn-danger btn-xs" })</td>
                     </tr>
                 }

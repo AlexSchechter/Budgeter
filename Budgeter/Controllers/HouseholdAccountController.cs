@@ -90,6 +90,7 @@ namespace Budgeter.Controllers
                 HouseholdAccount householdAccount = await db.HouseholdAccounts.FindAsync(model.Id);
                 householdAccount.Name = model.Name;
                 await db.SaveChangesAsync();
+                return RedirectToAction("Index");
             }
             return View(model);
         }

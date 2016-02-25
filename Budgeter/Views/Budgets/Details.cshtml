@@ -36,10 +36,10 @@
                             $@item.Amount
                         </td>
                         <td>
-                            @Html.ActionLink("Edit", "Edit", "BudgetItems", new { budgetItemId = item.Id }, new {@class = "btn btn-warning btn-xs"}) 
+                            @Html.ActionLink("Edit", "Edit", "BudgetItems", new { budgetItemId = item.Id }, new {@class = "btn btn-primary btn-xs"}) 
                         </td>
                         <td>
-                            @Html.ActionLink("Delete", "Delete", "BudgetItems", new { budgetItemId = item.Id }, new { @class = "btn btn-primary btn-xs" })
+                            @Html.ActionLink("Delete", "Delete", "BudgetItems", new { budgetItemId = item.Id }, new { @class = "btn btn-danger btn-xs" })
                         </td>
                     </tr>
                 }

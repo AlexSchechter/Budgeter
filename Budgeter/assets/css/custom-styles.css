@@ -83,7 +83,7 @@
 /* Generic*/
 
 
-.btn-xs 
+.btn-xs, .btn-md
 {
     width: 86px;
 }

@@ -99,8 +99,10 @@ namespace Budgeter.Controllers
             BudgetItem budgetItem = await db.BudgetItems.FindAsync(budgetItemId);
             if (budgetItem == null || budgetItem.Budget.HouseholdId != GetHouseholdInfo().Id)           
                 return HttpNotFound();
-            
-            return View(budgetItem);
+
+            ViewBag.BudgetItemId = budgetItem.Id;
+            ViewBag.BudgetId = budgetItem.Budget.Id;           
+            return View();
         }
 
         // POST: BudgetItems/Delete/5
