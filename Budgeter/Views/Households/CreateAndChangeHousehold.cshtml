@@ -21,7 +21,7 @@
             <h3 class="text-warning">Do you really want to leave the <i>"@Model.Name"</i> household?</h3>
         }
 
-        @using (Html.BeginForm("CreateAndChangeHousehold", "Households", new { newName = ViewBag.newName }, FormMethod.Post, new { @class = "form-horizontal edit-profile-form", role = "form" }))
+        @using (Html.BeginForm("CreateAndChangeHousehold", "Households", new { newName = ViewBag.newName }, FormMethod.Post, new { @class = "form-horizontal partial-form", role = "form" }))
         {
             <div class="form-group">
                 @Html.AntiForgeryToken()

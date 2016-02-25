@@ -7659,7 +7659,8 @@ legend {
 }
 
 .form-horizontal .control-label {
-  text-align: left;
+    text-align: left;
+    margin-bottom: 12px;
 }
 
 div[class*="col-"] > .form-group {

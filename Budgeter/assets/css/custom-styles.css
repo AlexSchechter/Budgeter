@@ -39,18 +39,28 @@
 
 .user-profile > .row > .col-sm-12 
 {
-    height: 200px;
+    height: 100px;
 }
 
-.edit-profile-form 
+.partial-form 
 {
     width: 500px;
     margin: auto;
 }
 
-.edit-profile-form .btn-block 
+.partial-form .btn-block 
 {
     margin-top: 20px;
+}
+
+.partial-form .btn-block.budgets
+{
+    margin-top: 5px;
+}
+
+.profile-info-left .action-buttons
+{
+    margin-top: 10px;
 }
 
 /* Accounts page*/
@@ -72,9 +82,15 @@
 
 /* Generic*/
 
+
 .btn-xs 
 {
     width: 86px;
+}
+
+.btn-xs.budgetItem
+{
+    width: auto;
 }
 
 .lead
@@ -102,7 +118,7 @@
 
 @media(max-width: 650px) 
 {
-    .edit-profile-form 
+    .partial-form 
     {
         width: auto;
     }

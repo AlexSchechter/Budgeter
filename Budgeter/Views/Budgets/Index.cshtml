@@ -1,41 +1,52 @@
 ﻿@model IEnumerable<Budgeter.Models.Budget>
 
-<h2>Budgets for @ViewBag.HouseholdName</h2>
+<div class="container-fluid primary-content">
+    <div class="primary-content-heading clearfix" >
+        <div class="h2">Budgets for @ViewBag.HouseholdName</div>
+    </div>
+    <div class="widget">
+        <div class="widget-content">      
+            <table class="table table-striped">         
+                <tr>
+                    <th>
+                        Budget Name
+                    </th>
+                    <th>
+                        Monthly Budget
+                    </th>
+                    <th>
+                        Budget Items
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            Budget Name
-        </th>
-        <th>
-            Monthly Budget
-        </th>
-        <th>
-            Budget Items
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @string.Concat("$",ViewBag.BudgetAmount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BudgetItems.Count)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { BudgetId=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { BudgetId=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { BudgetId=item.Id })
-        </td>
-    </tr>
-}
-
-</table>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @string.Concat("$", item.BudgetItems.Sum(b => b.Amount))
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BudgetItems.Count)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Budget Items", "Details", new { budgetId = item.Id }, new { @class = "btn btn-warning btn-xs" })
+                        </td>
+                        <td>
+                            @Html.ActionLink("Rename", "Edit", new { budgetId = item.Id }, new { @class = "btn btn-primary btn-xs" })
+                        </td>                                           
+                        <td> 
+                            @Html.ActionLink("Delete", "Delete", new { budgetId = item.Id }, new { @class = "btn btn-danger btn-xs" })
+                        </td>                    
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+    @Html.Action("Create", "Budgets")
+</div>

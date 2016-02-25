@@ -532,7 +532,6 @@
     <Content Include="Views\Manage\UpdateUser.cshtml" />
     <Content Include="Views\Manage\EditProfile.cshtml" />
     <Content Include="Views\HouseholdAccount\Index.cshtml" />
-    <Content Include="Views\Home\Households.cshtml" />
     <Content Include="Views\Households\ChangeHousehold.cshtml" />
     <Content Include="Views\Households\CreateAndChangeHousehold.cshtml" />
     <Content Include="Views\Shared\_NotAuthenticatedLayout.cshtml" />

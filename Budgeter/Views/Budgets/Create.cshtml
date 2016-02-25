@@ -1,31 +1,32 @@
 ﻿@model Budgeter.Models.Budget
-
-<h2>Create Budget</h2>
-
-@using (Html.BeginForm()) 
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Budget</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
+@{
+    ViewBag.Title = "Create New Budget";
+    Layout = "";
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
+<div class="widget">
+    <div class="widget-header clearfix">
+        <h3><i class="icon ion-compose"></i> <span>@ViewBag.Title</span></h3>
+        <div class="btn-group widget-header-toolbar">
+            <a href="#" title="Expand/Collapse" class="btn btn-link btn-toggle-expand"><i class="icon ion-ios-arrow-up"></i></a>
+        </div>
+    </div>
+    <div class="widget-content">
+        @using (Html.BeginForm("Create", "Budgets", FormMethod.Post, new { @class = "form-horizontal partial-form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = "Enter Name" })
+                </div>
+            </div>              
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-success btn-block budgets" />
+                </div>
+            </div>
+        }
+    </div>
 </div>

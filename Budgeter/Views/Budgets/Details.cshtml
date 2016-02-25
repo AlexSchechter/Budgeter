@@ -1,41 +1,52 @@
 ﻿@model IEnumerable<Budgeter.Models.BudgetItem>
 
-<h2>Budget Items for @ViewBag.BudgetName Monthly Budget</h2>
+<div class="container-fluid primary-content">
+    <div class="primary-content-heading clearfix">
+        <div class="h2">Budget Items for @ViewBag.BudgetName Monthly Buget</div>
+            @Html.ActionLink("Create New Budget Item", "Create", "BudgetItems", new { budgetId = ViewBag.BudgetId }, new { @class = "btn btn-success btn-xs budgetItem" })
+            @Html.ActionLink("Back to Budget Overview", "Index", null, new { @class = "btn btn-success btn-xs budgetItem" })
+        </div>
+    <div class="widget">
+        <div class="widget-content">
+            <table class="table table-striped">
+                <tr>
+                    <th>
+                        Category
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Amount
+                    </th>
+                    <th></th>
+                    <th></th>
+                </tr>
 
-<p>
-    @Html.ActionLink("Create New Budget Item", "Create", "BudgetItems", new { budgetId = ViewBag.BudgetId }, null) |
-    @Html.ActionLink("Back to Budget Management Overview", "Index")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            Category
-        </th>
-        <th>
-            Description
-        </th>
-        <th>
-            Amount
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                $@item.Amount
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", "BudgetItems", new { budgetItemId = item.Id }, null) |
-                @Html.ActionLink("Delete", "Delete", "BudgetItems", new { budgetItemId = item.Id }, null)
-            </td>
-        </tr>
-    }
-</table>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Category.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            $@item.Amount
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", "BudgetItems", new { budgetItemId = item.Id }, new {@class = "btn btn-warning btn-xs"}) 
+                        </td>
+                        <td>
+                            @Html.ActionLink("Delete", "Delete", "BudgetItems", new { budgetItemId = item.Id }, new { @class = "btn btn-primary btn-xs" })
+                        </td>
+                    </tr>
+                }
+            </table>
+            <p>
+            
+            </p>
+        </div>
+    </div>
+</div>

@@ -12,7 +12,7 @@ namespace Budgeter.Controllers
 {
     [Authorize]
     [RequireHttps]
-    public class ManageController : Controller
+    public class ManageController : BaseController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -54,13 +54,13 @@ namespace Budgeter.Controllers
         //GET: /Manage/EditProfile
         [HttpGet]
         [ChildActionOnly]
-        public ActionResult EditProfile(string userId)
+        public ActionResult EditProfile()
         {
-            if (userId == null)
+           
+            ApplicationUser user = GetUserInfo();
+            if (user == null)
                 return RedirectToAction("Index", "Home");
 
-            ApplicationDbContext db = new ApplicationDbContext();
-            ApplicationUser user = db.Users.FirstOrDefault(u => u.Id == userId);
             Profile model = new Profile
             {
                 UserId = user.Id,
