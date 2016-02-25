@@ -15,21 +15,20 @@ namespace Budgeter.Controllers
         public ActionResult Index()
         {
             Household household = GetHouseholdInfo();
-            CategoryViewModel model = new CategoryViewModel();
+            CategoryViewModel model = new CategoryViewModel {CategoryItems = new List<CategoryViewItem>()};
             CategoryViewItem item = new CategoryViewItem();
             foreach (Category category in db.Households.Find(GetUserInfo().HouseholdId).Categories)
             {
-                item.Category = category;
-                item.TransactionCount = category.Transactions.Where(t => t.HouseholdAccount.HouseholdId == household.Id).Count();
-                model.CategoryItems.Add(item//new CategoryViewItem
-                //{
-                //    Category = category,
-                //    TransactionCount = category.Transactions.Where(t => t.HouseholdAccount.HouseholdId == household.Id).Count()
-                //}
-                );
+                //item.Category = category;
+                //item.TransactionCount = category.Transactions.Where(t => t.HouseholdAccount.HouseholdId == household.Id).Count();
+                model.CategoryItems.Add (new CategoryViewItem
+                {
+                    Category = category,
+                    TransactionCount = category.Transactions.Where(t => t.HouseholdAccount.HouseholdId == household.Id).Count()
+                });
             }
 
-            return View(model); //what is passed here the object or just the reference to the database???
+            return View(model);
         }
 
         // GET: Categories/Create

@@ -15,9 +15,7 @@ namespace Budgeter.Controllers
         {         
             if (User.Identity.IsAuthenticated)
             {
-                ApplicationUser user = GetUserInfo();
-                Household household = GetHouseholdInfo();
-                ViewBag.Name = string.Concat(user.FirstName, " ", user.LastName);
+                Household household = GetHouseholdInfo();             
                 HomeViewModel model = new HomeViewModel
                 {
                     ChartData = db.Categories.Where(c => c.Households.Any(h => h.Id == household.Id)).ToList()

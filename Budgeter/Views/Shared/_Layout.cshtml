@@ -44,55 +44,28 @@
             <div class="top-bar-right pull-right">
                 <div class="logged-user">
                     <div class="btn-group">
-                        @if (Request.IsAuthenticated)
-                        {
-                            <a href="#" class="btn btn-link dropdown-toggle" data-toggle="dropdown">
-                                <img src="~/assets/img/user.ico" alt="User Image" />
-                                <span class="name">@ViewBag.Name<i class="icon ion-ios-arrow-down"></i></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a href="/Home/UserProfile">
-                                        <i class="icon ion-ios-person"></i>
-                                        <span class="text">Profile</span>
+                        <a href="#" class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+                            <img src="~/assets/img/user.ico" alt="User Image" />
+                            <span class="name">Logged in as @Html.Action("Budgeter", "Layout")<i class="icon ion-ios-arrow-down"></i></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="/Home/UserProfile">
+                                    <i class="icon ion-ios-person"></i>
+                                    <span class="text">Profile</span>
+                                </a>
+                            </li>
+                            <li>
+                                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <a href="javascript:document.getElementById('logoutForm').submit()">
+                                        <i class="icon ion-log-out"></i>
+                                        <span class="text">Logout</span>
                                     </a>
-                                </li>
-                                <li>
-                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
-                                    {
-                                        @Html.AntiForgeryToken()
-                                        <a href="javascript:document.getElementById('logoutForm').submit()">
-                                            <i class="icon ion-log-out"></i>
-                                            <span class="text">Logout</span>
-                                        </a>
-                                    }
-                                </li>
-                            </ul>
-                        }
-                        else
-                        {
-                            <a href="#" class="btn btn-link dropdown-toggle" data-toggle="dropdown">
-                                <span class="name">Login/Register <i class="icon ion-ios-arrow-down"></i></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a href="#">
-                                        <i class="icon ion-android-person"></i>
-                                        <span class="text">
-                                            @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <i class="icon ion-ios-gear"></i>
-                                        <span class="text">
-                                            @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        }
+                                }
+                            </li>
+                        </ul>                      
                     </div>
                 </div>
             </div>
@@ -111,13 +84,13 @@
                             <a href="/HouseholdAccount/Index" class="submenu"><i class="icon ion-card"></i><span class="text">Accounts</span></a>
                         </li>
                         <li>
-                            <a href="/Households/Index" class="submenu"><i class="ion-android-home"></i><span class="text">Manage Households</span></a>
+                            <a href="/Budgets/Index" class="submenu"><i class="ion-calculator"></i><span class="text">Manage Bugets</span></a>
+                        </li>
+                        <li>
+                            <a href="/Households/Index" class="submenu"><i class="ion-android-home"></i><span class="text">Change Households</span></a>
                         </li>
                         <li>
                             <a href="/Categories/Index" class="submenu"><i class="ion-ios-pricetags"></i><span class="text">Manage Categories</span></a>
-                        </li>
-                        <li>
-                            <a href="/Budgets/Index" class="submenu"><i class="ion-calculator"></i><span class="text">Manage Bugets</span></a>
                         </li>
                     </ul>
                     <h3>PROFILE</h3>

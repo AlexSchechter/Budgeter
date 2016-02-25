@@ -1,6 +1,31 @@
-﻿<div class="h2 text-danger">Do you really want to leave your current household?</div>
-@using (Html.BeginForm("ChangeHousehold", "Households", new { householdId = ViewBag.householdId }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{    
-    <input type="submit" name="submitButton" value="Confirm" />
-    <input type="submit" name="submitButton" value="Cancel" />
-}
+﻿<div class="widget edit-account-form">
+    <div class="widget-header clearfix">
+        <h3><i class="icon ion-compose"></i></h3>
+    </div>
+    <div class="widget-content">
+        @if (Model.Members.Count == 1)
+        {
+            <h3 class="text-danger">Do you really want to leave the <i>"@Model.Name"</i> household? Because you are the only member of this household 
+                 all the data (e.g. accounts, transactions and budgets) relating to this household will be deleted. This action cannot be undone.               
+            </h3>
+        }
+        else
+        {
+            <h3 class="text-warning">Do you really want to leave the <i>"@Model.Name"</i> household?</h3>
+        }
+               
+        @using (Html.BeginForm("ChangeHousehold", "Households", new { householdId = ViewBag.householdId }, FormMethod.Post, new { @class = "form-horizontal edit-profile-form", role = "form" }))
+        {
+            <div class="form-group">
+                @Html.AntiForgeryToken()
+                <div class="col-xs-6">
+                    <input type="submit" name="submitButton" value="Confirm" class="btn btn-success btn-block" />
+                </div>
+                <div class="col-xs-6">
+                    <input type="submit" name="submitButton" value="Cancel" class="btn btn-danger btn-block" />
+                </div>
+
+            </div>
+        }
+    </div>
+</div>

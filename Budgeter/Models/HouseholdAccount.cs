@@ -14,7 +14,8 @@ namespace Budgeter.Models
         public decimal Balance { get; set; }
         public decimal ReconciledBalance { get; set; }
         public string Name { get; set; }
-        public DateTimeOffset CreationDate { get; set; }       
+        public DateTimeOffset CreationDate { get; set; }   
+            
         public virtual ICollection<Transaction> Transactions { get; set; }
         public virtual Household Household { get; set; }
     }

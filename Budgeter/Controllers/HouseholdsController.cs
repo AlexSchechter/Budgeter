@@ -24,16 +24,26 @@ namespace Budgeter.Controllers
                 householdOption = db.Households.Find(optionId);
                 if (householdOption.MarkedForDeletion == false)
                     householdOptions.Add(householdOption);
-            }               
-            return View(new HouseholdViewModel { CurrentHousehold = household, HouseholdOptions = householdOptions.OrderBy(h => h.Name).ToList()});
+            }
+            return View(new HouseholdViewModel
+            {
+                CurrentHousehold = household,
+                HouseholdOptions = householdOptions.OrderBy(h => h.Name).ToList(),
+                CombinedBudgetAmounts = db.BudgetItems.Where(b => b.Budget.HouseholdId == household.Id).ToList().Sum(b => b.Amount),
+                TotalBalance = db.Transactions.Where(t => t.HouseholdAccount.HouseholdId == household.Id).ToList().Sum(t => t.Amount)
+            });
         }
 
         //GET: :Manage/ChangeHousehold
         [HttpGet]
         public ActionResult ChangeHousehold(int? householdId)
         {
+            Household model = GetHouseholdInfo();
+            if (householdId == null || model == null)
+                return RedirectToAction("Index", "Home");
+
             ViewBag.householdId = householdId;
-            return View(householdId);
+            return View(model);
         }
 
         //POST: /Manage/ChangeHousehold
@@ -61,11 +71,16 @@ namespace Budgeter.Controllers
         [HttpGet]
         public ActionResult CreateAndChangeHousehold(string newName)
         {
+            Household model = GetHouseholdInfo();
+            if (model == null)
+                return RedirectToAction("Index", "Home");
+
             if (newName != null && newName != "")
             {
                 ViewBag.newName = newName;
-                return View();
+                return View(model);
             }
+
             return RedirectToAction("Index", "Households");
         }
 

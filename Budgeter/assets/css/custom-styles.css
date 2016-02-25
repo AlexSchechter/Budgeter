@@ -1,4 +1,15 @@
-﻿/* NonAuthenticatedLayout page */
+﻿/*Change Household page*/
+#changeHousehold
+{
+    margin-bottom: 12px;
+}
+
+#newHousehold
+{
+    margin: 12px;
+}
+
+/* NonAuthenticatedLayout page */
 #site-logo 
 {
     display: block;
