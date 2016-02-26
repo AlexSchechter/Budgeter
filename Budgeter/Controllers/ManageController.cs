@@ -10,6 +10,7 @@ using System.Collections.Generic;
 
 namespace Budgeter.Controllers
 {
+
     [Authorize]
     [RequireHttps]
     public class ManageController : BaseController

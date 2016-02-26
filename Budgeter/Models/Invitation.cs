@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
 
 namespace Budgeter.Models
 {
@@ -7,6 +7,7 @@ namespace Budgeter.Models
         public int Id { get; set; }
         public string Email { get; set; }
         public int HouseholdId { get; set; }
+        public Guid JoinCode { get; set; }
 
         public virtual Household Household { get; set; }
     }

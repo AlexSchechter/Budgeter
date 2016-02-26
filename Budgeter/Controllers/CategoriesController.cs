@@ -10,7 +10,6 @@ namespace Budgeter.Controllers
 {
     public class CategoriesController : BaseController
     {
-       
         // GET: Categories
         public ActionResult Index()
         {

@@ -6,7 +6,6 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Budgeter.Models;
-using System.Collections.Generic;
 
 namespace Budgeter.Controllers
 {
@@ -16,7 +15,6 @@ namespace Budgeter.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-
 
         public AccountController()
         {
@@ -70,19 +68,16 @@ namespace Budgeter.Controllers
         {
             if (!ModelState.IsValid)
                 return View(model);
-
-            if (db.Users.FirstOrDefault(u => u.Email == model.Email).MarkedForDeletion)
-            { 
-                ModelState.AddModelError("", "Account marked for deletion");
-                return View(model);
-            }
-
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
+                  
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
+                    if (db.Users.FirstOrDefault(u => u.Email == model.Email).MarkedForDeletion)
+                    {
+                        ModelState.AddModelError("", "Account marked for deletion");
+                        return View(model);
+                    }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");

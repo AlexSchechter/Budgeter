@@ -13,8 +13,7 @@ using Microsoft.AspNet.Identity;
 namespace Budgeter.Controllers
 {
     public class TransactionsController : BaseController
-    {       
-      
+    {
         // GET: Transactions
         public async Task<ActionResult> Index(int? householdAccountId)
         {

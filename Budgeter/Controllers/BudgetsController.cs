@@ -8,10 +8,9 @@ using System.Web.Mvc;
 using Budgeter.Models;
 
 namespace Budgeter.Controllers
-{
+{    
     public class BudgetsController : BaseController
     {
-       
         // GET: Budgets
         public async Task<ActionResult> Index()
         {

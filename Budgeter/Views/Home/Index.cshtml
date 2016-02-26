@@ -33,9 +33,9 @@
                         <td>@transaction.Category.Name</td>
                         <td>@transaction.HouseholdAccount.Name</td>
                         <td>@transaction.Description</td>
-                        <td>@string.Concat(transaction.EnteredBy.FirstName, " ", transaction.EnteredBy.LastName)</td>
-                        <td>@string.Concat("$", transaction.Amount)</td>
-                        <td>@string.Concat("$", transaction.ReconciledAmount)</td>
+                        <td>@String.Concat(transaction.EnteredBy.FirstName, " ", transaction.EnteredBy.LastName)</td>
+                        <td>@String.Concat("$", transaction.Amount)</td>
+                        <td>@String.Concat("$", transaction.ReconciledAmount)</td>
                     </tr>
                 }
             </tbody>

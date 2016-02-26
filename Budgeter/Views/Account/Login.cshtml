@@ -47,6 +47,25 @@
     <p><em>Don't have an account yet?</em> <a href="/Account/Register"><strong>Sign Up</strong></a></p>
 </div>
 <div class="login-separator text-center"><span>or sign in with</span></div>
+@using (Html.BeginForm("ExternalLogin", "Account"))
+{
+    @Html.AntiForgeryToken()
+    <div id="socialLoginList">
+        <p>
+            @using Microsoft.Owin.Security
+            @{
+                var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+                foreach (Microsoft.Owin.Security.AuthenticationDescription p in loginProviders)
+                {
+                    <button type="submit" class="btn btn-block btn-social btn-@p.AuthenticationType.ToLower()" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">
+                        <span class="fa fa-@p.AuthenticationType.ToLower()"></span>@p.AuthenticationType
+                    </button>
+                                                @*<button type="submit" class="fb-login-button" data-size="large" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>*@
+                }
+            }
+        </p>
+    </div>
+}
 <div class="text-center">
     <button type="button" class="btn btn-login-social btn-login-facebook"><span>Facebook</span></button>
     <button type="button" class="btn btn-login-social btn-login-twitter"><span>Twitter</span></button>

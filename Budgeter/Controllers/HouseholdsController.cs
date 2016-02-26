@@ -8,6 +8,7 @@ namespace Budgeter.Controllers
 {
     public class HouseholdsController : BaseController
     {
+
         //Get /Home/Households
         public ActionResult Index ()
         {
@@ -92,32 +93,17 @@ namespace Budgeter.Controllers
             {              
                 ApplicationUser user = GetUserInfo();
                 Household oldHousehold = GetHouseholdInfo();
-                db.Households.Add(new Household { Name = newName, MarkedForDeletion = false });
-                await db.SaveChangesAsync();
-                Household newHousehold = db.Households.OrderByDescending(h => h.Id).FirstOrDefault(h => h.Name == newName);
-                user.HouseholdId = newHousehold.Id;
-
-                string[] categoryNames = {"Automobile", "Bank Charges", "Charity", "Childcare", "Clothing", "Credit Card Fees", "Education",
-                "Events", "Food", "Gifts", "Healthcare", "Household", "Savings Interest", "Insurance", "Job Expenses", "Leisure (not holiday)", "Hobbies",
-                "Loans", "Misc", "Pet Care", "Salary", "Savings", "Taxes", "Utilities", "Holiday"};
-
-                Category myCategory = new Category();
-                foreach (string name in categoryNames)
-                {
-                    if (!db.Categories.Any(c => c.Name == name))
-                    {
-                        db.Categories.Add(new Category { Name = name });
-                        await db.SaveChangesAsync();
-                    }
-
-                    myCategory = db.Categories.FirstOrDefault(c => c.Name == name);
-                    newHousehold.Categories.Add(myCategory);
-                }
-                
                 if (oldHousehold.Members.Count == 1)
                     oldHousehold.MarkedForDeletion = true;
 
+                db.Households.Add(new Household { Name = newName, MarkedForDeletion = false });
                 await db.SaveChangesAsync();
+
+                Household newHousehold = db.Households.OrderByDescending(h => h.Id).FirstOrDefault(h => h.Name == newName);
+                user.HouseholdId = newHousehold.Id;
+                await db.SaveChangesAsync();
+
+                PopulateCategories();                    
             }
             return RedirectToAction("Index", "Households");
         }

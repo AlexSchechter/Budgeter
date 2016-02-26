@@ -55,6 +55,7 @@ namespace Budgeter.Models
         public DbSet<BudgetItem> BudgetItems { get; set; }
         public DbSet<Invitation> Invitations { get; set; }
         public IEnumerable ApplicationUsers { get; internal set; }
+        public DbSet<SendGridCredential> SendgridCredentials { get; set; }
 
         internal void SubmitChanges()
         {
