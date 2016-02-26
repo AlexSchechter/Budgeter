@@ -46,15 +46,16 @@ namespace Budgeter.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
-
+            if (GetUserInfo() == null)
+                return RedirectToAction("Index", "Home");
             return View();
         }
 
         public ActionResult Contact()
         {
+            if (GetUserInfo() == null)
+                return RedirectToAction("Index", "Home");
             ViewBag.Message = "Your contact page.";
-
             return View();
         }
 
@@ -62,6 +63,9 @@ namespace Budgeter.Controllers
         public ActionResult UserProfile()
         {
             ApplicationUser user = GetUserInfo();
+            if (user == null)
+                return RedirectToAction("Index", "Home");
+
             return View(new ProfileViewModel
             {
                 Email = user.Email,
@@ -71,8 +75,5 @@ namespace Budgeter.Controllers
                 HouseholdName = db.Households.FirstOrDefault(h => h.Id == user.HouseholdId).Name
             });
         }
-
-      
-
     }
 }

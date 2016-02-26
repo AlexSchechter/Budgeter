@@ -16,35 +16,38 @@
             @Html.Action("Create", "HouseholdAccount")
         </div>
     </div>
-    <div class="table-responsive">
-        <table class="table colored-header datatable project-list">
-            <thead>
-                <tr>
-                    <th>Account Name</th>
-                    <th>Creation Date</th>
-                    <th>Transactions</th>
-                    <th>Balance</th>
-                    <th>Reconciled Balance</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (HouseholdAccount account in Model)
-                {
+    <div class="widget">
+        <div class="widget-content">
+            <table class="table table-striped">
+                <thead>
                     <tr>
-                        <td>@account.Name</td>
-                        <td>@account.CreationDate.Date.ToString("d")</td>
-                        <td>@account.Transactions.Count()</td>
-                        <td>@string.Concat("$", account.Balance)</td>
-                        <td>@string.Concat("$", account.ReconciledBalance)</td>
-                        <td>@Html.ActionLink("Transactions", "Index", "Transactions", new { householdAccountId = account.Id }, new { @class = "btn btn-primary btn-xs" })</td>
-                        <td>@Html.ActionLink("Rename", "Edit", new { householdAccountId = account.Id }, new { @class = "btn btn-warning btn-xs" })</td>
-                        <td>@Html.ActionLink("Delete", "Delete", new { householdAccountId = account.Id }, new { @class = "btn btn-danger btn-xs" })</td>
+                        <th>Account Name</th>
+                        <th>Creation Date</th>
+                        <th>Transactions</th>
+                        <th>Balance</th>
+                        <th>Reconciled Balance</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (HouseholdAccount account in Model)
+                    {
+                        <tr>
+                            <td>@account.Name</td>
+                            <td>@account.CreationDate.Date.ToString("d")</td>
+                            <td>@account.Transactions.Count()</td>
+                            <td>@string.Concat("$", account.Balance)</td>
+                            <td>@string.Concat("$", account.ReconciledBalance)</td>
+                            <td>@Html.ActionLink("Transactions", "Index", "Transactions", new { householdAccountId = account.Id }, new { @class = "btn btn-primary btn-xs" })</td>
+                            <td>@Html.ActionLink("Rename", "Edit", new { householdAccountId = account.Id }, new { @class = "btn btn-warning btn-xs" })</td>
+                            <td>@Html.ActionLink("Delete", "Delete", new { householdAccountId = account.Id }, new { @class = "btn btn-danger btn-xs" })</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
     </div>
 </div>

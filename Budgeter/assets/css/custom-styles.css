@@ -77,11 +77,18 @@
 
 .edit-account-form h3 
 {
-    text-align:center;
+    text-align: center;
 }
 
-/* Generic*/
+/* Categories*/
 
+.btn.btn-primary.btn-md.btn-category
+{
+    width: 170px;
+    margin-bottom: 12px;
+    margin-top: 12px;
+}
+/* Generic*/
 
 .btn-xs, .btn-md
 {

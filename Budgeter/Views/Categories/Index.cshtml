@@ -1,38 +1,45 @@
 ﻿@model Budgeter.Models.CategoryViewModel
 
-<div class="h2">Index of Categories</div>
-<div class="h5 text-info">Please note that only Categories that contain no transactinons can be deleted</div>
-<br />
+<div class="container-fluid primary-content">
+    <div class="primary-content-heading clearfix">
+        <div class="h2">Index of Categories</div>
+        <i class="h5 text-warning">Please note that only Categories that contain no transactinons can be deleted</i>  
+    </div> 
+    <div class="widget">
+        <div class="widget-content">           
+            <p>
+                @Html.ActionLink("Create New Category", "Create", null, new { @class = "btn btn-primary btn-md btn-category"} )
+            </p>
+            <table class="table table-striped">
+                <tr>
+                    <th>
+                        Category Name
+                    </th>
+                    <th>
+                        Transactions
+                    </th>
+                    <th></th>
+                </tr>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @*@Html.DisplayNameFor(model => model.CategoryItems.Name)*@
-        </th>
-        <th>
-            Transactions
-        </th>
-        <th></th>
-    </tr>
+                @foreach (var item in Model.CategoryItems)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Category.Name)
+                        </td>
+                        <td>
+                            @item.TransactionCount
+                        </td>
+                        <td>
+                            @if (item.TransactionCount == 0)
+                            {
+                                @Html.ActionLink("Delete", "Delete", new { categoryId = item.Category.Id }, new { @class = "btn btn-danger btn-xs" });
+                            }
+                        </td>
+                    </tr>
+                }
 
-@foreach (var item in Model.CategoryItems) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Category.Name)
-        </td>
-        <td>
-            @item.TransactionCount
-        </td>
-        <td>
-            @if (item.TransactionCount == 0)
-            {
-                @Html.ActionLink("Delete", "Delete", new { categoryId = item.Category.Id });
-            }
-        </td>
-    </tr>
-}
-
-</table>
+            </table>
+        </div>
+    </div>
+</div>
