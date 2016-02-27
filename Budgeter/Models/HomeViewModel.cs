@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Budgeter.Models
 {
@@ -7,5 +8,6 @@ namespace Budgeter.Models
         public IEnumerable<ChartItem> ChartData { get; set; }
         public IEnumerable<Transaction> LastTransactions { get; set; }
         public IEnumerable<HouseholdAccount> HouseholdAccounts { get; set; }
+        public DateTimeOffset? Date { get; set; }
     }
 }

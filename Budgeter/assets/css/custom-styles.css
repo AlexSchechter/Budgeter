@@ -1,4 +1,19 @@
-﻿/*Change Household page*/
+﻿/*Home page*/
+
+#changeMonth
+{
+    position: absolute;
+    right: 22px;
+    margin-top: 10px;
+}
+
+.switch-button
+{
+    width: 200px !important;
+}
+
+
+/*Change Household page*/
 #changeHousehold
 {
     margin-bottom: 12px;

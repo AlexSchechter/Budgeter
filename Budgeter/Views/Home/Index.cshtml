@@ -1,4 +1,5 @@
-﻿@using Budgeter.Models
+﻿@using System
+@using Budgeter.Models
 @model HomeViewModel
 
 <!-- PRIMARY CONTENT HEADING -->
@@ -73,63 +74,39 @@
         </div>
     </div>
 </div>
-<div class="widget widget-no-header widget-transparent bottom-30px">
-    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-    <table id="datatable" hidden>
-        <thead>
-            <tr>
-                <th></th>
-                <th>Amount Budgeted</th>
-                <th>Amount Spent</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (ChartItem item in Model.ChartData)
+<div class="widget ">
+    <div class="widget-header clearfix">
+        <h3><i class="icon ion-calculator"></i> <span>Activity by Category for @Model.Date.Value.ToString("MMMM yyyy")</span></h3>
+        @using (Html.BeginForm("Index", "Home", new { date = Model.Date }, FormMethod.Post, new { @id = "changeMonth" } ))
+        {
+                <input type="submit" name="submitButton" value="Previous Month" class="btn btn-success btn-xs switch-button"  />
+                <input type="submit" name="submitButton" value="Next Month" class="btn btn-warning btn-xs switch-button" />
+        }
+    </div>
+    <div class="widget-content">
+        <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+        <table id="datatable" hidden>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Amount Budgeted</th>
+                    <th>Amount Spent</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (ChartItem item in Model.ChartData)
             {
                 if (item != null)
                 {
-                    <tr>
-                        <th>@item.CategoryName</th>
-                        <td>@item.AmountBudgeted</td>
-                        <td>@item.AmountSpent</td>
-                    </tr>
+                        <tr>
+                            <th>@item.CategoryName</th>
+                            <td>@item.AmountBudgeted</td>
+                            <td>@item.AmountSpent</td>
+                        </tr>
+                    }
+
                 }
-
-            }
-        </tbody>
-    </table>
-
-</div>
-<div class="row">
-    <div class="col-sm-8">
-
-    </div>
-    <div class="col-sm-4">
-
+            </tbody>
+        </table>
     </div>
 </div>
-<div class="row">
-    <div class="col-sm-8">
-
-    </div>
-    <div class="col-sm-4">
-
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-4">
-
-    </div>
-    <div class="col-sm-4">
-
-    </div>
-    <div class="col-sm-4">
-
-    </div>
-</div>
-<div class="right-sidebar">
-
-</div>
-
-
-

@@ -9,19 +9,39 @@ namespace Budgeter.Controllers
     [RequireHttps]
     public class HomeController : BaseController
     {
-        public ActionResult Index(DateTimeOffset? date)
+        public ActionResult Index(string submitButton, DateTimeOffset? date )
         {         
             if (User.Identity.IsAuthenticated)
             {
                 Household household = GetHouseholdInfo();
-                DateTimeOffset selectedDate = date == null ? DateTime.Now : (DateTimeOffset)date;      
+                DateTimeOffset selectedDate = new DateTimeOffset();
+                if (date == null)
+                    selectedDate = DateTime.Now;
+                else
+                {
+                    switch (submitButton)
+                    {
+                        case "Next Month":
+                            selectedDate = date.Value.AddMonths(1);
+                            break;
+                        case "Previous Month":
+                            selectedDate = date.Value.AddMonths(-1);
+                            break;
+                        default:
+                            View(date);
+                            break;
+                    }                                                
+                }
+
+                //selectedDate = selectedDate.AddMonths(-1); 
                 HomeViewModel model = new HomeViewModel
                 {
                     ChartData = db.Categories.Where(c => c.Households.Any(h => h.Id == household.Id)).ToList()
                                              .Select(c => CategoryToChartItem(c, household.Id, selectedDate)),
                     LastTransactions = db.Transactions.Where(t => t.HouseholdAccount.HouseholdId == household.Id).Include(t => t.HouseholdAccount)
                                                       .OrderByDescending(t => t.Date).Take(5),
-                    HouseholdAccounts = db.HouseholdAccounts.Where(h => h.HouseholdId == household.Id)
+                    HouseholdAccounts = db.HouseholdAccounts.Where(h => h.HouseholdId == household.Id),
+                    Date = selectedDate
                 };
                 return View(model);
             }               

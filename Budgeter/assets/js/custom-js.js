@@ -13,7 +13,7 @@ $(function () {
             type: 'column'
         },
         title: {
-            text: 'Spending vs Budget for Each Category for this Month'
+           text: null
         },
         yAxis: {
             allowDecimals: false,
