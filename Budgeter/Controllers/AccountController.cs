@@ -155,14 +155,16 @@ namespace Budgeter.Controllers
                             
                 if (invitation != null)
                 {
-                    user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, HouseholdId = invitation.HouseholdId };                  
+                    user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, HouseholdId = invitation.HouseholdId };
+
                 }
                 else
                 {
                     db.Households.Add(new Household { Name = model.FirstName });
                     await db.SaveChangesAsync();
-                    var id = db.Households.ToList().OrderByDescending(h => h.Id).FirstOrDefault(h => h.Name == model.FirstName).Id;
-                    user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, HouseholdId = id };                 
+                    var householdId = db.Households.ToList().OrderByDescending(h => h.Id).FirstOrDefault(h => h.Name == model.FirstName).Id;
+                    user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, HouseholdId = householdId };
+                    PopulateCategories(householdId);             
                 }
 
                 var result = await UserManager.CreateAsync(user, model.Password);
@@ -369,9 +371,15 @@ namespace Budgeter.Controllers
 
             // Sign in the user with this external login provider if the user already has a login
             var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
-            switch (result)
+            
+            switch (result) 
             {
                 case SignInStatus.Success:
+                    if (db.Users.FirstOrDefault(u => u.Email == loginInfo.Email).MarkedForDeletion) //NEED TO CHECK FOR ACTUAL EMAIL
+                    {
+                        ModelState.AddModelError("", "Account marked for deletion");
+                        return View(returnUrl);
+                    }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -402,8 +410,36 @@ namespace Budgeter.Controllers
                 var info = await AuthenticationManager.GetExternalLoginInfoAsync();
                 if (info == null)              
                     return View("ExternalLoginFailure");
+
+                ApplicationUser user = null;
+                Invitation invitation = db.Invitations.FirstOrDefault(i => i.Email == model.Email);              
+                if (invitation != null)
+                {
+                    user = new ApplicationUser
+                    {
+                        UserName = model.Email,
+                        Email = model.Email,
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        HouseholdId = invitation.HouseholdId
+                    };
+                }
+                else
+                {
+                    Household household = new Household { Name = model.FirstName };
+                    db.Households.Add(household);
+                    await db.SaveChangesAsync();
+                    int householdId = db.Households.OrderByDescending(h => h.Id).First(h => h.Name == household.Name).Id;
+                    user = new ApplicationUser
+                    {
+                        UserName = model.Email,
+                        Email = model.Email,
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        HouseholdId = householdId
+                    };
+                }
                 
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -411,6 +447,8 @@ namespace Budgeter.Controllers
                     if (result.Succeeded)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        if (invitation == null)
+                            PopulateCategories(user.HouseholdId);
                         return RedirectToLocal(returnUrl);
                     }
                 }

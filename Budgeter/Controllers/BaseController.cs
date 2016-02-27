@@ -21,9 +21,9 @@ namespace Budgeter.Controllers
             return user == null ? null : db.Households.FirstOrDefault(h => h.Id == user.HouseholdId);
         }
 
-        protected void PopulateCategories()
+        protected void PopulateCategories(int householdId)
         {
-            Household household = GetHouseholdInfo();
+            Household household = db.Households.Find(householdId);
             string[] categoryNames = {"Automobile", "Bank Charges", "Charity", "Childcare", "Clothing", "Credit Card Fees", "Education",
                 "Events", "Food", "Gifts", "Healthcare", "Household", "Savings Interest", "Insurance", "Job Expenses", "Leisure (not holiday)", "Hobbies",
                 "Loans", "Misc", "Pet Care", "Salary", "Savings", "Taxes", "Utilities", "Holiday"};

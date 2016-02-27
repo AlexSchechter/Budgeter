@@ -103,7 +103,7 @@ namespace Budgeter.Controllers
                 user.HouseholdId = newHousehold.Id;
                 await db.SaveChangesAsync();
 
-                PopulateCategories();                    
+                PopulateCategories(newHousehold.Id);                    
             }
             return RedirectToAction("Index", "Households");
         }
