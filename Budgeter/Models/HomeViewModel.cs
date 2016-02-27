@@ -6,5 +6,6 @@ namespace Budgeter.Models
     {
         public IEnumerable<ChartItem> ChartData { get; set; }
         public IEnumerable<Transaction> LastTransactions { get; set; }
+        public IEnumerable<HouseholdAccount> HouseholdAccounts { get; set; }
     }
 }

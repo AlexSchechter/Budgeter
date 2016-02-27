@@ -88,7 +88,20 @@
     margin-bottom: 12px;
     margin-top: 12px;
 }
-/* Generic*/
+
+/*Transactions*/
+
+#Reconciled
+{
+    position: relative;
+}
+.checkbox.checkbox-form
+{
+    display: inline;
+    margin-left: 24px;
+}
+
+/*Generic*/
 
 .btn-xs, .btn-md
 {

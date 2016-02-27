@@ -5,7 +5,6 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using Budgeter.Models;
 using Microsoft.AspNet.Identity;
@@ -32,14 +31,18 @@ namespace Budgeter.Controllers
         }
 
         // GET: Transactions/Create
-        public ActionResult Create(int householdAccountId)
+        public ActionResult Create(int? householdAccountId)
         {
-            if (GetUserInfo() == null)
+            if (GetUserInfo() == null || householdAccountId == null)
                 return RedirectToAction("Index", "Home");
 
             Household household = GetHouseholdInfo();
             ViewBag.CategoryId = new SelectList(db.Households.Find(household.Id).Categories.OrderBy(c => c.Name), "Id", "Name");
-            return View(new Transaction { HouseholdAccountId = householdAccountId });
+            return View(new Transaction
+            {
+                HouseholdAccountId = (int)householdAccountId,
+                Reconciled = true
+            });
         }
 
         // POST: Transactions/Create
@@ -60,7 +63,7 @@ namespace Budgeter.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index", new { householdAccountId = transaction.HouseholdAccountId });
             }
-            return View(transaction.HouseholdAccountId);
+            return View(transaction);
         }
 
         // GET: Transactions/Edit/5

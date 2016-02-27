@@ -1,6 +1,4 @@
 ﻿using Budgeter.Models;
-using Microsoft.AspNet.Identity;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using System;
@@ -11,30 +9,35 @@ namespace Budgeter.Controllers
     [RequireHttps]
     public class HomeController : BaseController
     {
-        public ActionResult Index()
+        public ActionResult Index(DateTimeOffset? date)
         {         
             if (User.Identity.IsAuthenticated)
             {
-                Household household = GetHouseholdInfo();             
+                Household household = GetHouseholdInfo();
+                DateTimeOffset selectedDate = date == null ? DateTime.Now : (DateTimeOffset)date;      
                 HomeViewModel model = new HomeViewModel
                 {
                     ChartData = db.Categories.Where(c => c.Households.Any(h => h.Id == household.Id)).ToList()
-                                             .Select(c => CategoryToChartItem(c, household.Id)),
+                                             .Select(c => CategoryToChartItem(c, household.Id, selectedDate)),
                     LastTransactions = db.Transactions.Where(t => t.HouseholdAccount.HouseholdId == household.Id).Include(t => t.HouseholdAccount)
-                                                      .OrderByDescending(t => t.Date).Take(5)
+                                                      .OrderByDescending(t => t.Date).Take(5),
+                    HouseholdAccounts = db.HouseholdAccounts.Where(h => h.HouseholdId == household.Id)
                 };
                 return View(model);
             }               
             return RedirectToAction("Login", "Account");
         }
 
-        private ChartItem CategoryToChartItem(Category category, int householdId)
+        private ChartItem CategoryToChartItem(Category category, int householdId, DateTimeOffset date)
         {
            
             var transactions = db.Transactions.Where(t => t.HouseholdAccount.HouseholdId == householdId && t.Category.Id == category.Id)
                                               .Where(t => t.Amount < 0)
-                                              .Where(t => t.Date.Month == DateTimeOffset.Now.Month && t.Date.Year == DateTimeOffset.Now.Year);
+                                              .Where(t => t.Date.Month == date.Month && t.Date.Year == date.Year);
             var budgetItems = db.BudgetItems.Where(b => b.Budget.HouseholdId == householdId && b.Category.Id == category.Id);
+
+            if ((!transactions.Any() || transactions == null) && (!budgetItems.Any() || budgetItems == null))
+                return null;
 
             return new ChartItem
             {

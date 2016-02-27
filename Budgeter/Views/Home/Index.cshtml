@@ -1,49 +1,79 @@
 ﻿@using Budgeter.Models
 @model HomeViewModel
 
-<!-- PRIMARY CONTENT HEADING -->    
-<div class="primary-content-heading clearfix">         
+<!-- PRIMARY CONTENT HEADING -->
+<div class="primary-content-heading clearfix">
     <h2>DASHBOARD</h2>
 
 </div>
 <!-- END PRIMARY CONTENT HEADING -->
-<div class="widget widget-no-header widget-transparent bottom-30px">
-    <div class="widget-header clearfix">
-        <h3><i class="icon ion-ios-grid-view-outline"></i> <span>Last 5 Transactions</span></h3>
-    </div>
-    <div class="widget-content">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Category</th>
-                    <th>Account</th>
-                    <th>Description</th>
-                    <th>Entered By</th>
-                    <th>Amount</th>
-                    <th>Reconciled Amount</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (Transaction transaction in Model.LastTransactions)
-                {
-                    <tr>
-                        <td>@transaction.Date.ToString("d")</td>
-                        <td>@transaction.Category.Name</td>
-                        <td>@transaction.HouseholdAccount.Name</td>
-                        <td>@transaction.Description</td>
-                        <td>@String.Concat(transaction.EnteredBy.FirstName, " ", transaction.EnteredBy.LastName)</td>
-                        <td>@String.Concat("$", transaction.Amount)</td>
-                        <td>@String.Concat("$", transaction.ReconciledAmount)</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+<div class="row">
+    <div class="col-sm-8">
+        <div class="widget">
+            <div class="widget-header clearfix">
+                <h3><i class="icon ion-calculator"></i> <span>Last 5 Transactions</span></h3>
+            </div>
+            <div class="widget-content">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Category</th>
+                            <th>Account</th>
+                            <th>Description</th>
+                            <th>Entered By</th>
+                            <th>Amount</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Transaction transaction in Model.LastTransactions)
+                        {
+                            <tr>
+                                <td>@transaction.Date.ToString("d")</td>
+                                <td>@transaction.Category.Name</td>
+                                <td>@transaction.HouseholdAccount.Name</td>
+                                <td>@transaction.Description</td>
+                                <td>@String.Concat(transaction.EnteredBy.FirstName, " ", transaction.EnteredBy.LastName)</td>
+                                <td>@String.Concat("$", transaction.Amount)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>      
     </div>
 
+    <div class="col-sm-4">
+        <div class="widget">
+            <div class="widget-header clearfix">
+                <h3><i class="icon ion-calculator"></i> <span>Accounts</span></h3>
+            </div>
+            <div class="widget-content">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Account Name</th>
+                            <th>Transactions</th>
+                            <th>Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (HouseholdAccount account in Model.HouseholdAccounts)
+                        {
+                            <tr>
+                                <td>@account.Name</td>
+                                <td>@account.Transactions.Count</td>
+                                <td>@account.Balance</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="widget widget-no-header widget-transparent bottom-30px">  
+<div class="widget widget-no-header widget-transparent bottom-30px">
     <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
     <table id="datatable" hidden>
         <thead>
@@ -54,48 +84,52 @@
             </tr>
         </thead>
         <tbody>
-            @foreach(ChartItem item in Model.ChartData)
+            @foreach (ChartItem item in Model.ChartData)
             {
-                <tr>
-                    <th>@item.CategoryName</th> 
-                    <td>@item.AmountBudgeted</td>
-                    <td>@item.AmountSpent</td>
-                </tr>                   
-            }             
+                if (item != null)
+                {
+                    <tr>
+                        <th>@item.CategoryName</th>
+                        <td>@item.AmountBudgeted</td>
+                        <td>@item.AmountSpent</td>
+                    </tr>
+                }
+
+            }
         </tbody>
-    </table>  
+    </table>
 
 </div>
 <div class="row">
     <div class="col-sm-8">
-            
+
     </div>
     <div class="col-sm-4">
-                         
+
     </div>
 </div>
 <div class="row">
     <div class="col-sm-8">
-            
+
     </div>
     <div class="col-sm-4">
-            
+
     </div>
 </div>
 <div class="row">
     <div class="col-sm-4">
-            
+
     </div>
     <div class="col-sm-4">
-            
+
     </div>
     <div class="col-sm-4">
-            
+
     </div>
 </div>
 <div class="right-sidebar">
-   
+
 </div>
 
 
- 
+
