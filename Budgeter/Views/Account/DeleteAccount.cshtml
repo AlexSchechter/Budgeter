@@ -1,4 +1,4 @@
-﻿<h2>Delete</h2>
+﻿@*<h2>Delete</h2>
 
 <h3>Are you sure you want to delete your account?</h3>
 <div class="h5 text-danger">Please note that this will delete your household (and all the budgets and accounts asociated with it) if you are the last person in your household. This action cannot be undone.</div>
@@ -12,5 +12,30 @@
             @Html.ActionLink("Back to Profile", "UserProfile", "Home")
         </div>
     }
+</div>*@
+
+<div class="widget edit-account-form">
+    <div class="widget-header clearfix">
+        <h3><i class="icon ion-compose"></i></h3>
+    </div>
+    <div class="widget-content">
+        <h3 class="text-danger">
+            Are you sure you want to delete your account? Please note that this will delete your household (and all the budgets and accounts asociated with it) if you are the last person in your household. This action cannot be undone.
+        </h3>
+    </div>
+    @using (Html.BeginForm("DeleteAccount", "Account", FormMethod.Post, new { @class = "form-horizontal partial-form", role = "form" }))
+    {
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+            <div class="col-xs-6">
+                <input type="submit" name="submitButton" value="Delete" class="btn btn-success btn-block" />
+            </div>
+            <div class="col-xs-6">
+                @Html.ActionLink("Cancel", "Index", "Home", null, new { @class = "btn btn-danger btn-block" })
+            </div>
+        </div>
+    }
+</div>
+
 </div>
 

@@ -2,10 +2,10 @@
 
 <h2>Transactions for @ViewBag.HouseholdAccountName</h2>
 
-<p>
-    @Html.ActionLink("Create New Transaction", "Create", new { householdAccountId = ViewBag.HouseholdAccountId }) |
-    @Html.ActionLink("Back to Accounts List", "Index", "HouseholdAccount")
-</p>
+<div id="transactionsButtons">
+    @Html.ActionLink("Create New Transaction", "Create", new { householdAccountId = ViewBag.HouseholdAccountId }, new { @class = "btn btn-success" })
+    @Html.ActionLink("Back to Accounts List", "Index", "HouseholdAccount", new { @class = "btn btn-primary", @id = "backToAccounts" })
+</div>
 <div class="widget">
     <div class="widget-content">
         <div class="table-responsive">
@@ -68,8 +68,8 @@
                                 @Html.DisplayFor(modelItem => item.Reconciled)
                             </td>
                             <td>
-                                @Html.ActionLink("Edit", "Edit", new { transactionId = item.Id }) |
-                                @Html.ActionLink("Delete", "Delete", new { transactionId = item.Id })
+                                @Html.ActionLink("Edit", "Edit", new { transactionId = item.Id }, new { @class = "btn btn-success btn-xs"}) 
+                                @Html.ActionLink("Delete", "Delete", new { transactionId = item.Id }, new { @class = "btn btn-primary btn-xs" })
                             </td>
                         </tr>
                     }

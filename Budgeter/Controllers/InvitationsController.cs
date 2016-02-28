@@ -38,7 +38,6 @@ namespace Budgeter.Controllers
             if (ModelState.IsValid)
             {
                 Household household = GetHouseholdInfo();
-                invitation.JoinCode = Guid.NewGuid();
                 invitation.HouseholdId = household.Id;
                 db.Invitations.Add(invitation);
                 await db.SaveChangesAsync();

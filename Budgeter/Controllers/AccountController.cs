@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Budgeter.Models;
+using System.Security.Principal;
 
 namespace Budgeter.Controllers
 {
@@ -134,8 +135,8 @@ namespace Budgeter.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            if (GetUserInfo() != null)
-                return RedirectToAction("Index", "Home");
+            if (User.Identity.IsAuthenticated)
+                    return RedirectToAction("Index", "Home");
 
             return View();
         }
@@ -210,12 +211,15 @@ namespace Budgeter.Controllers
 
             ApplicationUser user = GetUserInfo();
             Household household = GetHouseholdInfo();
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-
+            
             user.MarkedForDeletion = true;           
             if (household.Members.Count == 1)
-                household.MarkedForDeletion = true;   
-                    
+                household.MarkedForDeletion = true;
+
+            Session.Clear();
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
+
             await db.SaveChangesAsync();          
                      
             return RedirectToAction("Index", "Home");
@@ -466,6 +470,7 @@ namespace Budgeter.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
             return RedirectToAction("Index", "Home");
         }
 
