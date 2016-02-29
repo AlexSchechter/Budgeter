@@ -80,7 +80,15 @@
         @using (Html.BeginForm("Index", "Home", new { date = Model.Date }, FormMethod.Post, new { @id = "changeMonth" } ))
         {
                 <input type="submit" name="submitButton" value="Previous Month" class="btn btn-success btn-xs switch-button"  />
-                <input type="submit" name="submitButton" value="Next Month" class="btn btn-warning btn-xs switch-button" />
+                if (ViewBag.IsCurrentMonth)
+                {
+                    <div class="btn btn-default btn-xs switch-button" id="currentMonth"> Next Month</div>
+                }
+                else
+                {
+                    <input type="submit" name="submitButton" value="Next Month" class="btn btn-warning btn-xs switch-button" /> 
+                }
+
         }
     </div>
     <div class="widget-content">

@@ -3,7 +3,7 @@
 
 <div class="container-fluid primary-content">
     <div class="primary-content-heading clearfix" id="changeHousehold">
-        <div class="h2">Change Household </div>
+        <h2>Change Household </h2>
         <p class="h5">You are currently a member of @Model.CurrentHousehold.Name Household. Your household has
             <i>@Model.CurrentHousehold.HouseholdAccounts.Count account(s)</i> with combined balance of <i>$ @Model.TotalBalance</i>                     
             and <i>@Model.CurrentHousehold.Budgets.Count budget(s)</i>  with a total budgeted amout of <i>$ @Model.CombinedBudgetAmounts</i>.    
@@ -52,7 +52,7 @@
                                     <td>@household.Members.Count</td>
                                     <td>@household.HouseholdAccounts.Count</td>
                                     <td>@household.Budgets.Count</td>
-                                    <td>@Html.ActionLink("Join", "ChangeHousehold", "Households", new { householdId = household.Id }, new { @class = "btn btn-default" })</td>
+                                    <td>@Html.ActionLink("Join", "ChangeHousehold", "Households", new { householdId = household.Id }, new { @class = "btn btn-success" })</td>
                                 </tr>
                             }
                         </tbody>
@@ -73,7 +73,7 @@
                             <div class="input-group">
                                 <input name="members" value="1" type="hidden" />
                                 <input type="text" class="form-control" name="newName" placeholder="Pick Household Name">
-                                <span class="input-group-btn"><button class="btn btn-success" type="submit"><span class="icon ion-compose"> Change Household</span></button></span>
+                                <span class="input-group-btn"><button class="btn btn-success" type="submit"><span class="icon ion-compose"> Create New Household</span></button></span>
                             </div>
                         </div>
                     }

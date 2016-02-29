@@ -33,7 +33,8 @@ namespace Budgeter.Controllers
                     }                                                
                 }
 
-                //selectedDate = selectedDate.AddMonths(-1); 
+                ViewBag.IsCurrentMonth = (selectedDate.Month == DateTimeOffset.Now.Month && selectedDate.Year == DateTimeOffset.Now.Year) ? true : false;
+
                 HomeViewModel model = new HomeViewModel
                 {
                     ChartData = db.Categories.Where(c => c.Households.Any(h => h.Id == household.Id)).ToList()

@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -12,13 +13,14 @@ namespace Budgeter.Controllers
     public class HouseholdAccountController : BaseController
     {
         //Get /HouseholdAccount/Index
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             Household household = GetHouseholdInfo();
             if (household == null)
                 return RedirectToAction("Index", "Home");
 
-            List<HouseholdAccount> model = db.HouseholdAccounts.Where(h => h.HouseholdId == household.Id).OrderBy(h => h.Name).ToList();
+            List<HouseholdAccount> model = await db.Database.SqlQuery<HouseholdAccount>("EXEC GetHouseholdAccountsForHousehold @householdId", new SqlParameter("householdId", household.Id)).ToListAsync();
+            //db.HouseholdAccounts.Where(h => h.HouseholdId == household.Id).OrderBy(h => h.Name).ToList();
             ViewBag.HouseholdName = household.Name;
             ViewBag.CombinedBalance = db.HouseholdAccounts.Sum(h => h.Balance);
             ViewBag.CombinedReconciledBalance = db.HouseholdAccounts.Sum(h => h.ReconciledBalance);

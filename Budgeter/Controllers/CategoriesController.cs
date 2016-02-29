@@ -16,10 +16,9 @@ namespace Budgeter.Controllers
             Household household = GetHouseholdInfo();
             CategoryViewModel model = new CategoryViewModel {CategoryItems = new List<CategoryViewItem>()};
             CategoryViewItem item = new CategoryViewItem();
-            foreach (Category category in db.Households.Find(GetUserInfo().HouseholdId).Categories)
-            {
-                //item.Category = category;
-                //item.TransactionCount = category.Transactions.Where(t => t.HouseholdAccount.HouseholdId == household.Id).Count();
+            var categories = db.Households.Find(GetUserInfo().HouseholdId).Categories.OrderBy(c => c.Name);
+            foreach (Category category in categories)
+            {            
                 model.CategoryItems.Add (new CategoryViewItem
                 {
                     Category = category,
@@ -74,6 +73,8 @@ namespace Budgeter.Controllers
          
             if (!GetHouseholdInfo().Categories.Any(c => c.Id == categoryId))
                 return HttpNotFound();
+
+
 
             return View(await db.Categories.FindAsync(categoryId));
         }

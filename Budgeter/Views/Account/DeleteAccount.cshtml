@@ -1,20 +1,6 @@
-﻿@*<h2>Delete</h2>
+﻿
 
-<h3>Are you sure you want to delete your account?</h3>
-<div class="h5 text-danger">Please note that this will delete your household (and all the budgets and accounts asociated with it) if you are the last person in your household. This action cannot be undone.</div>
-<div>
-    <hr />
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to Profile", "UserProfile", "Home")
-        </div>
-    }
-</div>*@
-
-<div class="widget edit-account-form">
+<div class="widget budgeter-form">
     <div class="widget-header clearfix">
         <h3><i class="icon ion-compose"></i></h3>
     </div>
