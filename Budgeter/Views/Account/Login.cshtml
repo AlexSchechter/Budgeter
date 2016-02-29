@@ -50,32 +50,19 @@
 @using (Html.BeginForm("ExternalLogin", "Account"))
 {
     @Html.AntiForgeryToken()
-    <div id="socialLoginList">
-        <p>
+    <div class="row">
             @using Microsoft.Owin.Security
             @{
                 var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
                 foreach (Microsoft.Owin.Security.AuthenticationDescription p in loginProviders)
                 {
-                    <button type="submit" class="btn btn-block btn-social btn-@p.AuthenticationType.ToLower()" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">
-                        <span class="fa fa-@p.AuthenticationType.ToLower()"></span>@p.AuthenticationType
-                    </button>
-                                                @*<button type="submit" class="fb-login-button" data-size="large" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>*@
+                    <div class="col-sm-4">
+                        <button type="submit" class="btn btn-block btn-social btn-@p.AuthenticationType.ToLower()" @*id="@p.AuthenticationType"*@ name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">
+                            <span class="fa fa-@p.AuthenticationType.ToLower()"></span>@p.AuthenticationType
+                        </button>
+                    </div>
                 }
             }
-        </p>
     </div>
 }
-<div class="text-center">
-    <button type="button" class="btn btn-login-social btn-login-facebook"><span>Facebook</span></button>
-    <button type="button" class="btn btn-login-social btn-login-twitter"><span>Twitter</span></button>
-    <button type="button" class="btn btn-login-social btn-login-googleplus"><span>Google Plus</span></button>
-</div>
 
-
-
-@*<div class="col-sm-4">
-        <section id="socialLoginForm">
-            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-        </section>
-    </div>*@
