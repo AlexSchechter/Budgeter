@@ -44,7 +44,7 @@ namespace Budgeter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Id,CategoryId,BudgetId,Amount,Description")] BudgetItem budgetItem)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && db.Budgets.Find(budgetItem.BudgetId).HouseholdId == GetHouseholdInfo().Id)
             {
                 db.BudgetItems.Add(budgetItem);
                 await db.SaveChangesAsync();
@@ -79,7 +79,7 @@ namespace Budgeter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,CategoryId,BudgetId,Amount,Description")] BudgetItem budgetItem)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && db.Budgets.Find(budgetItem.BudgetId).HouseholdId == GetHouseholdInfo().Id)
             {
                 db.Entry(budgetItem).State = EntityState.Modified;
                 await db.SaveChangesAsync();
@@ -112,9 +112,13 @@ namespace Budgeter.Controllers
         public async Task<ActionResult> DeleteConfirmed(int budgetItemId)
         {
             BudgetItem budgetItem = await db.BudgetItems.FindAsync(budgetItemId);
-            db.BudgetItems.Remove(budgetItem);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Details", "Budgets", new { budgetId = budgetItem.BudgetId });
+            if (db.Budgets.Find(budgetItem.BudgetId).HouseholdId == GetHouseholdInfo().Id)
+            {
+                db.BudgetItems.Remove(budgetItem);
+                await db.SaveChangesAsync();
+                return RedirectToAction("Details", "Budgets", new { budgetId = budgetItem.BudgetId });
+            }
+            return View(budgetItemId);
         }
     }
 }

@@ -10,60 +10,84 @@ namespace Budgeter.Controllers
     {
 
         //Get /Home/Households
-        public ActionResult Index ()
+        public async Task<ActionResult> Index ()
         {
             ApplicationUser user = GetUserInfo();
             Household household = GetHouseholdInfo();
             if (household == null)
                 return RedirectToAction("Index", "Home");
-            List<int> householdOptionsIds = db.Invitations.Where(i => i.Email == user.Email).
-                Where(i => i.HouseholdId != household.Id).Select(i => i.HouseholdId).ToList();
-            List<Household> householdOptions = new List<Household>();
-            Household householdOption = new Household();
-            foreach (int optionId in householdOptionsIds)
+
+            IEnumerable<Invitation> invitations = db.Invitations.Where(i => i.Email == user.Email);
+            List<InvitationWithHousehold> householdOptions = new List<InvitationWithHousehold>();
+            foreach (Invitation invitation in invitations)
             {
-                householdOption = db.Households.Find(optionId);
-                if (householdOption.MarkedForDeletion == false)
-                    householdOptions.Add(householdOption);
+                Household householdFromInvite = await db.Households.FindAsync(invitation.HouseholdId);
+                if (householdFromInvite.Id != household.Id && householdFromInvite.MarkedForDeletion == false)
+                {
+                    householdOptions.Add(new InvitationWithHousehold
+                    {
+                        Invitation = invitation,
+                        Household = householdFromInvite
+                    });
+                }               
             }
+
             return View(new HouseholdViewModel
             {
                 CurrentHousehold = household,
-                HouseholdOptions = householdOptions.OrderBy(h => h.Name).ToList(),
                 CombinedBudgetAmounts = db.BudgetItems.Where(b => b.Budget.HouseholdId == household.Id).ToList().Sum(b => b.Amount),
-                TotalBalance = db.Transactions.Where(t => t.HouseholdAccount.HouseholdId == household.Id).ToList().Sum(t => t.Amount)
+                TotalBalance = db.Transactions.Where(t => t.HouseholdAccount.HouseholdId == household.Id).ToList().Sum(t => t.Amount),
+                HouseholdOptions = householdOptions.OrderBy(h => h.Household.Name).ToList()
             });
+
+            //var test = db.Invitations.Where(i => i.Email == user.Email).
+            //    Where(i => i.HouseholdId != household.Id).Select(i => i.Household).ToList();
+            //List<int> householdOptionsIds = db.Invitations.Where(i => i.Email == user.Email).
+            //    Where(i => i.HouseholdId != household.Id).Select(i => i.HouseholdId).ToList();
+            //List<Household> householdOptions = new List<Household>();
+            //Household householdOption = new Household();
+            //foreach (int optionId in householdOptionsIds)
+            //{
+            //    householdOption = db.Households.Find(optionId);
+            //    if (householdOption.MarkedForDeletion == false)
+            //        householdOptions.Add(householdOption);
+            //}
+
         }
 
         //GET: :Manage/ChangeHousehold
         [HttpGet]
-        public ActionResult ChangeHousehold(int? householdId)
+        public ActionResult ChangeHousehold(int? invitationId)
         {
             Household model = GetHouseholdInfo();
-            if (householdId == null || model == null)
+            if (invitationId == null || model == null)
                 return RedirectToAction("Index", "Home");
 
-            ViewBag.householdId = householdId;
+            ViewBag.invitationId = invitationId;
             return View(model);
         }
 
         //POST: /Manage/ChangeHousehold
         [HttpPost]
-        public async Task<ActionResult> ChangeHousehold(string submitButton, int? householdId)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeHousehold(string submitButton, int? invitationId)
         {
-            if (submitButton == "Confirm")
-            {
-                if ((householdId != null) && (db.Households.Any(h => h.Id == householdId) && (db.Households.Find(householdId).MarkedForDeletion == false)))
-                {
-                    ApplicationUser user = GetUserInfo();
-                    Household oldHousehold = GetHouseholdInfo();
-                    user.HouseholdId = (int)householdId;
-                    if (oldHousehold.Members.Count == 1)
-                        oldHousehold.MarkedForDeletion = true;
-                    await db.SaveChangesAsync();
-                    return RedirectToAction("Index", "Households");
-                }
+            if (invitationId == null || !db.Invitations.Any(i => i.Id == invitationId))
                 return HttpNotFound();
+
+            Invitation invitation = await db.Invitations.FindAsync(invitationId);
+            ApplicationUser user = GetUserInfo();
+            Household newHousehold = await db.Households.FindAsync(invitation.HouseholdId);
+
+            if (submitButton == "Confirm" && user.Email == invitation.Email && newHousehold.MarkedForDeletion == false)                  
+            {                            
+                Household oldHousehold = GetHouseholdInfo();
+                if (oldHousehold.Members.Count == 1)
+                    oldHousehold.MarkedForDeletion = true;
+
+                user.HouseholdId = newHousehold.Id;
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index", "Households");   
             }
             return RedirectToAction("Index", "Households");
         }
@@ -87,6 +111,7 @@ namespace Budgeter.Controllers
 
         //POST: /Manage/CreateAndChangeHousehold
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateAndChangeHousehold(string submitButton, string newName)
         {
             if (submitButton == "Confirm" && newName != null && newName != "")

@@ -45,14 +45,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (Household household in Model.HouseholdOptions)
+                            @foreach (InvitationWithHousehold invite in Model.HouseholdOptions)
                             {
                                 <tr>
-                                    <td>@household.Name</td>
-                                    <td>@household.Members.Count</td>
-                                    <td>@household.HouseholdAccounts.Count</td>
-                                    <td>@household.Budgets.Count</td>
-                                    <td>@Html.ActionLink("Join", "ChangeHousehold", "Households", new { householdId = household.Id }, new { @class = "btn btn-success" })</td>
+                                    <td>@invite.Household.Name</td>
+                                    <td>@invite.Household.Members.Count</td>
+                                    <td>@invite.Household.HouseholdAccounts.Count</td>
+                                    <td>@invite.Household.Budgets.Count</td>
+                                    <td>@Html.ActionLink("Join", "ChangeHousehold", "Households", new { invitationId = invite.Invitation.Id }, new { @class = "btn btn-success" })</td>
                                 </tr>
                             }
                         </tbody>

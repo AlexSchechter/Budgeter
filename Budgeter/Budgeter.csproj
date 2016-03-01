@@ -231,6 +231,7 @@
     <Compile Include="Models\Household.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Invitation.cs" />
+    <Compile Include="Models\InvitationWithHousehold.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Profile.cs" />
     <Compile Include="Models\ProfileViewModel.cs" />

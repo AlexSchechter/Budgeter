@@ -64,7 +64,7 @@ namespace Budgeter.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(budget);
+            return RedirectToAction("Index");
         }
 
         // GET: Budgets/Edit/5

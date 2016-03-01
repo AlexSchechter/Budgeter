@@ -22,8 +22,8 @@ namespace Budgeter.Controllers
             List<HouseholdAccount> model = await db.Database.SqlQuery<HouseholdAccount>("EXEC GetHouseholdAccountsForHousehold @householdId", new SqlParameter("householdId", household.Id)).ToListAsync();
             //db.HouseholdAccounts.Where(h => h.HouseholdId == household.Id).OrderBy(h => h.Name).ToList();
             ViewBag.HouseholdName = household.Name;
-            ViewBag.CombinedBalance = db.HouseholdAccounts.Sum(h => h.Balance);
-            ViewBag.CombinedReconciledBalance = db.HouseholdAccounts.Sum(h => h.ReconciledBalance);
+            ViewBag.CombinedBalance = model.Sum(h => h.Balance);
+            ViewBag.CombinedReconciledBalance = model.Sum(h => h.ReconciledBalance);
             return View(model);
         }
 
@@ -45,8 +45,7 @@ namespace Budgeter.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationDbContext db = new ApplicationDbContext();
-                string userId = User.Identity.GetUserId();
+                string userId = GetUserInfo().Id;
                 HouseholdAccount household = new HouseholdAccount
                 {
                     Name = model.Name,
@@ -86,9 +85,8 @@ namespace Budgeter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(HouseholdAccount model)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && model.HouseholdId == GetHouseholdInfo().Id)
             {
-                ApplicationDbContext db = new ApplicationDbContext();
                 HouseholdAccount householdAccount = await db.HouseholdAccounts.FindAsync(model.Id);
                 householdAccount.Name = model.Name;
                 await db.SaveChangesAsync();
@@ -114,19 +112,24 @@ namespace Budgeter.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(string submitButton, int householdAccountId)
         {
-            switch (submitButton)
+            HouseholdAccount householdAccount = db.HouseholdAccounts.FirstOrDefault(h => h.Id == householdAccountId);
+            if(householdAccount.HouseholdId == GetHouseholdInfo().Id)
             {
-                case "Delete":
-                    ApplicationDbContext db = new ApplicationDbContext();
-                    HouseholdAccount householdAccount = db.HouseholdAccounts.FirstOrDefault(h => h.Id == householdAccountId);
-                    db.HouseholdAccounts.Remove(householdAccount);
-                    db.SaveChangesAsync();
-                    return RedirectToAction("Index");
-                case "Cancel":
-                    return RedirectToAction("Index");
-                default:
-                    return View(householdAccountId);
+                switch (submitButton)
+                {
+                    case "Delete":
+
+
+                        db.HouseholdAccounts.Remove(householdAccount);
+                        db.SaveChangesAsync();
+                        return RedirectToAction("Index");
+                    case "Cancel":
+                        return RedirectToAction("Index");
+                    default:
+                        return View(householdAccountId);
+                }
             }
+            return RedirectToAction("Index");
         }
     }
 }
