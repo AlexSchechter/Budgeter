@@ -28,6 +28,12 @@
 {
     margin-bottom: 20px;
 }
+.h5.text-danger.warning-transaction
+{
+    position: absolute;
+    margin-left: -10px;
+    margin-top: -2px;
+}
 /*Change Household page*/
 #changeHousehold
 {

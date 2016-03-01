@@ -7,7 +7,7 @@
             <h3><i class="icon ion-compose"></i> <span>Send Invitation to join @ViewBag.HouseholdName Household</span></h3>
         </div>
         <div class="widget-content">
-            @using (Html.BeginForm("Create", "Transactions", FormMethod.Post, new { @class = "form-horizontal partial-form", @role = "form" }))
+            @using (Html.BeginForm("Create", "Invitations", FormMethod.Post, new { @class = "form-horizontal partial-form", @role = "form" }))
             {
                 @Html.AntiForgeryToken()
                 <div class="form-horizontal">

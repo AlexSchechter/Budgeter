@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
@@ -16,27 +15,30 @@ namespace Budgeter.Controllers
         // GET: Transactions
         public async Task<ActionResult> Index(int? householdAccountId)
         {
-            if (GetUserInfo() == null)
+           
+            if (householdAccountId == null)
+                return RedirectToAction("Index", "HouseholdAccount");
+
+            HouseholdAccount householdAccount = db.HouseholdAccounts.Find(householdAccountId);
+            Household household = GetHouseholdInfo();
+
+            if (household == null ||  household.Id != householdAccount.HouseholdId)
                 return RedirectToAction("Index", "Home");
 
-            if (householdAccountId !=null)
-            {
-                ViewBag.HouseholdAccountId = householdAccountId;
-                ViewBag.HouseholdAccountName = db.HouseholdAccounts.Find(householdAccountId).Name;
-                var transactions = db.Transactions.Where(t => t.HouseholdAccountId == householdAccountId).Include(t => t.Category)
-                                                  .Include(t => t.EnteredBy).Include(t => t.HouseholdAccount).OrderByDescending(t => t.Date);
-                return View(await transactions.ToListAsync());
-            }
-            return RedirectToAction("Index", "HouseholdAccount");  
+            ViewBag.HouseholdAccountId = householdAccountId;
+            ViewBag.HouseholdAccountName = db.HouseholdAccounts.Find(householdAccountId).Name;
+            var transactions = db.Transactions.Where(t => t.HouseholdAccountId == householdAccountId).Include(t => t.Category)
+                                                .Include(t => t.EnteredBy).Include(t => t.HouseholdAccount).OrderByDescending(t => t.Date);
+            return View(await transactions.ToListAsync());
         }
 
         // GET: Transactions/Create
         public ActionResult Create(int? householdAccountId)
         {
-            if (GetUserInfo() == null || householdAccountId == null)
-                return RedirectToAction("Index", "Home");
-
             Household household = GetHouseholdInfo();
+            if (household == null || householdAccountId == null)
+                return RedirectToAction("Index", "Home");
+          
             ViewBag.CategoryId = new SelectList(db.Households.Find(household.Id).Categories.OrderBy(c => c.Name), "Id", "Name");
             return View(new Transaction
             {
@@ -52,26 +54,25 @@ namespace Budgeter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Id,HouseholdAccountId,Description,Date,Amount,CategoryId,ReconciledAmount,Reconciled,EnteredById")] Transaction transaction)
         {
-            if (ModelState.IsValid)
-            {
-                transaction.Date = DateTimeOffset.Now;
-                transaction.EnteredById = User.Identity.GetUserId();
-                db.Transactions.Add(transaction);
-                HouseholdAccount householdAccount = await db.HouseholdAccounts.FindAsync(transaction.HouseholdAccountId);
-                householdAccount.Balance += transaction.Amount;
-                householdAccount.ReconciledBalance += transaction.ReconciledAmount;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index", new { householdAccountId = transaction.HouseholdAccountId });
-            }
-            return View(transaction);
+            if (!ModelState.IsValid)
+                return View(transaction);
+
+            HouseholdAccount householdAccount = await db.HouseholdAccounts.FindAsync(transaction.HouseholdAccountId);
+            if (householdAccount.HouseholdId != GetHouseholdInfo().Id)
+                return RedirectToAction("Index", "Home");
+                
+            transaction.Date = DateTimeOffset.Now;
+            transaction.EnteredById = User.Identity.GetUserId();
+            db.Transactions.Add(transaction);
+            householdAccount.Balance += transaction.Amount;
+            householdAccount.ReconciledBalance += transaction.ReconciledAmount;
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index", new { householdAccountId = transaction.HouseholdAccountId });            
         }
 
         // GET: Transactions/Edit/5
         public async Task<ActionResult> Edit(int? transactionId)
         {
-            if (GetUserInfo() == null)
-                return RedirectToAction("Index", "Home");
-
             if (transactionId == null)            
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             
@@ -85,32 +86,35 @@ namespace Budgeter.Controllers
             return View(transaction);
         }
 
-        // POST: Transactions/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,HouseholdAccountId,Description,Date,Amount,CategoryId,ReconciledAmount,Reconciled,EnteredById")] Transaction transaction)
         {
-            if (ModelState.IsValid)
+            Household household = GetHouseholdInfo();
+            
+            if (!ModelState.IsValid)
             {
-                db.Entry(transaction).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                HouseholdAccount householdAccount = await db.HouseholdAccounts.FindAsync(transaction.HouseholdAccountId);
-
-                householdAccount.Balance = 0; //Update balance
-                householdAccount.ReconciledBalance = 0;
-                foreach (Transaction t in db.Transactions)
-                {
-                    householdAccount.Balance += t.Amount;
-                    householdAccount.ReconciledBalance += t.ReconciledAmount;
-                }
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index", new { householdAccountId = transaction.HouseholdAccountId });
+                ViewBag.CategoryId = new SelectList(db.Households.FirstOrDefault(h => h.Id == household.Id).Categories, "Id", "Name", transaction.CategoryId);
+                return View(transaction);
             }
-            int householdId = GetUserInfo().HouseholdId;
-            ViewBag.CategoryId = new SelectList(db.Households.FirstOrDefault(h => h.Id == householdId).Categories, "Id", "Name", transaction.CategoryId);
-            return View(transaction);
+
+            HouseholdAccount householdAccount = await db.HouseholdAccounts.FindAsync(transaction.HouseholdAccountId);
+
+            if (household.Id != householdAccount.HouseholdId)
+                return RedirectToAction("Index", "Home");
+
+            db.Entry(transaction).State = EntityState.Modified;
+            await db.SaveChangesAsync();               
+            householdAccount.Balance = 0; //Update balance
+            householdAccount.ReconciledBalance = 0;
+            var transactions = db.Transactions.Where(t => t.HouseholdAccountId == transaction.HouseholdAccountId);
+            foreach (Transaction t in transactions)
+            {
+                householdAccount.Balance += t.Amount;
+                householdAccount.ReconciledBalance += t.ReconciledAmount;
+            }
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index", new { householdAccountId = transaction.HouseholdAccountId });                       
         }
 
         // GET: Transactions/Delete/5
@@ -134,16 +138,22 @@ namespace Budgeter.Controllers
         // POST: Transactions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int transactionId)
+        public async Task<ActionResult> DeleteConfirmed(int? transactionId)
         {
+            if (transactionId == null)
+                return View(transactionId);
+         
             Transaction transaction = await db.Transactions.FindAsync(transactionId);           
             HouseholdAccount account = await db.HouseholdAccounts.FirstOrDefaultAsync(h => h.Id == transaction.HouseholdAccountId);
+
+            if (account.HouseholdId != GetHouseholdInfo().Id)
+                return RedirectToAction("Index", "Home");
+
             account.Balance -= transaction.Amount;
             account.ReconciledBalance -= transaction.ReconciledAmount;
             db.Transactions.Remove(transaction);
             await db.SaveChangesAsync();
             return RedirectToAction("Index", new { householdAccountId = transaction.HouseholdAccountId });
         }
-
     }
 }

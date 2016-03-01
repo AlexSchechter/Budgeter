@@ -39,20 +39,6 @@ namespace Budgeter.Controllers
                 TotalBalance = db.Transactions.Where(t => t.HouseholdAccount.HouseholdId == household.Id).ToList().Sum(t => t.Amount),
                 HouseholdOptions = householdOptions.OrderBy(h => h.Household.Name).ToList()
             });
-
-            //var test = db.Invitations.Where(i => i.Email == user.Email).
-            //    Where(i => i.HouseholdId != household.Id).Select(i => i.Household).ToList();
-            //List<int> householdOptionsIds = db.Invitations.Where(i => i.Email == user.Email).
-            //    Where(i => i.HouseholdId != household.Id).Select(i => i.HouseholdId).ToList();
-            //List<Household> householdOptions = new List<Household>();
-            //Household householdOption = new Household();
-            //foreach (int optionId in householdOptionsIds)
-            //{
-            //    householdOption = db.Households.Find(optionId);
-            //    if (householdOption.MarkedForDeletion == false)
-            //        householdOptions.Add(householdOption);
-            //}
-
         }
 
         //GET: :Manage/ChangeHousehold

@@ -63,7 +63,7 @@
                         @foreach (HouseholdAccount account in Model.HouseholdAccounts)
                         {
                             <tr>
-                                <td>@account.Name</td>
+                                <td>@Html.ActionLink(account.Name, "Index", "HouseholdAccount")</td>
                                 <td>@account.Transactions.Count</td>
                                 <td>@account.Balance</td>
                             </tr>

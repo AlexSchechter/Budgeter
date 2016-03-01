@@ -110,7 +110,7 @@ namespace Budgeter.Controllers
         //DELETE: /HouseholdAccount/Delete
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(string submitButton, int householdAccountId)
+        public async Task<ActionResult> Delete(string submitButton, int householdAccountId)
         {
             HouseholdAccount householdAccount = db.HouseholdAccounts.FirstOrDefault(h => h.Id == householdAccountId);
             if(householdAccount.HouseholdId == GetHouseholdInfo().Id)
@@ -118,10 +118,8 @@ namespace Budgeter.Controllers
                 switch (submitButton)
                 {
                     case "Delete":
-
-
                         db.HouseholdAccounts.Remove(householdAccount);
-                        db.SaveChangesAsync();
+                        await db.SaveChangesAsync();
                         return RedirectToAction("Index");
                     case "Cancel":
                         return RedirectToAction("Index");

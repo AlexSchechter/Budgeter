@@ -72,8 +72,9 @@ namespace Budgeter.Controllers
         {
             if (!ModelState.IsValid)
                 return View(model);
-                  
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+
+            string userName = db.Users.FirstOrDefault(u => u.Email == model.Email).UserName;
+            var result = await SignInManager.PasswordSignInAsync(userName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
