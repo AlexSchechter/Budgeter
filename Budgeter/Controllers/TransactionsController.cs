@@ -12,7 +12,7 @@ namespace Budgeter.Controllers
 {
     public class TransactionsController : BaseController
     {
-        // GET: Transactions
+        // GET: Transactions/Index
         public async Task<ActionResult> Index(int? householdAccountId)
         {
            

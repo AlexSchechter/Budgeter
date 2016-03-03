@@ -6,7 +6,7 @@
 
 <div id="edit-profile-section" class="widget">
     <div class="widget-header clearfix">
-        <h3><i class="icon ion-compose"></i> <span>@ViewBag.Title.ToUpper()</span></h3>
+        <h3><i class="icon ion-compose"></i> <span>@ViewBag.Title</span></h3>
         <div class="btn-group widget-header-toolbar">
             <a href="#" title="Expand/Collapse" class="btn btn-link btn-toggle-expand"><i class="icon ion-ios-arrow-up"></i></a>
         </div>
@@ -40,7 +40,6 @@
                         @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
                     </div>
                 </div>
-                @Html.HiddenFor(m => m.UserId)
 
                 <div class="form-group">
                     <input type="submit" class="btn btn-success btn-block" value="Save Changes" />

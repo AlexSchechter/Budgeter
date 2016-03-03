@@ -56,26 +56,19 @@ namespace Budgeter.Controllers
         [HttpGet]
         [ChildActionOnly]
         public ActionResult EditProfile()
-        {
-           
+        {        
             ApplicationUser user = GetUserInfo();
             if (user == null)
                 return RedirectToAction("Index", "Home");
 
             Profile model = new Profile
             {
-                UserId = user.Id,
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Username = user.UserName,
-                HouseholdId = user.HouseholdId,
-                HouseholdInvites = db.Households.Where(h => h.Id == user.HouseholdId).ToList()
             };
 
-            List<Invitation> invitations = db.Invitations.Where(i => i.Email == user.Email).ToList();
-            foreach (Invitation i in invitations)
-                model.HouseholdInvites.Add(db.Households.FirstOrDefault(h => h.Id == i.HouseholdId));
             return View(model);
         }
 
@@ -85,8 +78,8 @@ namespace Budgeter.Controllers
         {
             if (profile == null)
                 RedirectToAction("Index", "Home");
-            ApplicationDbContext db = new ApplicationDbContext();
-            ApplicationUser user = db.Users.FirstOrDefault(u => u.Id == profile.UserId);
+
+            ApplicationUser user = GetUserInfo();
             List<Invitation> invitations = db.Invitations.Where(i => i.Email == user.Email).ToList();
 
             user.UserName = profile.Username;
