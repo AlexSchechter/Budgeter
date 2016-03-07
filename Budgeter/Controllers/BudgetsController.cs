@@ -57,6 +57,12 @@ namespace Budgeter.Controllers
             if (GetUserInfo() == null)
                 return RedirectToAction("Index", "Home");
 
+            //if (GetUserInfo().Email == "john@snow.com")
+            //{
+            //    ViewBag.Demo = "The demo account is view only. Please log in to alter the data.";
+            //    return RedirectToAction("Index");
+            //}
+            
             if (ModelState.IsValid)
             {
                 budget.HouseholdId = GetHouseholdInfo().Id;

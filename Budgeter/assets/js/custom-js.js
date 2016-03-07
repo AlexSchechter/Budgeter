@@ -4,7 +4,18 @@
     }, 200);
 })
 
+//$(".btn-demo").click(function () {
+//    $(".demo-text").show();
+//});
+
+$(".btn-demo").click(function (event) {
+    event.preventDefault();
+    $(".demo-text").show();
+});
+
 $(function () {
+ 
+
     $('#container').highcharts({
         data: {
             table: 'datatable'

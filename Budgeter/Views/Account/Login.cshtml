@@ -44,9 +44,25 @@
             </div>
         </div>
     }
-    <p><em>Don't have an account yet?</em> <a href="/Account/Register"><strong>Sign Up</strong></a></p>
+    <p>
+        <em>Don't have an account yet?</em> <a href="/Account/Register"><strong>Sign Up</strong></a> <em>&nbsp; or </em>
+        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Email, new { @Value = "john@snow.com" })
+            @Html.HiddenFor(m => m.Password, new { @Value = "Demo-1" })
+            <div class="form-group" id="demoAccount">
+                <div class="col-sm-7">
+                    <button type="submit" class="btn btn-warning btn-block">Demo Account Preview</button>
+                </div>
+            </div>
+        }
+        <br />
+    </p>
 </div>
+
 <div class="login-separator text-center"><span>or sign in with</span></div>
+
 @using (Html.BeginForm("ExternalLogin", "Account"))
 {
     @Html.AntiForgeryToken()

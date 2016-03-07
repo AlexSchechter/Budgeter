@@ -13,6 +13,7 @@ namespace Budgeter.Controllers
         protected ApplicationUser GetUserInfo()
         {
             return db.Users.Find(User.Identity.GetUserId());
+            
         }
 
         protected Household GetHouseholdInfo()

@@ -1,4 +1,6 @@
-﻿/*Home page*/
+﻿
+
+/*Home page*/
 
 #changeMonth
 {
@@ -16,6 +18,14 @@
 .switch-button
 {
     width: 200px !important;
+}
+
+/*Login*/
+
+#demoAccount
+{
+    margin-bottom: -26px;
+    margin-top: 14px;
 }
 
 /*Transactions*/
@@ -89,7 +99,7 @@
     margin-top: 20px;
 }
 
-.partial-form .btn-block.budgets
+.partial-form .btn-block.btn-budgets
 {
     margin-top: 5px;
 }
