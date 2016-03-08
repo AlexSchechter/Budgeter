@@ -4,7 +4,7 @@
     Layout = "";
 }
 
-<div id="edit-profile-section" class="widget">
+<div id="edit-profile-section" class="widget" hidden>
     <div class="widget-header clearfix">
         <h3><i class="icon ion-compose"></i> <span>@ViewBag.Title</span></h3>
         <div class="btn-group widget-header-toolbar">
@@ -22,28 +22,28 @@
                     @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
                 </div>
             </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Email, new { @class = "col-sm-2 control-label" })
-                    <div class="col-sm-10">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                    </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Email, new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
                 </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.FirstName, new { @class = "col-sm-2 control-label" })
-                    <div class="col-sm-10">
-                        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
-                    </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.FirstName, new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
                 </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.LastName, new { @class = "col-sm-2 control-label" })
-                    <div class="col-sm-10">
-                        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
-                    </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.LastName, new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
                 </div>
-
-                <div class="form-group">
-                    <input type="submit" class="btn btn-success btn-block" value="Save Changes" />
-                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-success btn-block btn-demo" data-assigned-id = @User.Identity.Name value="Save Changes" />
+            </div>
         }
+        <div class="h4 text-danger demo-text" hidden>This functionality is disabled in the demo account. Please log in for full functionality.</div>
     </div>
 </div>

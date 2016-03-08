@@ -1,21 +1,21 @@
-﻿$(".edit-profile-button").click(function () {
+﻿$(".edit-profile-button").click(function (event) {
+    event.preventDefault();
+    $("#edit-profile-section").show();
     $('html, body').animate({
         scrollTop: $("#edit-profile-section").offset().top - 60
     }, 200);
 })
 
-//$(".btn-demo").click(function () {
-//    $(".demo-text").show();
-//});
 
 $(".btn-demo").click(function (event) {
-    event.preventDefault();
-    $(".demo-text").show();
+    var user = $(this).data('assigned-id');
+    if (user == "john@snow.com") {
+        event.preventDefault();
+        $(".demo-text").show();
+    }
 });
 
 $(function () {
- 
-
     $('#container').highcharts({
         data: {
             table: 'datatable'

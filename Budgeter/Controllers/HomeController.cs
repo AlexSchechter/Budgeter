@@ -14,6 +14,7 @@ namespace Budgeter.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 Household household = GetHouseholdInfo();
+                ViewBag.Household = household.Name;
                 DateTimeOffset selectedDate = new DateTimeOffset();
                 if (date == null)
                     selectedDate = DateTime.Now;

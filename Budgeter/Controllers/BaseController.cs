@@ -12,6 +12,7 @@ namespace Budgeter.Controllers
 
         protected ApplicationUser GetUserInfo()
         {
+            var u = User.Identity.Name;
             return db.Users.Find(User.Identity.GetUserId());
             
         }

@@ -25,10 +25,10 @@
             </div>              
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-success btn-block btn-budgets btn-demo" />
+                    <input type="submit" value="Create" class="btn btn-success btn-block btn-budgets btn-demo" drata-assigned-id = @User.Identity.Name />
                 </div>
             </div>
         }
-        <div class="h4 text-danger demo-text" value=@User.Identity.GetUserName() idden>This functionality is disabled in the demo account. Please log in to for full functionality.</div>
+        <div class="h4 text-danger demo-text" hidden>This functionality is disabled in the demo account. Please log in for full functionality.</div>
     </div>
 </div>

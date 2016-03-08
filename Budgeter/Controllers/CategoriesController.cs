@@ -14,6 +14,7 @@ namespace Budgeter.Controllers
         public ActionResult Index()
         {
             Household household = GetHouseholdInfo();
+            ViewBag.Household = household.Name;
             CategoryViewModel model = new CategoryViewModel {CategoryItems = new List<CategoryViewItem>()};
             CategoryViewItem item = new CategoryViewItem();
             var categories = db.Households.Find(GetUserInfo().HouseholdId).Categories.OrderBy(c => c.Name);

@@ -10,7 +10,7 @@
             <div class="form-group">
                 @Html.AntiForgeryToken()
                 <div class="col-xs-6">
-                    <input type="submit" name="submitButton" value="Delete" class="btn btn-success btn-block" />
+                    <input type="submit" name="submitButton" value="Delete" class="btn btn-success btn-block btn-demo" data-assigned-id = @User.Identity.Name />
                 </div>
                 <div class="col-xs-6">
                     <input type="submit" name="submitButton" value="Cancel" class="btn btn-danger btn-block" />
@@ -18,38 +18,6 @@
 
             </div>
         }
+        <div class="h4 text-danger demo-text" hidden>This functionality is disabled in the demo account. Please log in for full functionality.</div>
     </div>
 </div>
-
-@*@model Budgeter.Models.Category
-
-@{
-    ViewBag.Title = "Delete";
-}
-
-<h2>Delete</h2>
-
-<h3>Are you sure you want to delete this category?</h3>
-<div>
-    <h4>Category</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
-    </dl>
-
-    @using (Html.BeginForm(new { categoryId = Model.Id } )) {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>
-    }
-</div>*@

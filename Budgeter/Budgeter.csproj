@@ -558,7 +558,6 @@
     <Content Include="Views\BudgetItems\Edit.cshtml" />
     <Content Include="Views\Account\DeleteAccount.cshtml" />
     <Content Include="Views\Invitations\Create.cshtml" />
-    <Content Include="Views\Invitations\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

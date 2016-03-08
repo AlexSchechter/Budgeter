@@ -9,7 +9,7 @@
             <div class="form-group">
                 @Html.AntiForgeryToken()
                 <div class="col-xs-6">
-                    <input type="submit" name="submitButton" value="Delete" class="btn btn-success btn-block" />
+                    <input type="submit" name="submitButton" value="Delete" class="btn btn-success btn-block btn-demo" data-assigned-id = @User.Identity.Name />
                 </div>
                 <div class="col-xs-6">
                     <input type="submit" name="submitButton" value="Cancel" class="btn btn-danger btn-block" />
@@ -17,5 +17,6 @@
 
             </div>
         }
+        <div class="h4 text-danger demo-text" hidden>This functionality is disabled in the demo account. Please log in for full functionality.</div>
     </div>
 </div>
