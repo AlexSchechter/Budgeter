@@ -7,6 +7,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Budgeter.Models;
 using System.Security.Principal;
+using System.Security.Claims;
+using Facebook;
 
 namespace Budgeter.Controllers
 {
@@ -375,7 +377,21 @@ namespace Budgeter.Controllers
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)          
                 return RedirectToAction("Login");
-            
+
+            if (loginInfo.Login.LoginProvider == "Facebook")
+            {
+                var identity = AuthenticationManager.GetExternalIdentity(DefaultAuthenticationTypes.ExternalCookie);
+                var access_token = identity.FindFirstValue("FacebookAccessToken");
+                var fb = new FacebookClient(access_token);
+                dynamic myInfo = fb.Get("/me?fields=email"); 
+                loginInfo.Email = myInfo.email;
+            }
+
+            if (loginInfo.Login.LoginProvider == "Microsoft")
+            {
+                var identity = await AuthenticationManager.AuthenticateAsync(DefaultAuthenticationTypes.ExternalCookie);
+                var emailClaim = identity.Identity.FindFirst(ClaimTypes.Email).Value;
+            }
 
             // Sign in the user with this external login provider if the user already has a login
             var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
@@ -383,7 +399,7 @@ namespace Budgeter.Controllers
             switch (result) 
             {
                 case SignInStatus.Success:
-                    if (db.Users.FirstOrDefault(u => u.Email == loginInfo.Email).MarkedForDeletion) //NEED TO CHECK FOR ACTUAL EMAIL
+                    if (db.Users.FirstOrDefault(u => u.Email == loginInfo.Email).MarkedForDeletion)
                     {
                         ModelState.AddModelError("", "Account marked for deletion");
                         return View(returnUrl);
@@ -457,6 +473,16 @@ namespace Budgeter.Controllers
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                         if (invitation == null)
                             PopulateCategories(user.HouseholdId);
+                        return RedirectToLocal(returnUrl);
+                    }
+                }
+                else if (UserManager.FindByEmail(model.Email) != null)
+                {
+                    var existingUser = await UserManager.FindByEmailAsync(model.Email);
+                    result = await UserManager.AddLoginAsync(existingUser.Id, info.Login);
+                    if (result.Succeeded)
+                    {
+                        await SignInManager.SignInAsync(existingUser, isPersistent: false, rememberBrowser: false);
                         return RedirectToLocal(returnUrl);
                     }
                 }

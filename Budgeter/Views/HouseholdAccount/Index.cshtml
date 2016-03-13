@@ -7,7 +7,7 @@
         <div class="project-list-subheading">
             <p class="lead">
                 You have
-                <span class="label label-success">@Model.Count() account(s)</span>
+                <span class="label label-success">@Model.Count account(s)</span>
                 with combined balance of
                 <span class="label label-warning">$ @ViewBag.CombinedBalance</span>
                 and combined reconciled balance of
@@ -37,7 +37,7 @@
                         <tr>
                             <td>@account.Name</td>
                             <td>@account.CreationDate.Date.ToString("d")</td>
-                            <td>@account.Transactions.Count()</td>
+                            <td>@account.Transactions.Count</td>
                             <td>@string.Concat("$", account.Balance)</td>
                             <td>@string.Concat("$", account.ReconciledBalance)</td>
                             <td>@Html.ActionLink("Transactions", "Index", "Transactions", new { householdAccountId = account.Id }, new { @class = "btn btn-primary btn-xs" })</td>
