@@ -9,6 +9,7 @@ using Budgeter.Models;
 using System.Security.Principal;
 using System.Security.Claims;
 using Facebook;
+using System.Data.Entity;
 
 namespace Budgeter.Controllers
 {
@@ -393,17 +394,18 @@ namespace Budgeter.Controllers
                 var emailClaim = identity.Identity.FindFirst(ClaimTypes.Email).Value;
             }
 
-            // Sign in the user with this external login provider if the user already has a login
+            ApplicationUser user = await db.Users.FirstOrDefaultAsync(u => u.Email == loginInfo.Email);
+            if (user != null && user.MarkedForDeletion)
+            {
+                ModelState.AddModelError("", "Account marked for deletion");
+                return View(returnUrl);
+            }
+
             var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
             
             switch (result) 
             {
-                case SignInStatus.Success:
-                    if (db.Users.FirstOrDefault(u => u.Email == loginInfo.Email).MarkedForDeletion)
-                    {
-                        ModelState.AddModelError("", "Account marked for deletion");
-                        return View(returnUrl);
-                    }
+                case SignInStatus.Success:                  
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -411,7 +413,16 @@ namespace Budgeter.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
                 case SignInStatus.Failure:
                 default:
-                    // If the user does not have an account, then prompt the user to create an account
+                    if (UserManager.FindByEmail(loginInfo.Email) != null)
+                    {
+                        var existingUser = await UserManager.FindByEmailAsync(loginInfo.Email);
+                        var attempt = await UserManager.AddLoginAsync(existingUser.Id, loginInfo.Login);
+                        if (attempt.Succeeded)
+                        {
+                            await SignInManager.SignInAsync(existingUser, isPersistent: false, rememberBrowser: false);
+                            return RedirectToLocal(returnUrl);
+                        }
+                    }
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
                     return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
