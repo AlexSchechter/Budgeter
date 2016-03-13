@@ -1,15 +1,14 @@
 ﻿@{
     Layout = "~/Views/Shared/_NotAuthenticatedLayout.cshtml";
 }
-
 <div class="container-fluid primary-content not-authenticated">
     <br />
     <div class="widget">
         <div class="widget-header clearfix">
-            <div class="h2 text-danger"><i class="icon ion-information-circled"></i> <span> Your Password Has Been Reset</span></div>
+            <div class="h2 text-danger"><i class="icon ion-information-circled" ></i> <span> @ViewBag.Title</span></div>
         </div>
         <div class="widget-content">
-            <div class="h4 text-success"><i>@Html.ActionLink("Please click here to log in", "Login", "Account")</i></div>
+            <div class="h4 text-success"><i>@ViewBag.Message</i></div>
         </div>
     </div>
 </div>

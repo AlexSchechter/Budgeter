@@ -76,8 +76,15 @@ namespace Budgeter.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            string userName = db.Users.FirstOrDefault(u => u.Email == model.Email).UserName;
-            var result = await SignInManager.PasswordSignInAsync(userName, model.Password, model.RememberMe, shouldLockout: false);
+            ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
+            if (!await UserManager.IsEmailConfirmedAsync(user.Id))
+            {
+                string callbackUrl = await SendEmailConfirmationTokenAsync(user.Id, "Confirm your account-Resend");
+                ViewBag.errorMessage = "You must have a confirmed email to log on - the email confirmation token has been resent to your email account.";
+                return View("Error");
+            }
+
+            var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -176,20 +183,16 @@ namespace Budgeter.Controllers
                 }
 
                 var result = await UserManager.CreateAsync(user, model.Password);
-                //db.Households.Add(new Household { Name = model.HouseholdName });
-                await db.SaveChangesAsync();
-               
+
+                await db.SaveChangesAsync();              
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    string userId = (await db.Users.FirstAsync(u => u.Email == user.Email)).Id;
+                    string callbackUrl = await SendEmailConfirmationTokenAsync(user.Id, "Confirm your account");
+                    ViewBag.Title = "Thank you for Signing Up!";
+                    ViewBag.Message = "Check your email and click on the link provided to confirm your account, you must be confirmed before you can log in.";
+                    return View("Info");
 
-                    return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
             }
@@ -267,12 +270,10 @@ namespace Budgeter.Controllers
                     return View("ForgotPasswordConfirmation");
                 }
 
-                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
             // If we got this far, something failed, redisplay form
@@ -487,16 +488,7 @@ namespace Budgeter.Controllers
                         return RedirectToLocal(returnUrl);
                     }
                 }
-                else if (UserManager.FindByEmail(model.Email) != null)
-                {
-                    var existingUser = await UserManager.FindByEmailAsync(model.Email);
-                    result = await UserManager.AddLoginAsync(existingUser.Id, info.Login);
-                    if (result.Succeeded)
-                    {
-                        await SignInManager.SignInAsync(existingUser, isPersistent: false, rememberBrowser: false);
-                        return RedirectToLocal(returnUrl);
-                    }
-                }
+               
                 AddErrors(result);
             }
 
@@ -521,6 +513,16 @@ namespace Budgeter.Controllers
         public ActionResult ExternalLoginFailure()
         {
             return View();
+        }
+
+        private async Task<string> SendEmailConfirmationTokenAsync(string userID, string subject)
+        {
+            string code = await UserManager.GenerateEmailConfirmationTokenAsync(userID);
+            var callbackUrl = Url.Action("ConfirmEmail", "Account",
+               new { userId = userID, code = code }, protocol: Request.Url.Scheme);
+            await UserManager.SendEmailAsync(userID, subject,
+               "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+            return callbackUrl;
         }
 
         protected override void Dispose(bool disposing)

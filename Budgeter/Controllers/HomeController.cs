@@ -10,10 +10,10 @@ namespace Budgeter.Controllers
     public class HomeController : BaseController
     {
         public ActionResult Index(string submitButton, DateTimeOffset? date )
-        {         
-            if (User.Identity.IsAuthenticated)
-            {
-                Household household = GetHouseholdInfo();
+        {
+            Household household = GetHouseholdInfo();
+            if (household != null )
+            {              
                 ViewBag.Household = household.Name;
                 DateTimeOffset selectedDate = new DateTimeOffset();
                 if (date == null)

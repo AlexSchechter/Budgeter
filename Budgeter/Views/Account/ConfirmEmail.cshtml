@@ -1,10 +1,15 @@
 ﻿@{
-    ViewBag.Title = "Confirm Email";
+    Layout = "~/Views/Shared/_NotAuthenticatedLayout.cshtml";
 }
 
-<h2>@ViewBag.Title.</h2>
-<div>
-    <p>
-        Thank you for confirming your email. Please @Html.ActionLink("Click here to Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
-    </p>
+<div class="container-fluid primary-content not-authenticated">
+    <br />
+    <div class="widget">
+        <div class="widget-header clearfix">
+            <div class="h2 text-danger"><i class="icon ion-information-circled"></i> <span> Thank You for Confirming Your Email!</span></div>
+        </div>
+        <div class="widget-content">
+            <div class="h4 text-success"><i>Your account has now been activated. @Html.ActionLink("Please click here to log in", "Login", "Account").</i></div>
+        </div>
+    </div>
 </div>
