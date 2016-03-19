@@ -8,6 +8,7 @@ using System.Collections.Generic;
 
 namespace Budgeter.Controllers
 {
+    [RequireHttps]
     public class CategoriesController : BaseController
     {
         // GET: Categories

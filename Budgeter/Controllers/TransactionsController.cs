@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity;
 
 namespace Budgeter.Controllers
 {
+    [RequireHttps]
     public class TransactionsController : BaseController
     {
         // GET: Transactions/Index

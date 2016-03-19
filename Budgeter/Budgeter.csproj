@@ -261,6 +261,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\bootstrap-social.css" />
     <Content Include="assets\css\bootstrap-social.css" />
     <Content Include="assets\css\bootstrap.css" />
     <Content Include="assets\css\bootstrap.min.css" />
@@ -459,6 +460,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="assets\Documents\BudgeterSpecifications.pdf" />
     <None Include="Properties\PublishProfiles\BudgeterApp - Web Deploy.pubxml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -517,7 +519,9 @@
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -578,10 +582,10 @@
     <Content Include="Views\BudgetItems\Edit.cshtml" />
     <Content Include="Views\Account\DeleteAccount.cshtml" />
     <Content Include="Views\Invitations\Create.cshtml" />
+    <Content Include="Views\Shared\Info.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="assets\Documents\" />
     <Folder Include="Views\Layout\" />
   </ItemGroup>
   <ItemGroup>

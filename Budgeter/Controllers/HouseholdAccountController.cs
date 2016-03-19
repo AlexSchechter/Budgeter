@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace Budgeter.Controllers
 {
+    [RequireHttps]
     public class HouseholdAccountController : BaseController
     {
         //Get /HouseholdAccount/Index

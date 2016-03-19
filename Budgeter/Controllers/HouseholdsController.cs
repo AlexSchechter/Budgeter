@@ -6,9 +6,9 @@ using System.Web.Mvc;
 
 namespace Budgeter.Controllers
 {
+    [RequireHttps]
     public class HouseholdsController : BaseController
     {
-
         //Get /Home/Households
         public async Task<ActionResult> Index ()
         {

@@ -68,7 +68,7 @@
 
                     @using (Html.BeginForm("CreateAndChangeHousehold", "Households", FormMethod.Get, new { @class = "form-horizontal", role = "form", id = "newHousehold"}))
                     {
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.ValidationSummary("", new { @class = "text-danger" })
                         <div class="form-group">
                             <div class="input-group">
                                 <input name="members" value="1" type="hidden" />

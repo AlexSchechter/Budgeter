@@ -7,12 +7,13 @@ using System.Net.Mail;
 using System.Linq;
 using System.Net.Mime;
 using System.Net;
+using System.Configuration;
 
 namespace Budgeter.Controllers
 {
+    [RequireHttps]
     public class InvitationsController : BaseController
-    {
-        
+    {      
         // GET: Invitations
         public async Task<ActionResult> Index()
         {
@@ -38,6 +39,9 @@ namespace Budgeter.Controllers
             {
                 Household household = GetHouseholdInfo();
                 invitation.HouseholdId = household.Id;
+                if (await db.Invitations.Where(i => i.HouseholdId == household.Id).AnyAsync(i => i.Email == invitation.Email))
+                    return RedirectToAction("Index", "Home");
+
                 db.Invitations.Add(invitation);
                 await db.SaveChangesAsync();
                 try
@@ -54,8 +58,9 @@ namespace Budgeter.Controllers
 
                     //Initialise SmtpClient and send
                     SmtpClient smtpClient = new SmtpClient("smtp.sendgrid.net", Convert.ToInt32(587));
-                    var SendGridCredentials = db.SendgridCredentials.First();
-                    NetworkCredential credentials = new NetworkCredential(SendGridCredentials.UserName, SendGridCredentials.Password);
+                    NetworkCredential credentials = new NetworkCredential(
+                        ConfigurationManager.AppSettings["mailAccount"], ConfigurationManager.AppSettings["mailPassword"]);
+                                       
                     smtpClient.Credentials = credentials;
                     smtpClient.Send(mailMessage);
 

@@ -8,7 +8,7 @@ using Budgeter.Models;
 
 namespace Budgeter.Controllers
 {
-    
+    [RequireHttps]
     public class BudgetItemsController : BaseController
     {
         // GET: BudgetItems
