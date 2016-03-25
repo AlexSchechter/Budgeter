@@ -8,23 +8,19 @@ using Budgeter.Models;
 
 namespace Budgeter.Controllers
 {
+    [Authorize]
     [RequireHttps]
     public class BudgetItemsController : BaseController
     {
         // GET: BudgetItems
         public async Task<ActionResult> Index()
-        {
-            if (GetUserInfo() == null)
-                return RedirectToAction("Index", "Home");         
+        {                
             return View(await db.BudgetItems.Include(b => b.Budget).Include(b => b.Category).OrderBy(b => b.Description).ToListAsync());
         }
 
         // GET: BudgetItems/Create
         public async Task<ActionResult> Create(int? budgetId)
         {
-            if (GetUserInfo() == null)
-                return RedirectToAction("Index", "Home");
-
             if (budgetId == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
@@ -44,7 +40,8 @@ namespace Budgeter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Id,CategoryId,BudgetId,Amount,Description")] BudgetItem budgetItem)
         {
-            if (ModelState.IsValid && db.Budgets.Find(budgetItem.BudgetId).HouseholdId == GetHouseholdInfo().Id)
+            if (ModelState.IsValid && db.Budgets.Find(budgetItem.BudgetId).HouseholdId == GetHouseholdInfo().Id
+                && User.Identity.Name != DemoEmail)
             {
                 db.BudgetItems.Add(budgetItem);
                 await db.SaveChangesAsync();
@@ -56,9 +53,6 @@ namespace Budgeter.Controllers
         // GET: BudgetItems/Edit/5
         public async Task<ActionResult> Edit(int? budgetItemId)
         {
-            if (GetUserInfo() == null)
-                return RedirectToAction("Index", "Home");
-
             if (budgetItemId == null)           
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             
@@ -79,7 +73,7 @@ namespace Budgeter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,CategoryId,BudgetId,Amount,Description")] BudgetItem budgetItem)
         {
-            if (ModelState.IsValid && db.Budgets.Find(budgetItem.BudgetId).HouseholdId == GetHouseholdInfo().Id)
+            if (ModelState.IsValid && db.Budgets.Find(budgetItem.BudgetId).HouseholdId == GetHouseholdInfo().Id && User.Identity.Name != DemoEmail)
             {
                 db.Entry(budgetItem).State = EntityState.Modified;
                 await db.SaveChangesAsync();
@@ -91,9 +85,6 @@ namespace Budgeter.Controllers
         // GET: BudgetItems/Delete/5
         public async Task<ActionResult> Delete(int? budgetItemId)
         {
-            if (GetUserInfo() == null)
-                return RedirectToAction("Index", "Home");
-
             if (budgetItemId == null)           
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             
@@ -112,7 +103,7 @@ namespace Budgeter.Controllers
         public async Task<ActionResult> DeleteConfirmed(int budgetItemId)
         {
             BudgetItem budgetItem = await db.BudgetItems.FindAsync(budgetItemId);
-            if (db.Budgets.Find(budgetItem.BudgetId).HouseholdId == GetHouseholdInfo().Id)
+            if (db.Budgets.Find(budgetItem.BudgetId).HouseholdId == GetHouseholdInfo().Id && User.Identity.Name != DemoEmail)
             {
                 db.BudgetItems.Remove(budgetItem);
                 await db.SaveChangesAsync();

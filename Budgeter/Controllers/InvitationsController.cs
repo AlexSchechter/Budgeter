@@ -11,6 +11,7 @@ using System.Configuration;
 
 namespace Budgeter.Controllers
 {
+    [Authorize]
     [RequireHttps]
     public class InvitationsController : BaseController
     {      
@@ -35,7 +36,7 @@ namespace Budgeter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Id,Email,HouseholdId")] Invitation invitation)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && User.Identity.Name != DemoEmail)
             {
                 Household household = GetHouseholdInfo();
                 invitation.HouseholdId = household.Id;

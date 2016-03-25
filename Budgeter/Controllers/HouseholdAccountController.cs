@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -10,6 +9,7 @@ using System.Web.Mvc;
 
 namespace Budgeter.Controllers
 {
+    [Authorize]
     [RequireHttps]
     public class HouseholdAccountController : BaseController
     {
@@ -17,9 +17,6 @@ namespace Budgeter.Controllers
         public async Task<ActionResult> Index()
         {
             Household household = GetHouseholdInfo();
-            if (household == null)
-                return RedirectToAction("Index", "Home");
-
             //List<HouseholdAccount> model = await db.Database.SqlQuery<HouseholdAccount>("EXEC GetHouseholdAccountsForHousehold @householdId", new SqlParameter("householdId", household.Id)).ToListAsync();
             List<HouseholdAccount> model = await db.HouseholdAccounts.Where(h => h.HouseholdId == household.Id).OrderBy(h => h.Name).ToListAsync();
             ViewBag.HouseholdName = household.Name;
@@ -33,9 +30,6 @@ namespace Budgeter.Controllers
         [ChildActionOnly]
         public ActionResult Create()
         {
-            if (GetUserInfo() == null)
-                RedirectToAction("Index", "Home");
-
             return View();
         }
 
@@ -44,7 +38,7 @@ namespace Budgeter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(HouseholdAccount model)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && User.Identity.Name != DemoEmail)
             {
                 string userId = GetUserInfo().Id;
                 HouseholdAccount household = new HouseholdAccount
@@ -66,9 +60,6 @@ namespace Budgeter.Controllers
         [HttpGet]
         public async Task<ActionResult> Edit(int? householdAccountId)
         {
-            if (GetUserInfo() == null)
-                return RedirectToAction("Index", "Home");
-
             if (householdAccountId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -86,7 +77,7 @@ namespace Budgeter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(HouseholdAccount model)
         {
-            if (ModelState.IsValid && model.HouseholdId == GetHouseholdInfo().Id)
+            if (ModelState.IsValid && User.Identity.Name != DemoEmail && model.HouseholdId == GetHouseholdInfo().Id)
             {
                 HouseholdAccount householdAccount = await db.HouseholdAccounts.FindAsync(model.Id);
                 householdAccount.Name = model.Name;
@@ -100,7 +91,7 @@ namespace Budgeter.Controllers
         [HttpGet]
         public ActionResult Delete(int? householdAccountId)
         {
-            if (householdAccountId == null || GetUserInfo() == null)
+            if (householdAccountId == null)
                 return RedirectToAction("Index", "Home");
 
             ViewBag.householdAccountId = householdAccountId;
@@ -108,26 +99,29 @@ namespace Budgeter.Controllers
             return View();
         }
 
-        //DELETE: /HouseholdAccount/Delete
+        //POST: /HouseholdAccount/Delete
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(string submitButton, int householdAccountId)
         {
-            HouseholdAccount householdAccount = db.HouseholdAccounts.FirstOrDefault(h => h.Id == householdAccountId);
-            if(householdAccount.HouseholdId == GetHouseholdInfo().Id)
+            if (User.Identity.Name != DemoEmail)
             {
-                switch (submitButton)
+                HouseholdAccount householdAccount = db.HouseholdAccounts.FirstOrDefault(h => h.Id == householdAccountId);
+                if (householdAccount.HouseholdId == GetHouseholdInfo().Id)
                 {
-                    case "Delete":
-                        db.HouseholdAccounts.Remove(householdAccount);
-                        await db.SaveChangesAsync();
-                        return RedirectToAction("Index");
-                    case "Cancel":
-                        return RedirectToAction("Index");
-                    default:
-                        return View(householdAccountId);
+                    switch (submitButton)
+                    {
+                        case "Delete":
+                            db.HouseholdAccounts.Remove(householdAccount);
+                            await db.SaveChangesAsync();
+                            return RedirectToAction("Index");
+                        case "Cancel":
+                            return RedirectToAction("Index");
+                        default:
+                            return View(householdAccountId);
+                    }
                 }
-            }
+            }       
             return RedirectToAction("Index");
         }
     }

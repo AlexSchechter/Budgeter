@@ -6,48 +6,45 @@ using System.Data.Entity;
 
 namespace Budgeter.Controllers
 {
+    [Authorize]
     [RequireHttps]
     public class HomeController : BaseController
     {
         public ActionResult Index(string submitButton, DateTimeOffset? date )
         {
-            Household household = GetHouseholdInfo();
-            if (household != null )
-            {              
-                ViewBag.Household = household.Name;
-                DateTimeOffset selectedDate = new DateTimeOffset();
-                if (date == null)
-                    selectedDate = DateTime.Now;
-                else
+            Household household = GetHouseholdInfo();                    
+            ViewBag.Household = household.Name;
+            DateTimeOffset selectedDate = new DateTimeOffset();
+            if (date == null)
+                selectedDate = DateTime.Now;
+            else
+            {
+                switch (submitButton)
                 {
-                    switch (submitButton)
-                    {
-                        case "Next Month":
-                            selectedDate = date.Value.AddMonths(1);
-                            break;
-                        case "Previous Month":
-                            selectedDate = date.Value.AddMonths(-1);
-                            break;
-                        default:
-                            View(date);
-                            break;
-                    }                                                
-                }
+                    case "Next Month":
+                        selectedDate = date.Value.AddMonths(1);
+                        break;
+                    case "Previous Month":
+                        selectedDate = date.Value.AddMonths(-1);
+                        break;
+                    default:
+                        View(date);
+                        break;
+                }                                                
+            }
 
-                ViewBag.IsCurrentMonth = (selectedDate.Month == DateTimeOffset.Now.Month && selectedDate.Year == DateTimeOffset.Now.Year) ? true : false;
+            ViewBag.IsCurrentMonth = (selectedDate.Month == DateTimeOffset.Now.Month && selectedDate.Year == DateTimeOffset.Now.Year) ? true : false;
 
-                HomeViewModel model = new HomeViewModel
-                {
-                    ChartData = db.Categories.Where(c => c.Households.Any(h => h.Id == household.Id)).ToList()
-                                             .Select(c => CategoryToChartItem(c, household.Id, selectedDate)),
-                    LastTransactions = db.Transactions.Where(t => t.HouseholdAccount.HouseholdId == household.Id).Include(t => t.HouseholdAccount)
-                                                      .OrderByDescending(t => t.Date).Take(5),
-                    HouseholdAccounts = db.HouseholdAccounts.Where(h => h.HouseholdId == household.Id),
-                    Date = selectedDate
-                };
-                return View(model);
-            }               
-            return RedirectToAction("Login", "Account");
+            HomeViewModel model = new HomeViewModel
+            {
+                ChartData = db.Categories.Where(c => c.Households.Any(h => h.Id == household.Id)).ToList()
+                                            .Select(c => CategoryToChartItem(c, household.Id, selectedDate)),
+                LastTransactions = db.Transactions.Where(t => t.HouseholdAccount.HouseholdId == household.Id).Include(t => t.HouseholdAccount)
+                                                    .OrderByDescending(t => t.Date).Take(5),
+                HouseholdAccounts = db.HouseholdAccounts.Where(h => h.HouseholdId == household.Id),
+                Date = selectedDate
+            };
+            return View(model);
         }
 
         private ChartItem CategoryToChartItem(Category category, int householdId, DateTimeOffset date)
@@ -71,16 +68,11 @@ namespace Budgeter.Controllers
 
         public ActionResult About()
         {
-            if (GetUserInfo() == null)
-                return RedirectToAction("Index", "Home");
             return View();
         }
 
         public ActionResult Contact()
         {
-            if (GetUserInfo() == null)
-                return RedirectToAction("Index", "Home");
-            ViewBag.Message = "Your contact page.";
             return View();
         }
 
@@ -88,9 +80,6 @@ namespace Budgeter.Controllers
         public ActionResult UserProfile()
         {
             ApplicationUser user = GetUserInfo();
-            if (user == null)
-                return RedirectToAction("Index", "Home");
-
             return View(new ProfileViewModel
             {
                 Email = user.Email,

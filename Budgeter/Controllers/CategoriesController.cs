@@ -8,6 +8,7 @@ using System.Collections.Generic;
 
 namespace Budgeter.Controllers
 {
+    [Authorize]
     [RequireHttps]
     public class CategoriesController : BaseController
     {
@@ -44,7 +45,7 @@ namespace Budgeter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Id,Name")] Category category)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && User.Identity.Name != DemoEmail)
             {
                 Household household = GetHouseholdInfo();
 
@@ -63,7 +64,6 @@ namespace Budgeter.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");           
             }
-
             return View();
         }
 
@@ -76,8 +76,6 @@ namespace Budgeter.Controllers
             if (!GetHouseholdInfo().Categories.Any(c => c.Id == categoryId))
                 return HttpNotFound();
 
-
-
             return View(await db.Categories.FindAsync(categoryId));
         }
 
@@ -86,6 +84,10 @@ namespace Budgeter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int categoryId)
         {
+
+            if (User.Identity.Name == DemoEmail)
+                return RedirectToAction("Index");
+
             Household household = GetHouseholdInfo();
 
             if (!household.Categories.Any(c => c.Id == categoryId))

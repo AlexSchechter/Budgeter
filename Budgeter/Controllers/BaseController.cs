@@ -8,6 +8,7 @@ namespace Budgeter.Controllers
 {
     public class BaseController : Controller
     {
+        protected readonly string DemoEmail = "john@snow.com";
         protected ApplicationDbContext db = new ApplicationDbContext();
 
         protected ApplicationUser GetUserInfo()

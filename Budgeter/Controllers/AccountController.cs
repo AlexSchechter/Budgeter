@@ -210,10 +210,6 @@ namespace Budgeter.Controllers
         [HttpGet]
         public ActionResult DeleteAccount()
         {
-            
-            if (GetUserInfo() == null)
-                return RedirectToAction("Index", "Home"); 
-                
             return View();
         }
 
